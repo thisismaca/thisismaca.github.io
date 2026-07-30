@@ -1,0 +1,41 @@
+/* Fixed palette — SPEC.md §10. Every colour on the site comes from here;
+   nothing is a one-off hex value in a component. */
+:root {
+  --color-home-bg: #444444;
+  --color-white: #ffffff;
+  --color-menu-text: #333333;
+  --color-body-text: #000000;
+  --color-instagram-glyph: #808080;
+}
+
+/* Minimal reset. box-sizing everywhere so clamp()-based padding (S4.5–S4.8)
+   never pushes an element wider than its own width — that's how S11.3
+   (nothing scrolls horizontally from 320px up) holds without extra rules. */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-body), sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  color: var(--color-body-text);
+  background: var(--color-white);
+}
+
+/* S6.2/S10/FR-020a — Home's background, set via Base's `background` prop. */
+body[data-bg='dark'] {
+  background: var(--color-home-bg);
+}
+
+a {
+  color: inherit;
+}

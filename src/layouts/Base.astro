@@ -1,0 +1,39 @@
+---
+import { Font } from 'astro:assets';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+
+interface Props {
+  headerShadow?: boolean;
+  /** S10 / FR-020a — 'dark' is Home's #444444; every other page is white. */
+  background?: 'white' | 'dark';
+}
+
+const { headerShadow = false, background = 'white' } = Astro.props;
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <!-- Per-page titles/meta are SPEC.md open question 5 — unresolved,
+         not this feature's job to decide. One fixed title until then. -->
+    <title>thisismaca.com</title>
+    <!-- S9.3 — registering the fonts here is what actually emits the
+         @font-face rules and metric-matched fallback; declaring `fonts:`
+         in astro.config.mjs alone only makes them available, it doesn't
+         use them on a page. Preloaded since both are used above the fold
+         on every route. -->
+    <Font cssVariable="--font-menu" preload />
+    <Font cssVariable="--font-body" preload />
+  </head>
+  <body data-bg={background}>
+    <Header shadow={headerShadow} />
+    <slot />
+    <Footer />
+  </body>
+</html>

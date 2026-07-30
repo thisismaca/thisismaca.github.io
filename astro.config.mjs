@@ -1,5 +1,5 @@
 // @ts-check
-import { defineConfig } from 'astro/config';
+import { defineConfig, fontProviders } from 'astro/config';
 
 // https://astro.build/config
 export default defineConfig({
@@ -7,4 +7,25 @@ export default defineConfig({
   // See PLAN.md §6.1 and §6.2 for why, and what site: becomes once the
   // custom domain is live.
   site: 'https://thisismaca.github.io',
+
+  // SPEC.md S9.1/S9.2 — menu type and body type. Confirmed against Google
+  // Fonts 2026-07-30 (specs/001-shell/research.md): Grenze Gotisch is a
+  // static family (weight 500 exists directly); Zalando Sans SemiExpanded
+  // is its own family, not an axis of "Zalando Sans". Astro's Fonts API
+  // self-hosts and generates a metric-matched fallback automatically,
+  // which is what satisfies S9.3 (no invisible text while loading).
+  fonts: [
+    {
+      name: 'Grenze Gotisch',
+      cssVariable: '--font-menu',
+      provider: fontProviders.google(),
+      weights: [500],
+    },
+    {
+      name: 'Zalando Sans SemiExpanded',
+      cssVariable: '--font-body',
+      provider: fontProviders.google(),
+      weights: [400],
+    },
+  ],
 });
