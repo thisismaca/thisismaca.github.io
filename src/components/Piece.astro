@@ -1,0 +1,50 @@
+---
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  piece: CollectionEntry<'pieces'>['data'];
+  priority?: boolean;
+}
+
+const { piece, priority = false } = Astro.props;
+---
+
+<div class="piece">
+  <Image src={piece.image} alt={piece.alt} priority={priority} />
+  <div class="caption" style={`background-color: ${piece.captionBackground}; color: ${piece.captionText};`}>
+    <p class="title">{piece.title}</p>
+    <p class="description">{piece.description}</p>
+  </div>
+</div>
+
+<style>
+  /* S6.3 — image and its own caption are flush; the gap belongs to the
+     stack container (global.css), never here. */
+  .piece {
+    display: block;
+  }
+
+  .piece :global(img) {
+    display: block;
+    /* S6.6 — "nothing is cropped." Astro's image.objectFit default is
+       "cover"; with layout: 'full-width' it's currently inert because the
+       box's aspect-ratio always matches the image's own, but that's a
+       coincidence of this configuration, not a guarantee. Pin it so
+       cropping can't silently reappear if that ever changes. */
+    object-fit: contain;
+  }
+
+  .caption {
+    padding: clamp(12px, 3vw, 24px);
+  }
+
+  .title {
+    font-weight: 700;
+    margin: 0 0 0.5em;
+  }
+
+  .description {
+    margin: 0;
+  }
+</style>

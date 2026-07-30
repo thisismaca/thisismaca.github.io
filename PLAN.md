@@ -1,6 +1,6 @@
 # Plan — thisismaca.com
 
-**Status:** draft 2 · **Date:** 2026-07-30 · **Implements:** `SPEC.md` draft 2
+**Status:** draft 3 · **Date:** 2026-07-30 · **Implements:** `SPEC.md` draft 2
 
 This document describes *how* the spec gets built. Unlike `SPEC.md`, it is
 disposable. If Astro turns out to be the wrong choice, this file is rewritten
@@ -9,6 +9,12 @@ and the spec is untouched.
 **Rule for this document:** every decision below names the spec requirements it
 serves. Anything here that serves no requirement is either scope creep, or a
 sign that the spec has a hole.
+
+**Changed since draft 2:** Milestone 0 is closed and Milestone 1 (the shell)
+is built and deployed — §7. Milestones 2 and 3 are merged into one feature,
+because five of the ten launch pieces arrived finished at once rather than
+one at a time — §7. The S12.4 contrast check turned out to be automatable,
+not manual as assumed; §8 and §9 are corrected.
 
 **Changed since draft 1:** hosting is decided — GitHub Pages, not Cloudflare
 (§1.2), which closes the last open stack question. Per-branch preview URLs are
@@ -382,14 +388,79 @@ not just the dev server.
   back to its default serif. Documented in `specs/001-shell/research.md`
   so it isn't rediscovered later.
 
-**Milestone 2 — one piece.**
-Content collection, schema, a single piece file, one image through the pipeline,
-the caption block with its per-piece colours. Verify S12.3 by checking that
-several image sizes were actually generated.
+**Milestones 2 and 3 — merged, closed 2026-07-30.**
+Originally two milestones: prove the pipeline with one piece, *then* build
+the stack's own behaviour (gaps, lazy loading, priority) once ten pieces
+exist. That assumed content would arrive one file at a time. Instead five of
+the ten pieces arrived together, fully finished — image, title, description,
+alt-worthy detail, and hand-picked caption colours all at once. Building the
+schema for one piece and then immediately rebuilding the stack around it for
+four more, in two separate Spec Kit cycles, would be process for its own
+sake. The two milestones are built as a single feature instead
+(`specs/002-*/`). Sequencing risk isn't lost — the task breakdown for that
+feature still proves the schema and pipeline against one piece before wiring
+the rest, per the same reasoning either way.
 
-**Milestone 3 — the stack.**
-Ten pieces, the 20px gaps, lazy loading, priority on the first image. Verify
-nothing shifts as images load.
+Content collection, schema, the five real pieces, the caption block with
+each one's own colours, the 20px gaps, lazy loading, priority on the first
+image. Verify S12.3 by checking that several image sizes were actually
+generated, and that nothing shifts as images load. Ten pieces at launch
+(S2.3) still holds — five more arrive later as plain file additions (S2.1),
+not a code change.
+
+**Caption contrast, checked before writing any code (S12.4).** All five
+hand-picked pairs were run through the WCAG contrast formula. Three passed
+outright. Two didn't:
+
+| Piece | Background | Original text | Ratio | Fixed text | Ratio |
+|---|---|---|---|---|---|
+| Jean-Michel Labadie | `#494949` | `#f08e79` | 3.79:1 (fail) | `#f3a797` | 4.63:1 |
+| Rex Brown | `#38543d` | `#e4a652` | 3.94:1 (fail) | `#eab875` | 4.64:1 |
+
+Both fixes are the same hue, lightened until AA passed — same mood, not a
+different colour choice. Confirmed with Maca before touching any file; the
+palette is hers to own. The other three (Kirk Hammett, Mario Duplantier,
+Phil Anselmo) passed as specified, 6.5:1 to 10.6:1.
+
+Worth noting for next time: 14px bold (the caption title, S9.2) is still
+below WCAG's 18.66px bold threshold for "large text," so it needs the same
+4.5:1 as body copy — it doesn't get the friendlier 3:1 bar. Check title and
+description against the same threshold, not just description.
+
+- ✅ `src/content.config.ts` — `pieces` collection, `glob()` loader,
+  `image()` schema field, `alt` required non-empty, hex colours validated,
+  no orientation field.
+- ✅ Five real pieces committed as content files: Kirk Hammett, Mario
+  Duplantier, Jean-Michel Labadie, Rex Brown, Phil Anselmo.
+- ✅ Home page renders the stack — verified in-browser against the actual
+  production build, not the dev server: correct order, correct per-piece
+  caption colours (including the two WCAG-corrected ones), 20px gaps
+  between every piece and at both ends (header→first, last→footer),
+  measured at ~20.00px each.
+- ✅ S12.3 — 9 responsive width variants generated for a single piece,
+  confirmed by listing `dist/_astro/`, not just by trusting the config.
+- ✅ S6.10/S6.11 — first piece's `<img>` carries `loading="eager"` and
+  `fetchpriority="high"`; every other piece carries `loading="lazy"` with
+  no `fetchpriority`, confirmed by reading the actual DOM attributes.
+- ✅ S6.6 — found and closed a latent gap: Astro's default `objectFit` is
+  `"cover"`, currently inert only because the container's aspect ratio
+  always matches the image's own under `layout: 'full-width'`. Pinned to
+  `contain` explicitly in `Piece.astro` so cropping can't silently
+  reappear if that configuration ever changes.
+- ✅ S2.1 — proved for real: added a sixth piece file, rebuilt, it
+  appeared at position 6 with no other file touched; removed it, rebuilt,
+  back to five.
+- ✅ S2.2 — proved for real: removed one piece's `alt`, the build failed
+  with a schema error naming the exact file and field; restored it, clean
+  build. (Aside: on this Windows machine, the failed build also throws a
+  `UV_HANDLE_CLOSING` assertion from Node's libuv after printing the
+  correct error — a platform-level crash in Astro's error-path cleanup,
+  not something this feature caused or can fix. The exit code is still
+  non-zero either way, which is all CI actually checks.)
+- ✅ `scripts/check-contrast.mjs` — the script `PLAN.md` §8 promises now
+  exists for real, reads pieces' actual frontmatter (not a hardcoded
+  list), and confirms all five pairs pass at 4.5:1+.
+- ✅ Zero `<script>` tags in the build output, unchanged from Milestone 1.
 
 **Milestone 4 — About and Contact.**
 The photo wrap, the shadow on both, the Contact footer swap.
@@ -421,11 +492,15 @@ testable rather than decorative.
 | S11.3 | No horizontal scroll from 320px up |
 | S12.1 | View source on the built output, confirm no script tags |
 | S12.3 | Confirm multiple widths generated per image |
-| S12.4 | Contrast-check every caption colour pair against its background |
+| S12.4 | Run every caption colour pair through the WCAG contrast formula |
 | S12.5 | Tab through all three pages |
 
-S12.4 is the one that will actually find problems, because the caption colours
-are hand-picked per piece and nothing validates them but a person.
+**S12.4 update, 2026-07-30**: this turned out to be automatable — a ~30-line
+script computing WCAG relative luminance catches it exactly, no manual
+eyeballing needed. Run it against every pair as pieces are added; it already
+caught 2 of the first 5 (§7, Milestones 2/3). The remaining manual judgment
+is only what to do about a failure — nudge the same hue, pick a different
+colour, or knowingly accept it — which stays a person's call.
 
 ---
 
@@ -436,7 +511,10 @@ are hand-picked per piece and nothing validates them but a person.
    change in S9.1, not a font change.
 2. **Wide monitors.** Spec open question 4. Each piece becomes very large above
    ~1920px. May need a maximum width on the stack — which would amend S6.6.
-3. **Caption contrast.** Twenty hand-picked colours, ten pairs, no automation.
+3. **Caption contrast.** ~~Twenty hand-picked colours, ten pairs, no
+   automation.~~ Wrong on both counts — see §8's S12.4 update. 2 of the
+   first 5 pairs failed and were nudged; 5 pairs remain for the pieces still
+   to come.
 4. **Photoshop and CSS disagreeing.** The composition is designed at one width
    and rendered at many. Check one exported piece in the browser early rather
    than exporting all ten first.

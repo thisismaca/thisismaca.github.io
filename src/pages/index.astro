@@ -1,5 +1,15 @@
 ---
+import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
+import Piece from '../components/Piece.astro';
+
+const pieces = (await getCollection('pieces')).sort((a, b) => a.data.order - b.data.order);
 ---
 
-<Base headerShadow={false} background="dark"></Base>
+<Base headerShadow={false} background="dark">
+  <div class="stack">
+    {pieces.map((piece) => (
+      <Piece piece={piece.data} priority={piece.data.order === 1} />
+    ))}
+  </div>
+</Base>
