@@ -2,86 +2,117 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Commands
+
+```bash
+npm run dev        # dev server
+npm run build      # static build to dist/
+npm run preview    # serve dist/ locally
+```
+
+When starting the dev server from an agent session, prefer `npx astro dev --background`,
+then manage it with `astro dev stop` / `status` / `logs` rather than holding a
+foreground process.
+
+There is no test runner and no linter. Verification on this project is the
+checklist in `PLAN.md` §8, which is checked against the *built output* — see
+Verification below.
+
 ## Project state
 
-This repository currently contains **no code** — only governing documents. It is at
-"Milestone 0" of `PLAN.md`: nothing has been scaffolded yet. Before writing any Astro
-code, check whether that has changed (`ls src/`, `package.json`) rather than assuming
-this description is current.
+Scaffolded and building; no real content yet. Node 24.18.0, Astro 7.1.6
+(engine floor `>=22.12.0`). `npm run build` emits `dist/` with zero JavaScript.
 
-## The three-document model
+**Hosting is undecided** — Cloudflare Workers vs Cloudflare Pages vs GitHub
+Pages is an open question the user is actively weighing. `PLAN.md` §1.2 still
+recommends Cloudflare Pages and is stale on two points: Workers now has
+*better* per-branch preview URLs than Pages, and GitHub Pages is a live
+contender. Do not write a deploy config, a CI workflow, or `site:` in
+`astro.config.mjs` until this is settled — all three depend on the answer.
 
-This project is built spec-driven. Three documents govern the work, in a strict
-hierarchy, and **must not be conflated**:
+If GitHub Pages wins, the `CNAME` file must live at **`public/CNAME`**, not the
+repo root, or each deploy silently drops the custom domain.
 
-1. **`CONSTITUTION.md`** — the rules that outrank everything else. Rarely changes.
-   If a decision conflicts with the constitution, the decision is wrong, not the
-   constitution. Read this first; it governs every other choice in this repo
-   (no CMS, no JS unless load-bearing, no shop, spec-before-code, etc.).
-2. **`SPEC.md`** — *what must be true* of the finished site, checkable against the
-   built output. Names no framework, host, or library on purpose. Requirements are
-   numbered (e.g. `S6.7`) so they can be referenced precisely from code, commits,
-   and `PLAN.md`.
-3. **`PLAN.md`** — *how* the spec gets built: framework choices, repo structure,
-   build order, verification steps. Disposable — can be rewritten entirely without
-   touching `SPEC.md`. Every decision in `PLAN.md` should cite the spec
-   requirement(s) it serves; a decision serving no requirement is scope creep.
+## Governing documents
 
-`DRAFT.md` is the original informal brief that `SPEC.md` was derived from — historical
-context, not a source of truth once it conflicts with `SPEC.md`.
+Three documents govern this project, in strict order of authority. They are not
+interchangeable:
 
-**Workflow rule:** behavior is decided in `SPEC.md` before it is implemented. If
-asked to build something the spec doesn't describe, stop and add the spec entry
-(with a numbered requirement) first, rather than improvising in code. When a
-requirement changes, update `SPEC.md`'s "Changed since draft N" note.
+1. **`.specify/memory/constitution.md`** — the rules that outrank everything.
+   Root `CONSTITUTION.md` is a pointer to it, kept so the two cannot drift.
+2. **`SPEC.md`** (root) — *what must be true* of the finished site, as numbered
+   requirements (`S4.11`, `S6.7`). Names no framework, host or library. Checkable
+   against the built site.
+3. **`PLAN.md`** (root) — *how* it gets built. Disposable; rewritable without
+   touching `SPEC.md`. Every decision must cite the requirement it serves.
 
-## Key constraints from the constitution (CONSTITUTION.md)
+`DRAFT.md` is the original brief and is **gitignored** — absent from a fresh
+clone. Historical context, never authority.
 
-These are non-negotiable and should shape any implementation suggestion:
+**Numbered requirement IDs are the shared vocabulary.** Reference them in code
+comments, commits and feature specs.
 
-- **Zero JavaScript by default.** Any script must be load-bearing (the feature
-  cannot exist without it) and justified in the spec before it's written.
-- **Content is files in Git.** No database, no CMS, no runtime content fetching.
-  Adding a piece of work = adding one file, no code changes.
-- **Static output, portable host.** The build must produce plain static files
-  deployable to any host — no vendor-specific runtime features.
-- **No image without alt text.** The build must fail if `alt` is missing —
-  this is enforced at the content-schema level, not by convention.
-- **One gallery, no categories.** Medium (illustration vs. photography) is a
-  caption, never a filter/section/route.
-- **Portfolio, not shop.** No cart, prices, or checkout; print sales are always
-  linked out to a third party.
+## Spec Kit workflow
 
-## Intended architecture (per PLAN.md — not yet built)
+This repo uses [GitHub Spec Kit](https://github.com/github/spec-kit) (0.14.4,
+PowerShell scripts, Claude integration). Skills live in `.claude/skills/`:
 
-- **Framework:** Astro (content collections + Content Layer API with a `glob()`
-  loader), chosen specifically for zero-JS-by-default and build-time responsive
-  images/schema validation. Requires Node ≥ 22.12.
-- **Content schema** (`src/content.config.ts`): one file per piece under
-  `src/content/pieces/`, fields `title`, `description`, `image`, `alt`,
+`/speckit-specify` → `/speckit-plan` → `/speckit-tasks` → `/speckit-implement`,
+plus optional `/speckit-clarify`, `/speckit-analyze`, `/speckit-checklist`.
+
+**Do not run `/speckit-constitution` casually** — the constitution is
+hand-written and the command's template output is markedly worse. Amend by hand.
+
+Spec Kit is feature-oriented: each `/speckit-specify` creates a numbered
+`specs/###-*/` directory. The mapping for this project is **one Spec Kit feature
+per `PLAN.md` §7 milestone** (`001-shell`, `002-one-piece`, `003-the-stack`,
+`004-about-contact`). `SPEC.md` stays at root as the whole-site contract; each
+feature spec cites its requirement IDs rather than restating them.
+
+## Constitution constraints
+
+Non-negotiable; they should shape every implementation choice:
+
+- **Zero JavaScript by default.** Any script must be load-bearing and justified
+  in the spec *before* it is written. Convenience is not justification.
+- **Content is files in Git.** No database, CMS, admin panel, or runtime fetching.
+  Adding a piece = adding one file, changing no code.
+- **Static output, portable host.** No feature may depend on a vendor runtime.
+- **No image without alt text.** Enforced by schema so the build *fails* —
+  not by convention.
+- **One gallery.** Medium is a caption, never a category, filter, or route.
+- **Portfolio, not shop.** No cart, prices, or checkout.
+- **Spec before code.** Building something the spec doesn't describe means
+  stopping and writing the spec entry first.
+
+## Architecture
+
+Per `PLAN.md`, mostly not yet built:
+
+- **Content:** one file per piece in `src/content/pieces/`, schema in
+  `src/content.config.ts`. Fields `title`, `description`, `image`, `alt`,
   `captionBackground`, `captionText`, `order` — all required, `alt` non-empty,
-  no orientation field (spec `S2.4` explicitly excludes it).
-- **Images:** source files live in `src/assets/` (NOT `public/`) so they pass
-  through Astro's build-time image pipeline and get responsive widths + known
-  intrinsic dimensions (required for layout-shift-free loading per `S6.12`).
-  Putting images in `public/` silently defeats this — called out in `PLAN.md`
-  as the most common mistake.
-- **Routes:** exactly three pages — `/` (home, the vertical piece stack),
-  `/about`, `/contact`. No per-piece detail pages/URLs (deliberate non-goal).
-- **Styling:** plain CSS with custom properties, no framework — the whole
-  visual surface is 3 pages, 1 breakpoint (768px), 6 colors, and a handful of
-  `clamp()` values.
-- **Fonts:** Astro's built-in Fonts API (self-hosted, subsetted, preloaded) for
-  Grenze Gotisch (menu) and Zalando Sans SemiExpanded (body text).
-- **Shared header/footer:** one boolean prop on the base layout controls the
-  header shadow (on for About/Contact, off for Home) rather than three copies
-  of the header.
-- **Hosting:** Cloudflare Pages (decide for real at Milestone 0), GitHub Pages
-  as the proof-of-portability fallback. `main` = production, `develop` =
-  integration/preview.
+  hex colours validated. **No orientation field** (`S2.4` excludes it by design).
+  Astro 7 imports `z` from `astro/zod`, not `astro:content`.
+- **Images:** sources go in **`src/assets/`, never `public/`**. Files in
+  `public/` are copied untouched, which defeats `S12.3` (responsive sizes) and
+  `S6.12` (no layout shift, which relies on build-time intrinsic dimensions).
+  This is the single easiest thing to get wrong here.
+- **Routes:** exactly three — `/`, `/about`, `/contact`. No per-piece URLs.
+- **Styling:** plain CSS, no framework. One breakpoint (768px), six colours,
+  a handful of `clamp()` values.
+- **Header shadow:** one boolean prop on the base layout (on for About/Contact,
+  off for Home), not three header copies.
 
-See `PLAN.md` §7 for the milestone build order and §8 for how each spec
-requirement gets verified (e.g. deleting an `alt` value must fail the build).
-Numbered spec requirements (`S4.11`, `S6.7`, etc.) are the shared vocabulary
-between `SPEC.md`, `PLAN.md`, and should be used in commits/PRs that implement
-or verify them.
+## Verification
+
+`PLAN.md` §8 maps each requirement to a check. The ones that actually catch
+problems:
+
+- **S2.2** — delete an `alt` value; the build must fail.
+- **S12.1** — grep built HTML in `dist/` for `<script`; must find none.
+- **S12.4** — contrast-check every hand-picked caption colour pair. Twenty
+  hand-chosen colours with nothing automated to validate them; this is the
+  requirement most likely to be silently violated.
+- **S4.4** — three menu items on one line at 320px, with the real blackletter
+  font loaded. Previously estimated by arithmetic, never measured.
