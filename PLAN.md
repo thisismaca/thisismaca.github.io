@@ -344,13 +344,16 @@ hosting is going to be annoying, it is much better to discover that now.
 - ✅ Toolchain — Node 24.18.0 LTS, Astro 7.1.6, Spec Kit 0.14.4.
 - ✅ Scaffold builds to static output with no JavaScript.
 - ✅ Governing documents committed.
-- ⬜ Rename the repo to `thisismaca.github.io` (§6.1), repoint the remote, push
-  `develop`.
-- ⬜ GitHub Actions workflow, Pages source set to Actions, `site:` set to
+- ✅ Repo renamed to `thisismaca.github.io` (§6.1), remote repointed, `develop`
+  pushed.
+- ✅ `.github/workflows/deploy.yml` (build + deploy on push to `main`) and
+  `ci.yml` (build-only on `develop`/PRs), `site:` set to
   `https://thisismaca.github.io`.
-- ⬜ First deploy — the half that actually proves the chain. Not blocked on
-  domain registration; the `github.io` URL serves from the root, so the chain
-  can be proven now and the domain attached later as a one-line `site:` change.
+- ⬜ Settings → Pages → Source set to **GitHub Actions** — an account setting,
+  left to the user.
+- ⬜ First deploy — push to `main` and confirm the Action run succeeds and
+  `https://thisismaca.github.io` serves the page. The half that actually proves
+  the chain. Not blocked on domain registration.
 
 **Milestone 1 — the shell.**
 Base layout, header, footer, three routes, the palette, both fonts. No images.
