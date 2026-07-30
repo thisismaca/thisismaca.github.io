@@ -1,6 +1,6 @@
 # Spec — thisismaca.com
 
-**Status:** draft 2 · **Date:** 2026-07-29
+**Status:** draft 3 · **Date:** 2026-07-30
 
 This document describes *what must be true* of the finished site. It names no
 framework, host or library on purpose — those belong in `PLAN.md`, which can be
@@ -8,6 +8,12 @@ thrown away and rewritten without touching this file.
 
 Every statement below should be checkable by looking at the built site. Anything
 that cannot be checked is a note, not a requirement, and is marked as such.
+
+**Changed since draft 2:** §7's open influences question is closed — text,
+woven into the bio, not images or a separate list (S7.7 also added: a link
+to the site's own source repo). Real content for both, and for five of the
+ten launch pieces (§2), landed during implementation rather than being
+decided speculatively up front.
 
 **Changed since draft 1:** the carousel is gone, replaced by a vertical stack.
 Orientation has left the content model. The carousel height question is closed.
@@ -144,9 +150,13 @@ by 80px wide, with 5px of margin on every side.
 **S7.5** Body text is black.
 **S7.6** The header shadow is visible (S4.11).
 
-> **Open — influences.** The original brief named Virgil Finlay and Richey
-> Beckett as lineage. Whether they appear here, and as text or images, is
-> undecided. Text costs nothing; thumbnails are someone else's copyright.
+**S7.7** The page includes a link to the site's own source repository.
+
+> **Decided 2026-07-30 — influences.** Text, not images, resolving the open
+> question above: influences (Virgil Finlay, Richey Beckett, Peeter Baltens,
+> the 2013 Tumblr aesthetic, nature) are named inline within the bio copy
+> itself, not as a separate labelled list or as thumbnail images. Final
+> copy supplied by the site owner — see `specs/003-about/` once written.
 
 ---
 
