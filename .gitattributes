@@ -1,0 +1,15 @@
+# Repo stores LF everywhere. Without this, a Windows checkout rewrites every
+# file to CRLF and CI sees a diff that isn't there.
+* text=auto eol=lf
+
+# PowerShell is the exception — it wants CRLF on Windows.
+*.ps1 text eol=crlf
+
+# Never transform binary assets. Image work is the payload of this site.
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.webp  binary
+*.avif  binary
+*.woff  binary
+*.woff2 binary

@@ -1,1 +1,4 @@
 DRAFT.md
+
+# Claude Code local session state — may contain machine-specific permissions
+.claude/settings.local.json
