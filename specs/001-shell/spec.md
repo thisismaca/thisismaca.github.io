@@ -185,6 +185,10 @@ out of scope for this feature — see Assumptions)
 - **FR-020** (S10): Header, footer, `/about`, and `/contact` backgrounds
   MUST be `#FFFFFF`; menu lettering MUST be `#333333`; body text on white
   MUST be black.
+- **FR-020a** (S6.2, S10): The `/` page background MUST be `#444444`. This
+  applies to the Home shell immediately, independent of the piece stack —
+  it is a palette property of the page, not of the pieces that will later
+  sit on it.
 
 **Responsive behaviour**
 
@@ -212,6 +216,8 @@ out of scope for this feature — see Assumptions)
   spacing at any point.
 - **SC-003**: The header shadow is present on exactly two of the three pages
   (`/about`, `/contact`) and absent on exactly one (`/`), on every load.
+- **SC-003a**: `/` renders with a `#444444` background visible around the
+  white header and footer; `/about` and `/contact` render white throughout.
 - **SC-004**: The footer's email and Instagram information is present and
   reachable, without scrolling past it, on all three pages.
 - **SC-005**: No page ever shows invisible or unstyled text while fonts are
