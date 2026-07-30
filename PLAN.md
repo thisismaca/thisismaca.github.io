@@ -1,6 +1,6 @@
 # Plan — thisismaca.com
 
-**Status:** draft 1 · **Date:** 2026-07-29 · **Implements:** `SPEC.md` draft 2
+**Status:** draft 2 · **Date:** 2026-07-30 · **Implements:** `SPEC.md` draft 2
 
 This document describes *how* the spec gets built. Unlike `SPEC.md`, it is
 disposable. If Astro turns out to be the wrong choice, this file is rewritten
@@ -10,9 +10,14 @@ and the spec is untouched.
 serves. Anything here that serves no requirement is either scope creep, or a
 sign that the spec has a hole.
 
-**Version note.** Version numbers below were checked on 2026-07-29 and move
-fast. Verify against current docs before installing rather than trusting this
-file.
+**Changed since draft 1:** hosting is decided — GitHub Pages, not Cloudflare
+(§1.2), which closes the last open stack question. Per-branch preview URLs are
+gone as a consequence, and §6 replaces them. GitHub Spec Kit has been adopted
+and the repository structure in §2 reflects it. Milestone 0 is half complete
+(§7). Versions in §1.1 are now measured on this machine rather than estimated.
+
+**Version note.** Versions move fast. Anything not marked as confirmed on a
+specific date should be verified against current docs before it is trusted.
 
 ---
 
@@ -40,33 +45,50 @@ the content files themselves are portable Markdown with frontmatter.
 
 **One thing to know:** Cloudflare acquired the Astro company in January 2026.
 The framework remains MIT-licensed and open source, so Constitution §4 is not
-violated — but combining Astro with Cloudflare hosting means both halves of the
-stack now answer to the same company. That is a concentration worth noticing,
-not a reason to change course. The mitigation is the constitution's own rule:
-the build output is plain static files, so the host stays swappable.
+violated. Draft 1 of this plan flagged the concentration risk of pairing Astro
+with Cloudflare hosting; §1.2 has since settled on GitHub Pages, so the two
+halves of the stack now answer to different companies and the concern is moot.
+The mitigation was never the vendor choice anyway — it is the constitution's own
+rule that the build output is plain static files, so the host stays swappable.
 
-### 1.2 Hosting — decide at milestone 1, not now
+**Confirmed on this machine (2026-07-30):** Astro 7.1.6 on Node 24.18.0 LTS.
+The scaffold builds to `output: "static"` and emits no `<script>` tags, so
+S12.1 holds at baseline.
+
+### 1.2 Hosting — GitHub Pages, decided 2026-07-30
 
 **Serves:** Constitution §4.
 
-The landscape shifted. Cloudflare now points new projects at **Workers with
-static assets** rather than Pages; Pages remains fully supported with no
-migration deadline, but new platform features ship to Workers first. Static
-asset requests are free on both.
+**Decision: GitHub Pages**, deployed from GitHub Actions. The repo already lives
+on GitHub, so this adds no account, no vendor and no CLI. It supports a custom
+domain on `thisismaca.com` with free automatic TLS, which was the deciding
+requirement.
 
-- **Pages** — connect the repo, push, done. Preview deployment per branch. This
-  is the whole workflow and it fits a static portfolio exactly.
-- **Workers with static assets** — where the investment is going, but it means
-  a `wrangler` config and a deploy step for a site that has no server-side
-  anything.
+What was weighed and rejected:
 
-**Recommendation:** start on Pages. The site is pure static with no dynamic
-requirement anywhere in the spec, git-push deployment is the entire need, and
-migration later is a config change, not a rewrite. Revisit if a contact form
-ever arrives.
+- **Cloudflare Workers with static assets** — where Cloudflare's investment is
+  going, and it has the best preview URLs of the three (stable per-branch
+  aliases). Rejected: its custom-domain support requires the DNS zone to sit on
+  Cloudflare, which GitHub Pages does not.
+- **Cloudflare Pages** — the earlier recommendation in draft 1 of this plan.
+  Genuinely good, and unmetered bandwidth is a real advantage for an
+  image-heavy site. Rejected as the extra vendor buys little that GitHub Pages
+  does not already cover at this scale.
 
-**Fallback:** GitHub Pages. Keep this genuinely viable — it is the proof that
-Constitution §4 holds.
+**What this costs.** GitHub Pages is one site per repository, so there are no
+per-branch preview deployments — see §6, which changes as a result. Bandwidth is
+softly limited (~100GB/month, worth confirming against current GitHub docs)
+rather than unmetered. Neither binds at portfolio traffic.
+
+**Reversal cost:** very low, and this is the point of Constitution §4. The build
+output is plain static files. Moving to either Cloudflare product means pointing
+DNS somewhere else and swapping one workflow file. Nothing in `SPEC.md` names a
+host, and nothing should.
+
+**Still available if bandwidth ever bites:** Cloudflare's free plan can sit in
+front of GitHub Pages as pure DNS/CDN, without moving the hosting. If that is
+ever done, set SSL mode to **Full** — Flexible causes a redirect loop against
+GitHub Pages.
 
 ### 1.3 Styling — plain CSS, no framework
 
@@ -95,9 +117,17 @@ be" is not "is".
 
 ```
 /
-├── CONSTITUTION.md
-├── SPEC.md
-├── PLAN.md
+├── CONSTITUTION.md              # pointer only — real text below
+├── SPEC.md                      # whole-site contract
+├── PLAN.md                      # this file
+├── CLAUDE.md                    # agent guidance
+├── .gitattributes               # LF everywhere; CRLF for .ps1
+├── .specify/
+│   ├── memory/constitution.md   # the actual constitution
+│   ├── templates/               # Spec Kit spec/plan/tasks templates
+│   └── scripts/powershell/      # Spec Kit helpers
+├── .claude/skills/speckit-*/    # /speckit-* commands
+├── specs/                       # one dir per milestone — see §7
 ├── astro.config.mjs
 ├── src/
 │   ├── content.config.ts        # collection schema
@@ -118,10 +148,18 @@ be" is not "is".
 │   └── styles/
 │       └── global.css           # palette, type, resets
 └── public/
+    └── CNAME                    # custom domain — see §6
 ```
 
-The three markdown documents live in the repo root, in the same history as the
-code they govern. That is the point of doing this spec-driven.
+The governing documents live in the repo, in the same history as the code they
+govern. That is the point of doing this spec-driven.
+
+**Two things moved when GitHub Spec Kit was adopted (2026-07-30).** The
+constitution now lives at `.specify/memory/constitution.md`, because that is
+where the `/speckit-*` commands read it from; root `CONSTITUTION.md` is a
+pointer so the two copies cannot drift. `SPEC.md` deliberately stays at root:
+Spec Kit is feature-oriented and `SPEC.md` is a whole-site contract, not a
+feature.
 
 ---
 
@@ -196,15 +234,88 @@ Mapped to the requirements they satisfy.
 
 The repo is already on a `develop` branch, so:
 
-- `main` — production. Deploys to the live site.
-- `develop` — integration. Deploys to a preview URL.
+- `main` — production. A GitHub Actions workflow builds and deploys on push.
+- `develop` — integration. Builds in CI to catch failures; deploys nowhere.
 - Merge `develop` into `main` to release.
 
-Both Pages and Workers give a per-branch preview URL, which is how the site gets
-checked on a real phone rather than in a desktop simulator.
+**Checking on a real phone.** Draft 1 assumed a per-branch preview URL. GitHub
+Pages does not have them — it is one site per repository. The replacement is
+the dev server bound to the local network:
 
-No custom domain yet, per the brief — the provided subdomain is fine until
-`thisismaca.com` is pointed at it.
+```
+npm run dev -- --host
+```
+
+That prints a LAN address to open on a phone on the same Wi-Fi. It is a better
+loop than a deploy preview anyway, because it is live-reloading and needs no
+push. The one thing it cannot verify is anything that differs between `astro
+dev` and a production build — so the verification pass in §8 runs against
+`npm run build && npm run preview -- --host`, not against the dev server.
+
+**Prerequisites before the first deploy** — none of this is code, but all of it
+blocks:
+
+1. ✅ The repo must be **public**, or the account needs a paid plan. GitHub
+   Pages on private repositories is not free. `thisismaca/thisismaca.com` is
+   public — confirmed 2026-07-30.
+2. Repo Settings → Pages → Source must be set to **GitHub Actions**, not
+   "Deploy from a branch".
+3. Node in the workflow should be pinned to the same major as local (24.x).
+4. Only the initial commit is on `origin`. `develop` and everything since is
+   local-only and needs pushing.
+
+### 6.1 Project site vs user site — decide before the first deploy
+
+The repository is named `thisismaca.com`, not `thisismaca.github.io`. That makes
+it a **project site**, which serves from a subpath:
+
+```
+https://thisismaca.github.io/thisismaca.com/
+```
+
+A subpath means `astro.config.mjs` needs `base: '/thisismaca.com'` as well as
+`site:`, and every internal link and asset URL has to respect it. Then, when
+`thisismaca.com` is attached as a custom domain, the site moves to the root and
+`base` must be **removed** again. Getting that transition wrong 404s every asset
+at once.
+
+Two ways out, both fine:
+
+- **Rename the repo to `thisismaca.github.io`.** It becomes a user site, serves
+  at the root immediately, needs no `base`, and the custom domain later changes
+  nothing structural. Costs: one rename, one remote URL update, and the repo
+  name stops matching the product name.
+- **Keep the name and skip the interim URL.** Set `base` never; simply do not
+  deploy until the domain is registered and pointed. The site is not public
+  until launch anyway, and §6's phone-checking runs off the LAN, not off a
+  deployed preview.
+
+**Recommendation: the second.** Nothing in the spec needs a public URL before
+launch, and it avoids configuring a `base` that exists only to be deleted. If a
+shareable URL is wanted sooner, take the first.
+
+### 6.2 Custom domain
+
+`thisismaca.com` is not owned yet. When it is registered:
+
+- Apex (`thisismaca.com`) — four `A` records to GitHub's Pages IPs
+  (`185.199.108–111.153`), plus the `AAAA` records; confirm the current set
+  against GitHub's docs rather than copying them from here.
+- `www` — a `CNAME` to `<user>.github.io`.
+- Tick **Enforce HTTPS** once the certificate is issued. It can take up to 24
+  hours to become available.
+
+**The gotcha that will cost an afternoon:** setting the domain in repo settings
+auto-commits a `CNAME` file to the *source branch root*, but an Actions
+deploy publishes `dist/`, so that file never reaches the deployed output and
+the domain silently unsets on the next deploy. The file must live at
+**`public/CNAME`** so Astro copies it into `dist/`.
+
+`site:` in `astro.config.mjs` must be set to the deployed origin. Under §6.1's
+recommendation that is `https://thisismaca.com` and never anything else — which
+is the main reason to prefer it. Getting `site:` wrong produces broken absolute
+URLs rather than a visible error, so having only one correct value it can ever
+hold is worth something.
 
 ---
 
@@ -213,11 +324,21 @@ No custom domain yet, per the brief — the provided subdomain is fine until
 Sequenced so something is deployed and visible early, and so the riskiest
 unknowns surface first rather than last.
 
-**Milestone 0 — deploy nothing, successfully.**
-Scaffold, commit the three markdown documents, connect the host, deploy a
-near-empty page. This proves the whole chain works before any real work is at
-stake. If hosting is going to be annoying, it is much better to discover that
-now.
+**Milestone 0 — deploy nothing, successfully.** *(partly done, 2026-07-30)*
+Scaffold, commit the governing documents, connect the host, deploy a near-empty
+page. This proves the whole chain works before any real work is at stake. If
+hosting is going to be annoying, it is much better to discover that now.
+
+- ✅ Toolchain — Node 24.18.0 LTS, Astro 7.1.6, Spec Kit 0.14.4.
+- ✅ Scaffold builds to static output with no JavaScript.
+- ✅ Governing documents committed.
+- ⬜ GitHub Actions workflow and Pages enabled — writeable now; see §6 for the
+  prerequisites.
+- ⬜ First deploy — the half that actually proves the chain. Under §6.1's
+  recommendation this waits for `thisismaca.com` to be registered, so that
+  `site:` is set once and `base:` is never needed. That defers the proof, which
+  is a real cost of the recommendation and the reason §6.1 offers the repo
+  rename as an alternative.
 
 **Milestone 1 — the shell.**
 Base layout, header, footer, three routes, the palette, both fonts. No images.
@@ -287,7 +408,8 @@ are hand-picked per piece and nothing validates them but a person.
 
 ## 10. Open — decide during build
 
-- Pages vs Workers (§1.2), at Milestone 0.
+- ~~Pages vs Workers (§1.2), at Milestone 0.~~ **Closed 2026-07-30 — GitHub
+  Pages. See §1.2.**
 - Image export format and how many responsive widths (spec open question 3).
 - Page titles, meta descriptions, favicon, 404 (spec open question 5).
 - Whether `year`, `medium` and `band/venue` return to the schema (spec open

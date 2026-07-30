@@ -5,9 +5,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Commands
 
 ```bash
-npm run dev        # dev server
-npm run build      # static build to dist/
-npm run preview    # serve dist/ locally
+npm run dev              # dev server
+npm run dev -- --host    # dev server on the LAN, for checking on a phone
+npm run build            # static build to dist/
+npm run preview          # serve dist/ locally
 ```
 
 When starting the dev server from an agent session, prefer `npx astro dev --background`,
@@ -23,15 +24,34 @@ Verification below.
 Scaffolded and building; no real content yet. Node 24.18.0, Astro 7.1.6
 (engine floor `>=22.12.0`). `npm run build` emits `dist/` with zero JavaScript.
 
-**Hosting is undecided** — Cloudflare Workers vs Cloudflare Pages vs GitHub
-Pages is an open question the user is actively weighing. `PLAN.md` §1.2 still
-recommends Cloudflare Pages and is stale on two points: Workers now has
-*better* per-branch preview URLs than Pages, and GitHub Pages is a live
-contender. Do not write a deploy config, a CI workflow, or `site:` in
-`astro.config.mjs` until this is settled — all three depend on the answer.
+**Hosting: GitHub Pages**, decided 2026-07-30, deployed via GitHub Actions
+(`PLAN.md` §1.2). Nothing is wired up yet — no workflow, no `site:` in
+`astro.config.mjs`, no `public/CNAME`. That is deliberate, not an oversight;
+the user asked for docs first.
 
-If GitHub Pages wins, the `CNAME` file must live at **`public/CNAME`**, not the
-repo root, or each deploy silently drops the custom domain.
+Three things block the first deploy, none of them code: the repo must be
+**public** (Pages on private repos is not free), Settings → Pages → Source must
+be **GitHub Actions** rather than "Deploy from a branch", and the workflow's
+Node should be pinned to 24.x to match local.
+
+Two traps recorded in `PLAN.md` §6, both silent rather than loud:
+
+- The `CNAME` file must live at **`public/CNAME`**, not the repo root. Setting
+  the domain in repo settings writes it to the root, where an Actions deploy
+  publishing `dist/` never sees it — so the custom domain unsets on the next
+  deploy.
+- `site:` in `astro.config.mjs` must match the deployed origin. Wrong value
+  produces broken absolute URLs, not an error.
+- The repo is `thisismaca/thisismaca.com`, **not** `thisismaca.github.io`, so
+  it is a *project* site serving from `/thisismaca.com/`. That would need
+  `base:` set — and then unset again when the custom domain lands. `PLAN.md`
+  §6.1 recommends avoiding `base` entirely by not deploying until the domain
+  is registered. Do not add `base:` without re-reading that section.
+
+**There are no per-branch preview URLs** — GitHub Pages is one site per repo.
+To check on a phone, run `npm run dev -- --host` and open the LAN address. For
+anything that could differ between dev and production, use
+`npm run build && npm run preview -- --host` instead.
 
 ## Governing documents
 
