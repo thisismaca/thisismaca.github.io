@@ -462,7 +462,8 @@ description against the same threshold, not just description.
   list), and confirms all five pairs pass at 4.5:1+.
 - ✅ Zero `<script>` tags in the build output, unchanged from Milestone 1.
 
-**Milestone 4 — About and Contact.** *(split, 2026-07-30)*
+**Milestone 4 — About and Contact.** *(split, 2026-07-30; About half closed
+same day)*
 The photo wrap, the shadow on both, the Contact footer swap. Originally one
 milestone; split into two Spec Kit features because About's real content
 (bio copy, influences, the site's own source-repo link, and Maca's photo)
@@ -470,6 +471,28 @@ arrived while Contact's (the invitation text) had not — the mirror image of
 why Milestones 2/3 merged. `specs/003-about/` covers the About half only;
 Contact remains unscoped until its content exists, at which point it
 becomes its own feature rather than blocking on it now.
+
+- ✅ `/about` fills the empty shell `001-shell` left it in: the site
+  owner's real bio (both paragraphs, unedited), her influences woven into
+  it as running text (closing `SPEC.md` §7's former open question), and a
+  working link to the site's own source repo.
+- ✅ The photo — deliberately cropped, unlike the piece stack's uncropped
+  images — renders at exactly 80×100px via `layout="fixed"`, confirmed by
+  checking the actual generated files: exactly two tiny variants (1x/2x),
+  not the piece stack's full responsive set. `specs/003-about/research.md`
+  explains why the global `image.layout: 'full-width'` from
+  `002-content-stack` had to be overridden per-instance here, not changed
+  globally.
+- ✅ S7.3/S7.4 verified precisely, not just eyeballed: at 1024px, the first
+  line of body text sits at the same vertical position as the photo and
+  starts just past its right edge (a real wrap, checked via `Range` on the
+  actual text node — a plain bounding-box check on the paragraph element
+  would have falsely failed this, since the box itself still spans full
+  width under a CSS float). Below 768px, the photo's centred position
+  matches the padding math exactly, and all text falls below it.
+- ✅ Header shadow (S7.6) confirmed still intact — this feature touches no
+  shared component.
+- ✅ Zero `<script>` tags, unchanged.
 
 **Milestone 5 — verification pass.**
 Walk §10 below end to end. Fix. Merge to `main`.

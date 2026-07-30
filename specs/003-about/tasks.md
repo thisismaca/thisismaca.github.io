@@ -31,7 +31,7 @@ component markup itself, per `research.md`).
 
 **⚠️ CRITICAL**: Do not start Phase 2+ before this checkpoint.
 
-- [ ] T001 Rewrite `src/pages/about.astro`: import `../assets/maca-portrait.jpg`, render it via `<Image>` with `layout="fixed" width={80} height={100}` and real descriptive alt text (FR-006); render both bio paragraphs verbatim (FR-004), with the influences named as running text (FR-005) and the source-repo URL in paragraph two as a real `<a href="https://github.com/thisismaca/thisismaca.github.io">` (FR-009); wrap photo + text in a container with `display: flow-root`
+- [X] T001 Rewrite `src/pages/about.astro`: import `../assets/maca-portrait.jpg`, render it via `<Image>` with `layout="fixed" width={80} height={100}` and real descriptive alt text (FR-006); render both bio paragraphs verbatim (FR-004), with the influences named as running text (FR-005) and the source-repo URL in paragraph two as a real `<a href="https://github.com/thisismaca/thisismaca.github.io">` (FR-009); wrap photo + text in a container with `display: flow-root`
 
 **Checkpoint**: `/about` shows real content. Layout is not yet correct at
 either breakpoint (no float/centring CSS applied yet).
@@ -46,7 +46,7 @@ black text, with the header shadow intact.
 **Independent Test**: Load `/about`, confirm the full bio text, correct
 colours, and header shadow.
 
-- [ ] T002 [US1] Run [quickstart.md](./quickstart.md) Scenario 1 (depends on T001) — confirm bio text is complete and unedited, background white and text black (already the `global.css` default from `001-shell`, so this is a regression check, not new CSS), header shadow still visible; fix anything found
+- [X] T002 [US1] Run [quickstart.md](./quickstart.md) Scenario 1 (depends on T001) — confirm bio text is complete and unedited, background white and text black (already the `global.css` default from `001-shell`, so this is a regression check, not new CSS), header shadow still visible; fix anything found
 
 **Checkpoint**: User Story 1 independently functional — the credibility
 content is correct, even though layout positioning isn't final yet.
@@ -61,10 +61,10 @@ photo centred above all text below 768px.
 **Independent Test**: Load `/about` at 768px+ and confirm the wrap;
 below 768px and confirm the stack.
 
-- [ ] T003 [US2] In `src/pages/about.astro`, add the ≥768px photo styling (depends on T001): `float: left`, `margin: 5px` (S7.2/S7.3)
-- [ ] T004 [US2] In the same file, add a `@media (max-width: 767px)` override: `float: none`, `margin-inline: auto`, `display: block` (S7.4)
-- [ ] T005 [US2] Run [quickstart.md](./quickstart.md) Scenario 2 (≥768px wrap); fix any issue found
-- [ ] T006 [US2] Run [quickstart.md](./quickstart.md) Scenario 3 (<768px stack, no horizontal scroll); fix any issue found
+- [X] T003 [US2] In `src/pages/about.astro`, add the ≥768px photo styling (depends on T001): `float: left`, `margin: 5px` (S7.2/S7.3)
+- [X] T004 [US2] In the same file, add a `@media (max-width: 767px)` override: `float: none`, `margin-inline: auto`, `display: block` (S7.4)
+- [X] T005 [US2] Run [quickstart.md](./quickstart.md) Scenario 2 (≥768px wrap); fix any issue found
+- [X] T006 [US2] Run [quickstart.md](./quickstart.md) Scenario 3 (<768px stack, no horizontal scroll); fix any issue found
 
 **Checkpoint**: User Stories 1 and 2 both independently functional.
 
@@ -77,7 +77,7 @@ below 768px and confirm the stack.
 **Independent Test**: Load `/about`, confirm the link's target and that
 it's visually distinguishable from plain text.
 
-- [ ] T007 [US3] Run [quickstart.md](./quickstart.md) Scenario 4 (depends on T001 — the link itself was already written there; this is verification only); fix anything found
+- [X] T007 [US3] Run [quickstart.md](./quickstart.md) Scenario 4 (depends on T001 — the link itself was already written there; this is verification only); fix anything found
 
 **Checkpoint**: All three user stories independently functional.
 
@@ -85,8 +85,8 @@ it's visually distinguishable from plain text.
 
 ## Phase 5: Polish & Cross-Cutting Concerns
 
-- [ ] T008 [P] Run [quickstart.md](./quickstart.md) Scenario 5 (`grep -ril "<script" dist/`); confirm no output
-- [ ] T009 Update root `PLAN.md` §7 Milestone 4 (About half) checklist once T001–T008 all pass
+- [X] T008 [P] Run [quickstart.md](./quickstart.md) Scenario 5 (`grep -ril "<script" dist/`); confirm no output
+- [X] T009 Update root `PLAN.md` §7 Milestone 4 (About half) checklist once T001–T008 all pass
 
 ---
 

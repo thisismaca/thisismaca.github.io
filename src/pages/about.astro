@@ -1,5 +1,55 @@
 ---
+import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
+import macaPortrait from '../assets/maca-portrait.jpg';
 ---
 
-<Base headerShadow={true}></Base>
+<Base headerShadow={true}>
+  <div class="about">
+    <Image
+      src={macaPortrait}
+      alt="Black-and-white close-up portrait of Maca, dark wavy hair falling across her face, wearing dark lipstick and a beaded drop earring, looking toward the camera."
+      layout="fixed"
+      width={80}
+      height={100}
+    />
+    <p>
+      Maca is a jack of all trades that loves to follow Metallica around the world catching
+      meaningful moments in every concert or city. She yearns to showcase her photos and
+      illustrations while keeping her IT job that allows her to accomplish her dreams. Her
+      inspiration comes from film black and white photography, works of Virgil Finlay, Richey
+      Beckett, Peeter Baltens, the 2013 Tumblr aesthetic and nature. Maca lives in Chile, in the
+      boring city of Chillán with her two fat cats that prevent her from travelling for more than
+      two weeks cause they get sad.
+    </p>
+    <p>
+      This site has the double purpose of showcasing art while testing new development
+      technologies. You can find the source code at{' '}
+      <a href="https://github.com/thisismaca/thisismaca.github.io"
+        >https://github.com/thisismaca/thisismaca.github.io</a
+      >
+    </p>
+  </div>
+</Base>
+
+<style>
+  .about {
+    display: flow-root;
+    padding: clamp(15px, 3vw, 30px);
+  }
+
+  /* S7.2/S7.3 — top-left, text wraps around it, at 768px and up. */
+  .about :global(img) {
+    margin: 5px;
+    float: left;
+  }
+
+  /* S7.4 — below 768px, centred, all text beneath it instead. */
+  @media (max-width: 767px) {
+    .about :global(img) {
+      float: none;
+      display: block;
+      margin-inline: auto;
+    }
+  }
+</style>
