@@ -1,6 +1,6 @@
 # Spec — thisismaca.com
 
-**Status:** draft 1 · **Date:** 2026-07-29
+**Status:** draft 2 · **Date:** 2026-07-29
 
 This document describes *what must be true* of the finished site. It names no
 framework, host or library on purpose — those belong in `PLAN.md`, which can be
@@ -8,6 +8,10 @@ thrown away and rewritten without touching this file.
 
 Every statement below should be checkable by looking at the built site. Anything
 that cannot be checked is a note, not a requirement, and is marked as such.
+
+**Changed since draft 1:** the carousel is gone, replaced by a vertical stack.
+Orientation has left the content model. The carousel height question is closed.
+JavaScript is now zero rather than "minimal".
 
 ---
 
@@ -35,13 +39,24 @@ Each piece is one file. Fields:
 | `alt` | yes | Text alternative; build fails if absent |
 | `captionBackground` | yes | Hex, chosen by hand per piece |
 | `captionText` | yes | Hex, chosen by hand per piece |
-| `order` | yes | Position in the carousel |
+| `order` | yes | Position in the stack |
 
 **S2.1** Adding a piece requires creating one file and changing no code.
 **S2.2** A missing `alt` fails the build rather than shipping.
-**S2.3** Orientation is derived from the image's own dimensions, not declared by
-hand. Width greater than height is landscape; otherwise portrait.
-**S2.4** Ten pieces at launch, mixed portrait and landscape.
+**S2.3** Ten pieces at launch.
+**S2.4** The site holds no concept of orientation. A piece is an image of
+whatever proportions it has.
+
+> **Note — where the images come from.** The stack is composed as a whole in
+> Photoshop and exported as one file per piece. A landscape work is placed on a
+> portrait canvas there, with its surround chosen deliberately rather than left
+> to the browser. Source files are around 2400px wide so they hold up
+> full-bleed on a desktop.
+>
+> **Visual design is baked into the pixels; text is not.** Titles and
+> descriptions stay as real HTML (§6), never lettering inside an image. A 2400px
+> composition renders at roughly 16% on a phone, which is where most visitors
+> are.
 
 ---
 
@@ -94,24 +109,28 @@ page, which is intended.
 
 ## 6. Home
 
-**S6.1** A carousel of the ten pieces begins immediately below the header.
-**S6.2** The carousel's background is `#444444`.
-**S6.3** The carousel advances via arrows and position dots. It does not
-auto-advance.
-**S6.4** Beneath each image sits a caption block containing the title in bold
-and the description below it.
+**S6.1** The ten pieces are stacked vertically in a single column, in `order`,
+beginning below the header.
+**S6.2** The background behind and between pieces is `#444444`.
+**S6.3** A piece unit is its image with its caption block flush beneath it, no
+gap between the two.
+**S6.4** The caption block contains the title in bold with the description
+below it.
 **S6.5** The caption block's background and text colours come from that piece's
-own fields, so they change from slide to slide.
-**S6.6** A landscape image spans the full viewport width.
-**S6.7** A portrait image fits within the height remaining between the header
-and the bottom of the viewport.
-**S6.8** A portrait piece's caption may fall below the fold. This is accepted.
-**S6.9** The footer is reached by scrolling and need not be visible on load.
-
-> **Open — carousel height.** Mixed orientations mean the carousel's height
-> differs between slides, which will shift everything below on each advance.
-> Three options: fix the height and letterbox portraits, allow the jump, or make
-> every slide fill the viewport with the image varying inside it. Undecided.
+own fields, so they differ from piece to piece.
+**S6.6** Each image spans the full viewport width. Its height is its own
+intrinsic height at that width. Nothing is cropped and no height is imposed.
+**S6.7** At least 20px separates one piece unit from the next — that is,
+between a caption block and the image below it. The page background shows
+through.
+**S6.8** The same 20px minimum separates the header from the first image, and
+the last caption block from the footer.
+**S6.9** There is no carousel, no arrows, no dots, no snapping and no
+pagination. The page is scrolled.
+**S6.10** Images below the fold are deferred until needed.
+**S6.11** The first image is not deferred and begins loading immediately.
+**S6.12** The page does not shift as images load. Space is reserved from each
+image's known dimensions before it arrives.
 
 ---
 
@@ -163,7 +182,7 @@ while fonts load.
 
 | Role | Value |
 |---|---|
-| Page and carousel background | `#444444` |
+| Home background, and gaps between pieces | `#444444` |
 | Header, footer, About, Contact | `#FFFFFF` |
 | Menu lettering | `#333333` |
 | Body text on white | Black |
@@ -179,20 +198,19 @@ About layout (S7.3, S7.4).
 **S11.2** Header padding and item spacing are fluid and cross no breakpoint
 (S4.5, S4.6, S4.8).
 **S11.3** Nothing scrolls horizontally at any width from 320px up.
+**S11.4** The stack is one column at every width. It never becomes a grid.
 
 ---
 
 ## 12. Performance and accessibility
 
-**S12.1** No JavaScript ships except what the carousel genuinely requires
-(Constitution §5). Arrows and dots via CSS scroll-snap ship none; if a script
-proves necessary, it is justified here first.
+**S12.1** No JavaScript ships. Nothing on the site requires it.
 **S12.2** Every image has alt text (S2.2).
 **S12.3** Images are served at sizes appropriate to the viewport, not one large
 file scaled down.
-**S12.4** The carousel is operable by keyboard.
-**S12.5** Text meets WCAG AA contrast against its background — including each
+**S12.4** Text meets WCAG AA contrast against its background — including each
 hand-picked caption pair, which must be checked per piece.
+**S12.5** The whole site is operable and readable without a pointing device.
 
 ---
 
@@ -200,22 +218,26 @@ hand-picked caption pair, which must be checked per piece.
 
 Not in this version, and not to be quietly added:
 
+- A carousel of any kind
+- One long composite image for the whole page
+- Slicing a single work across several stack entries
 - Per-piece detail pages and URLs
 - Hand-drawn frames and the ornament kit
 - A contact form
 - Selling anything, including prints
 - A hamburger menu
-- Splitting the gallery by medium
+- Splitting the gallery by medium or by orientation
 - Any admin interface
 
 ---
 
 ## 14. Open questions
 
-1. Carousel height with mixed orientations (§6).
-2. Whether `year`, `medium` and `band/venue` return as content fields — they
+1. Whether `year`, `medium` and `band/venue` return as content fields — they
    were in the original brief and are absent here.
-3. Influences on the About page (§7).
-4. Image source dimensions and formats.
+2. Influences on the About page (§7).
+3. Image export format, and how many responsive widths per piece.
+4. How the composition reads on a very wide monitor, where each piece becomes
+   large. Worth mocking one screen at 1440px and one at 2560px before export.
 5. Page titles, meta descriptions, favicon, and what a 404 does.
 6. Where the print house link lives, if anywhere, given §13.
