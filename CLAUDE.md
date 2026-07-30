@@ -90,10 +90,14 @@ plus optional `/speckit-clarify`, `/speckit-analyze`, `/speckit-checklist`.
 hand-written and the command's template output is markedly worse. Amend by hand.
 
 Spec Kit is feature-oriented: each `/speckit-specify` creates a numbered
-`specs/###-*/` directory. The mapping for this project is **one Spec Kit feature
-per `PLAN.md` §7 milestone** (`001-shell`, `002-one-piece`, `003-the-stack`,
-`004-about-contact`). `SPEC.md` stays at root as the whole-site contract; each
-feature spec cites its requirement IDs rather than restating them.
+`specs/###-*/` directory. The mapping for this project is **one Spec Kit
+feature per `PLAN.md` §7 milestone**, with one exception: Milestones 2 and 3
+(one piece, then the stack) merged into a single feature `002-*` when five of
+the ten launch pieces arrived finished at once rather than trickling in —
+splitting that into two near-identical specify/plan/tasks cycles would have
+been process for its own sake. See `PLAN.md` §7 for why. `SPEC.md` stays at
+root as the whole-site contract; each feature spec cites its requirement IDs
+rather than restating them.
 
 ## Constitution constraints
 
