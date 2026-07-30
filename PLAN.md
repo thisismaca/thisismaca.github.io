@@ -349,11 +349,13 @@ hosting is going to be annoying, it is much better to discover that now.
 - ✅ `.github/workflows/deploy.yml` (build + deploy on push to `main`) and
   `ci.yml` (build-only on `develop`/PRs), `site:` set to
   `https://thisismaca.github.io`.
-- ⬜ Settings → Pages → Source set to **GitHub Actions** — an account setting,
-  left to the user.
-- ⬜ First deploy — push to `main` and confirm the Action run succeeds and
-  `https://thisismaca.github.io` serves the page. The half that actually proves
-  the chain. Not blocked on domain registration.
+- ✅ Settings → Pages → Source set to **GitHub Actions**.
+- ✅ First deploy — confirmed 2026-07-30. `https://thisismaca.github.io` serves
+  the scaffold's placeholder page, zero `<script>` tags in production. The
+  whole chain works.
+
+**Milestone 0 is closed.** Next up: Milestone 1, the shell (§7 below) — base
+layout, header, footer, three routes, palette, both fonts, no images yet.
 
 **Milestone 1 — the shell.**
 Base layout, header, footer, three routes, the palette, both fonts. No images.
