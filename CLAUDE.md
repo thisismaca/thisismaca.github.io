@@ -29,10 +29,12 @@ Scaffolded and building; no real content yet. Node 24.18.0, Astro 7.1.6
 `astro.config.mjs`, no `public/CNAME`. That is deliberate, not an oversight;
 the user asked for docs first.
 
-Three things block the first deploy, none of them code: the repo must be
-**public** (Pages on private repos is not free), Settings → Pages → Source must
-be **GitHub Actions** rather than "Deploy from a branch", and the workflow's
-Node should be pinned to 24.x to match local.
+Blocking the first deploy, none of it code: the repo is being renamed to
+`thisismaca.github.io` (see below) and the local remote needs repointing
+afterwards; only the initial commit is on `origin`, so `develop` needs pushing;
+Settings → Pages → Source must be **GitHub Actions** rather than "Deploy from a
+branch"; and the workflow's Node should be pinned to 24.x to match local. The
+repo is already public, so the free-tier requirement is satisfied.
 
 Two traps recorded in `PLAN.md` §6, both silent rather than loud:
 
@@ -42,11 +44,15 @@ Two traps recorded in `PLAN.md` §6, both silent rather than loud:
   deploy.
 - `site:` in `astro.config.mjs` must match the deployed origin. Wrong value
   produces broken absolute URLs, not an error.
-- The repo is `thisismaca/thisismaca.com`, **not** `thisismaca.github.io`, so
-  it is a *project* site serving from `/thisismaca.com/`. That would need
-  `base:` set — and then unset again when the custom domain lands. `PLAN.md`
-  §6.1 recommends avoiding `base` entirely by not deploying until the domain
-  is registered. Do not add `base:` without re-reading that section.
+- **Never set `base:` in `astro.config.mjs`.** The repo is being renamed to
+  `thisismaca.github.io`, which makes this a *user* site serving from the root
+  (`PLAN.md` §6.1). `base` exists only for project sites on a subpath; setting
+  it here would break every asset URL. If a future session sees a subpath URL
+  and reaches for `base`, the rename has not happened yet — fix that instead.
+
+`site:` takes exactly two values over the project's life:
+`https://thisismaca.github.io` from the first deploy, then
+`https://thisismaca.com` once the domain is live. Nothing else changes with it.
 
 **There are no per-branch preview URLs** — GitHub Pages is one site per repo.
 To check on a phone, run `npm run dev -- --host` and open the LAN address. For

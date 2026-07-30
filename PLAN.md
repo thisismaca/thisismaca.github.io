@@ -12,9 +12,11 @@ sign that the spec has a hole.
 
 **Changed since draft 1:** hosting is decided — GitHub Pages, not Cloudflare
 (§1.2), which closes the last open stack question. Per-branch preview URLs are
-gone as a consequence, and §6 replaces them. GitHub Spec Kit has been adopted
-and the repository structure in §2 reflects it. Milestone 0 is half complete
-(§7). Versions in §1.1 are now measured on this machine rather than estimated.
+gone as a consequence, and §6 replaces them with the dev server on the LAN. The
+repository is being renamed `thisismaca.github.io` so the site serves from the
+root and `base:` is never needed (§6.1). GitHub Spec Kit has been adopted and
+the repository structure in §2 reflects it. Milestone 0 is half complete (§7).
+Versions in §1.1 are now measured on this machine rather than estimated.
 
 **Version note.** Versions move fast. Anything not marked as confirmed on a
 specific date should be verified against current docs before it is trusted.
@@ -263,36 +265,39 @@ blocks:
 3. Node in the workflow should be pinned to the same major as local (24.x).
 4. Only the initial commit is on `origin`. `develop` and everything since is
    local-only and needs pushing.
+5. The repo is being renamed to `thisismaca.github.io` (§6.1). Afterwards,
+   repoint the local remote — `git remote set-url origin` — rather than leaning
+   on GitHub's redirect of the old URL.
 
-### 6.1 Project site vs user site — decide before the first deploy
+### 6.1 User site, not project site — decided 2026-07-30
 
-The repository is named `thisismaca.com`, not `thisismaca.github.io`. That makes
-it a **project site**, which serves from a subpath:
+**Decision: the repository is renamed `thisismaca.github.io`.**
 
-```
-https://thisismaca.github.io/thisismaca.com/
-```
+The repository was named `thisismaca.com`, which would have made it a *project*
+site serving from a subpath — `https://thisismaca.github.io/thisismaca.com/`.
+A subpath means `astro.config.mjs` needs `base: '/thisismaca.com'` alongside
+`site:`, and every internal link and asset URL has to respect it. Worse, when
+`thisismaca.com` is later attached as a custom domain the site moves to the
+root and `base` must be **removed** again. Getting that transition wrong 404s
+every asset at once.
 
-A subpath means `astro.config.mjs` needs `base: '/thisismaca.com'` as well as
-`site:`, and every internal link and asset URL has to respect it. Then, when
-`thisismaca.com` is attached as a custom domain, the site moves to the root and
-`base` must be **removed** again. Getting that transition wrong 404s every asset
-at once.
+Named `<user>.github.io`, it is a **user site**: it serves at the root
+immediately, `base` is never configured, and attaching the custom domain later
+changes nothing structural. One rename buys the removal of an entire class of
+error.
 
-Two ways out, both fine:
+**Consequences:**
 
-- **Rename the repo to `thisismaca.github.io`.** It becomes a user site, serves
-  at the root immediately, needs no `base`, and the custom domain later changes
-  nothing structural. Costs: one rename, one remote URL update, and the repo
-  name stops matching the product name.
-- **Keep the name and skip the interim URL.** Set `base` never; simply do not
-  deploy until the domain is registered and pointed. The site is not public
-  until launch anyway, and §6's phone-checking runs off the LAN, not off a
-  deployed preview.
-
-**Recommendation: the second.** Nothing in the spec needs a public URL before
-launch, and it avoids configuring a `base` that exists only to be deleted. If a
-shareable URL is wanted sooner, take the first.
+- The repo name no longer matches the product name. Accepted — `package.json`,
+  `README.md` and the eventual domain all still say `thisismaca.com`.
+- The local remote must be repointed after the rename (§6, prerequisite 4).
+  GitHub redirects the old URL, but relying on a redirect is not a plan.
+- Only one user site exists per account, so this repo now claims
+  `thisismaca.github.io` for good. No other project needs it.
+- **Milestone 0 is unblocked.** The interim `https://thisismaca.github.io` URL
+  is usable straight away, so the "prove the chain works" deploy no longer waits
+  on domain registration. This was the main cost of the alternative and the
+  reason it was rejected.
 
 ### 6.2 Custom domain
 
@@ -301,7 +306,7 @@ shareable URL is wanted sooner, take the first.
 - Apex (`thisismaca.com`) — four `A` records to GitHub's Pages IPs
   (`185.199.108–111.153`), plus the `AAAA` records; confirm the current set
   against GitHub's docs rather than copying them from here.
-- `www` — a `CNAME` to `<user>.github.io`.
+- `www` — a `CNAME` to `thisismaca.github.io`.
 - Tick **Enforce HTTPS** once the certificate is issued. It can take up to 24
   hours to become available.
 
@@ -311,11 +316,18 @@ deploy publishes `dist/`, so that file never reaches the deployed output and
 the domain silently unsets on the next deploy. The file must live at
 **`public/CNAME`** so Astro copies it into `dist/`.
 
-`site:` in `astro.config.mjs` must be set to the deployed origin. Under §6.1's
-recommendation that is `https://thisismaca.com` and never anything else — which
-is the main reason to prefer it. Getting `site:` wrong produces broken absolute
-URLs rather than a visible error, so having only one correct value it can ever
-hold is worth something.
+`site:` in `astro.config.mjs` must be set to the deployed origin. It takes two
+values over the project's life:
+
+| When | `site:` | `base:` |
+|---|---|---|
+| From the first deploy | `https://thisismaca.github.io` | never set |
+| Once the domain is live | `https://thisismaca.com` | never set |
+
+`base` is never configured at either point — that is what §6.1's rename bought.
+Changing `site:` is a one-line edit with no structural consequence. Getting it
+wrong produces broken absolute URLs rather than a visible error, so check it
+after the domain moves.
 
 ---
 
@@ -332,13 +344,13 @@ hosting is going to be annoying, it is much better to discover that now.
 - ✅ Toolchain — Node 24.18.0 LTS, Astro 7.1.6, Spec Kit 0.14.4.
 - ✅ Scaffold builds to static output with no JavaScript.
 - ✅ Governing documents committed.
-- ⬜ GitHub Actions workflow and Pages enabled — writeable now; see §6 for the
-  prerequisites.
-- ⬜ First deploy — the half that actually proves the chain. Under §6.1's
-  recommendation this waits for `thisismaca.com` to be registered, so that
-  `site:` is set once and `base:` is never needed. That defers the proof, which
-  is a real cost of the recommendation and the reason §6.1 offers the repo
-  rename as an alternative.
+- ⬜ Rename the repo to `thisismaca.github.io` (§6.1), repoint the remote, push
+  `develop`.
+- ⬜ GitHub Actions workflow, Pages source set to Actions, `site:` set to
+  `https://thisismaca.github.io`.
+- ⬜ First deploy — the half that actually proves the chain. Not blocked on
+  domain registration; the `github.io` URL serves from the root, so the chain
+  can be proven now and the domain attached later as a one-line `site:` change.
 
 **Milestone 1 — the shell.**
 Base layout, header, footer, three routes, the palette, both fonts. No images.
