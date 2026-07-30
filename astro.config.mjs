@@ -28,4 +28,14 @@ export default defineConfig({
       weights: [400],
     },
   ],
+
+  // SPEC.md S6.6/S12.3. layout: 'full-width' is what makes an image scale
+  // to its container without cropping (S6.6) — the default layout is
+  // "none", which silently skips responsive width generation entirely
+  // (specs/002-content-stack/research.md), so this line is load-bearing,
+  // not cosmetic.
+  image: {
+    layout: 'full-width',
+    responsiveStyles: true,
+  },
 });

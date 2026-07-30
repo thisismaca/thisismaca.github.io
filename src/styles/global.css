@@ -39,3 +39,15 @@ body[data-bg='dark'] {
 a {
   color: inherit;
 }
+
+/* S6.1/S6.7/S6.8 — the Home piece stack. One property (gap) governs the
+   space between pieces; padding-block covers the same 20px minimum
+   between the header and the first image, and the last caption and the
+   footer. Deliberately one rule, not per-piece margins, so it can't drift
+   out of sync (PLAN.md §5). */
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding-block: 20px;
+}

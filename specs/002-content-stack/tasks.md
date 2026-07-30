@@ -20,8 +20,8 @@ Single project. All paths relative to repository root.
 
 ## Phase 1: Setup
 
-- [ ] T001 Add `image: { layout: 'full-width', responsiveStyles: true }` to `astro.config.mjs`, per the decision in [research.md](./research.md)
-- [ ] T002 [P] Create `scripts/check-contrast.mjs`: a standalone Node script computing WCAG relative luminance and contrast ratio for one or more `background,text` hex pairs, printing PASS/FAIL at the 4.5:1 threshold — the tool `quickstart.md` Scenario 4 and root `PLAN.md` §8 both reference
+- [X] T001 Add `image: { layout: 'full-width', responsiveStyles: true }` to `astro.config.mjs`, per the decision in [research.md](./research.md)
+- [X] T002 [P] Create `scripts/check-contrast.mjs`: a standalone Node script computing WCAG relative luminance and contrast ratio for one or more `background,text` hex pairs, printing PASS/FAIL at the 4.5:1 threshold — the tool `quickstart.md` Scenario 4 and root `PLAN.md` §8 both reference
 
 **Checkpoint**: Image config and the reusable contrast checker exist; no content yet.
 
@@ -34,9 +34,9 @@ story is independently testable until this phase is done.
 
 **⚠️ CRITICAL**: Do not start Phase 3+ before this checkpoint.
 
-- [ ] T003 Create `src/content.config.ts`: a `pieces` collection using a `glob()` loader over `src/content/pieces/`, schema `{ title: z.string().min(1), description: z.string().min(1), image: image(), alt: z.string().min(1), captionBackground: z.string().regex(/^#[0-9a-fA-F]{6}$/), captionText: z.string().regex(/^#[0-9a-fA-F]{6}$/), order: z.number().int() }` (S2, S2.2, S2.4 — no orientation field)
-- [ ] T004 Create `src/components/Piece.astro` (depends on T003): accepts one collection entry's `data` plus its rendered `<Image>`; renders the image immediately followed by a caption block (title bold, description below) with inline `background-color`/`color` from that piece's own fields, no gap between image and caption (S6.3, S6.4, S6.5)
-- [ ] T005 [P] In `src/styles/global.css`, add a stack container rule: `display: flex; flex-direction: column; gap: max(20px, ...)` — a single `gap` property, not per-piece margins, so S6.7/S6.8's 20px minimum can't drift out of sync (root `PLAN.md` §5)
+- [X] T003 Create `src/content.config.ts`: a `pieces` collection using a `glob()` loader over `src/content/pieces/`, schema `{ title: z.string().min(1), description: z.string().min(1), image: image(), alt: z.string().min(1), captionBackground: z.string().regex(/^#[0-9a-fA-F]{6}$/), captionText: z.string().regex(/^#[0-9a-fA-F]{6}$/), order: z.number().int() }` (S2, S2.2, S2.4 — no orientation field)
+- [X] T004 Create `src/components/Piece.astro` (depends on T003): accepts one collection entry's `data` plus its rendered `<Image>`; renders the image immediately followed by a caption block (title bold, description below) with inline `background-color`/`color` from that piece's own fields, no gap between image and caption (S6.3, S6.4, S6.5)
+- [X] T005 [P] In `src/styles/global.css`, add a stack container rule: `display: flex; flex-direction: column; gap: max(20px, ...)` — a single `gap` property, not per-piece margins, so S6.7/S6.8's 20px minimum can't drift out of sync (root `PLAN.md` §5)
 
 **Checkpoint**: Schema, rendering unit, and gap CSS exist. Nothing is
 populated with real content yet.
@@ -53,13 +53,13 @@ image, bold title, description, and caption colours.
 
 ### Implementation for User Story 1
 
-- [ ] T006 [P] [US1] Create `src/content/pieces/kirk-hammett-london.md`: title "Kirk Hammett in London, July 5th 2026", order 1, captionBackground `#302d2d`, captionText `#e9e1e1`, image → `src/assets/pieces/kirk-hammett-london.jpg`, description and alt per [data-model.md](./data-model.md)
-- [ ] T007 [P] [US1] Create `src/content/pieces/mario-duplantier-frankfurt.md`: order 2, captionBackground `#5c432f`, captionText `#fff1c4`, image → `src/assets/pieces/mario-duplantier-frankfurt.jpg`
-- [ ] T008 [P] [US1] Create `src/content/pieces/jean-michel-labadie-cardiff.md`: order 3, captionBackground `#494949`, captionText `#f3a797` (WCAG-corrected), image → `src/assets/pieces/jean-michel-labadie-cardiff.jpg`
-- [ ] T009 [P] [US1] Create `src/content/pieces/rex-brown-london.md`: order 4, captionBackground `#38543d`, captionText `#eab875` (WCAG-corrected), image → `src/assets/pieces/rex-brown-london.jpg`
-- [ ] T010 [P] [US1] Create `src/content/pieces/phil-anselmo-london.md`: order 5, captionBackground `#8f8f8f`, captionText `#000000`, image → `src/assets/pieces/phil-anselmo-london.jpg`
-- [ ] T011 [US1] Rewrite `src/pages/index.astro` (depends on T003–T010): `getCollection('pieces')`, sort by `order`, render `<Piece>` for each inside the gap container from T005
-- [ ] T012 [US1] Run [quickstart.md](./quickstart.md) Scenario 1; fix any ordering, caption, or colour issue found
+- [X] T006 [P] [US1] Create `src/content/pieces/kirk-hammett-london.md`: title "Kirk Hammett in London, July 5th 2026", order 1, captionBackground `#302d2d`, captionText `#e9e1e1`, image → `src/assets/pieces/kirk-hammett-london.jpg`, description and alt per [data-model.md](./data-model.md)
+- [X] T007 [P] [US1] Create `src/content/pieces/mario-duplantier-frankfurt.md`: order 2, captionBackground `#5c432f`, captionText `#fff1c4`, image → `src/assets/pieces/mario-duplantier-frankfurt.jpg`
+- [X] T008 [P] [US1] Create `src/content/pieces/jean-michel-labadie-cardiff.md`: order 3, captionBackground `#494949`, captionText `#f3a797` (WCAG-corrected), image → `src/assets/pieces/jean-michel-labadie-cardiff.jpg`
+- [X] T009 [P] [US1] Create `src/content/pieces/rex-brown-london.md`: order 4, captionBackground `#38543d`, captionText `#eab875` (WCAG-corrected), image → `src/assets/pieces/rex-brown-london.jpg`
+- [X] T010 [P] [US1] Create `src/content/pieces/phil-anselmo-london.md`: order 5, captionBackground `#8f8f8f`, captionText `#000000`, image → `src/assets/pieces/phil-anselmo-london.jpg`
+- [X] T011 [US1] Rewrite `src/pages/index.astro` (depends on T003–T010): `getCollection('pieces')`, sort by `order`, render `<Piece>` for each inside the gap container from T005
+- [X] T012 [US1] Run [quickstart.md](./quickstart.md) Scenario 1; fix any ordering, caption, or colour issue found
 
 **Checkpoint**: User Story 1 independently functional — five real pieces,
 correctly ordered and captioned.
@@ -77,10 +77,10 @@ image's attributes and loading order, and that no visible shift occurs.
 
 ### Implementation for User Story 2
 
-- [ ] T013 [US2] In `src/pages/index.astro` or `Piece.astro` (depends on T011), pass `priority` to the `<Image>` only for the piece with `order === 1` — expands to `loading="eager"`, `decoding="sync"`, `fetchpriority="high"` per [research.md](./research.md); every other piece gets none of those, defaulting to lazy
-- [ ] T014 [US2] Run [quickstart.md](./quickstart.md) Scenario 2; confirm the first image's attributes and that later images don't fetch until scrolled near
-- [ ] T015 [US2] Run [quickstart.md](./quickstart.md) Scenario 3; confirm multiple widths exist per piece under `dist/_astro/`
-- [ ] T016 [US2] Run [quickstart.md](./quickstart.md) Scenario 7; confirm no horizontal scroll 320px–2560px and zero `<script>` tags in `dist/`
+- [X] T013 [US2] In `src/pages/index.astro` or `Piece.astro` (depends on T011), pass `priority` to the `<Image>` only for the piece with `order === 1` — expands to `loading="eager"`, `decoding="sync"`, `fetchpriority="high"` per [research.md](./research.md); every other piece gets none of those, defaulting to lazy
+- [X] T014 [US2] Run [quickstart.md](./quickstart.md) Scenario 2; confirm the first image's attributes and that later images don't fetch until scrolled near
+- [X] T015 [US2] Run [quickstart.md](./quickstart.md) Scenario 3; confirm multiple widths exist per piece under `dist/_astro/`
+- [X] T016 [US2] Run [quickstart.md](./quickstart.md) Scenario 7; confirm no horizontal scroll 320px–2560px and zero `<script>` tags in `dist/`
 
 **Checkpoint**: User Stories 1 and 2 both independently functional.
 
@@ -96,8 +96,8 @@ remove `alt` from a piece, confirm the build fails.
 
 ### Implementation for User Story 3
 
-- [ ] T017 [US3] Run [quickstart.md](./quickstart.md) Scenario 5 (add a temporary sixth piece, rebuild, confirm position 6, remove it, rebuild again)
-- [ ] T018 [US3] Run [quickstart.md](./quickstart.md) Scenario 6 (temporarily delete an `alt` field, confirm the build fails with a schema error naming the file, restore it)
+- [X] T017 [US3] Run [quickstart.md](./quickstart.md) Scenario 5 (add a temporary sixth piece, rebuild, confirm position 6, remove it, rebuild again)
+- [X] T018 [US3] Run [quickstart.md](./quickstart.md) Scenario 6 (temporarily delete an `alt` field, confirm the build fails with a schema error naming the file, restore it)
 
 **Checkpoint**: All three user stories independently functional.
 
@@ -105,8 +105,8 @@ remove `alt` from a piece, confirm the build fails.
 
 ## Phase 6: Polish & Cross-Cutting Concerns
 
-- [ ] T019 [P] Run [quickstart.md](./quickstart.md) Scenario 4 (`node scripts/check-contrast.mjs`) against all five real pairs; confirm every one reports PASS
-- [ ] T020 Update root `PLAN.md` §7 Milestones 2/3 checklist once T001–T019 all pass
+- [X] T019 [P] Run [quickstart.md](./quickstart.md) Scenario 4 (`node scripts/check-contrast.mjs`) against all five real pairs; confirm every one reports PASS
+- [X] T020 Update root `PLAN.md` §7 Milestones 2/3 checklist once T001–T019 all pass
 
 ---
 

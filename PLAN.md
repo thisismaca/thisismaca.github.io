@@ -388,7 +388,7 @@ not just the dev server.
   back to its default serif. Documented in `specs/001-shell/research.md`
   so it isn't rediscovered later.
 
-**Milestones 2 and 3 — merged, 2026-07-30.**
+**Milestones 2 and 3 — merged, closed 2026-07-30.**
 Originally two milestones: prove the pipeline with one piece, *then* build
 the stack's own behaviour (gaps, lazy loading, priority) once ten pieces
 exist. That assumed content would arrive one file at a time. Instead five of
@@ -426,6 +426,41 @@ Worth noting for next time: 14px bold (the caption title, S9.2) is still
 below WCAG's 18.66px bold threshold for "large text," so it needs the same
 4.5:1 as body copy — it doesn't get the friendlier 3:1 bar. Check title and
 description against the same threshold, not just description.
+
+- ✅ `src/content.config.ts` — `pieces` collection, `glob()` loader,
+  `image()` schema field, `alt` required non-empty, hex colours validated,
+  no orientation field.
+- ✅ Five real pieces committed as content files: Kirk Hammett, Mario
+  Duplantier, Jean-Michel Labadie, Rex Brown, Phil Anselmo.
+- ✅ Home page renders the stack — verified in-browser against the actual
+  production build, not the dev server: correct order, correct per-piece
+  caption colours (including the two WCAG-corrected ones), 20px gaps
+  between every piece and at both ends (header→first, last→footer),
+  measured at ~20.00px each.
+- ✅ S12.3 — 9 responsive width variants generated for a single piece,
+  confirmed by listing `dist/_astro/`, not just by trusting the config.
+- ✅ S6.10/S6.11 — first piece's `<img>` carries `loading="eager"` and
+  `fetchpriority="high"`; every other piece carries `loading="lazy"` with
+  no `fetchpriority`, confirmed by reading the actual DOM attributes.
+- ✅ S6.6 — found and closed a latent gap: Astro's default `objectFit` is
+  `"cover"`, currently inert only because the container's aspect ratio
+  always matches the image's own under `layout: 'full-width'`. Pinned to
+  `contain` explicitly in `Piece.astro` so cropping can't silently
+  reappear if that configuration ever changes.
+- ✅ S2.1 — proved for real: added a sixth piece file, rebuilt, it
+  appeared at position 6 with no other file touched; removed it, rebuilt,
+  back to five.
+- ✅ S2.2 — proved for real: removed one piece's `alt`, the build failed
+  with a schema error naming the exact file and field; restored it, clean
+  build. (Aside: on this Windows machine, the failed build also throws a
+  `UV_HANDLE_CLOSING` assertion from Node's libuv after printing the
+  correct error — a platform-level crash in Astro's error-path cleanup,
+  not something this feature caused or can fix. The exit code is still
+  non-zero either way, which is all CI actually checks.)
+- ✅ `scripts/check-contrast.mjs` — the script `PLAN.md` §8 promises now
+  exists for real, reads pieces' actual frontmatter (not a hardcoded
+  list), and confirms all five pairs pass at 4.5:1+.
+- ✅ Zero `<script>` tags in the build output, unchanged from Milestone 1.
 
 **Milestone 4 — About and Contact.**
 The photo wrap, the shadow on both, the Contact footer swap.
