@@ -36,6 +36,35 @@ Fonts listings:
   what satisfies S9.3 (no invisible text while loading) without any manual
   `font-display` or preload work.
 
+**Correction, discovered during implementation (T011)**: registering a font
+in `astro.config.mjs`'s `fonts:` array only makes it *available* — it does
+not, by itself, emit any `@font-face` rule or define the `cssVariable` as
+an actual CSS custom property anywhere. Referencing `var(--font-menu)` in a
+component's `<style>` with nothing else done resolves to nothing, and
+because an unresolved `var()` invalidates the whole property at
+computed-value time, the browser fell back to its default serif font
+(observed as `"Times New Roman"`) rather than even reaching the `sans-serif`
+fallback in the same declaration.
+
+The font must additionally be **rendered** once per page via the `Font`
+component from `astro:assets` (`node_modules/astro/components/Font.astro`
+in this installed version) — that render is what emits the `@font-face`
+rules, the fallback `@font-face`, and the `:root { --font-menu: ...}`
+declaration into the page's CSS:
+
+```astro
+import { Font } from 'astro:assets';
+// in <head>:
+<Font cssVariable="--font-menu" preload />
+```
+
+Done in `src/layouts/Base.astro` so every page gets it once, rather than
+per-component. Confirmed by inspecting the built `dist/about/index.html`
+directly rather than trusting documentation a second time: `@font-face` and
+the metric-matched fallback (`size-adjust`, `ascent-override`, etc.) are
+present, and computed styles in-browser show `16px` at 767px and `20px` at
+768px with the real font family resolved.
+
 **Alternatives considered**:
 
 - `fontProviders.fontsource()` — Fontsource also mirrors both faces. Rejected

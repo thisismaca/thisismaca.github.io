@@ -1,0 +1,61 @@
+---
+interface Props {
+  shadow?: boolean;
+}
+
+const { shadow = false } = Astro.props;
+---
+
+<header class:list={[{ 'has-shadow': shadow }]}>
+  <nav>
+    <a href="/">Home</a>
+    <a href="/about">About</a>
+    <a href="/contact">Contact</a>
+  </nav>
+</header>
+
+<style>
+  header {
+    background: var(--color-white);
+  }
+
+  /* S4.11 — shadow along the lower edge only when `shadow` is true
+     (About/Contact); absent on Home. Toggled by one prop, not a second
+     header. */
+  header.has-shadow {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+  }
+
+  nav {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    /* S4.5/S4.6 — fluid, never a fixed value; never crosses a breakpoint. */
+    padding-block-start: clamp(15px, 3vw, 30px);
+    padding-block-end: clamp(5px, 1vw, 8px);
+    /* S4.7 — a floor, not a range; no upper bound is specified. */
+    padding-inline: 5px;
+    /* S4.8 */
+    gap: clamp(8px, 4vw, 30px);
+    /* S4.9 — no height/min-height here. Header height is left to fall out
+       of this padding plus the line box, never set directly. */
+  }
+
+  nav a {
+    /* S9.1 */
+    font-family: var(--font-menu), sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    color: var(--color-menu-text);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  /* S11.1 — the one breakpoint, governing menu type size only. */
+  @media (min-width: 768px) {
+    nav a {
+      font-size: 20px;
+    }
+  }
+</style>

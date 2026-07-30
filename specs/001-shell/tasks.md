@@ -32,8 +32,8 @@ Single project. All paths relative to repository root.
 
 **Purpose**: Config shared by every route and component.
 
-- [ ] T001 Add a `fonts:` array to `astro.config.mjs` registering `"Grenze Gotisch"` and `"Zalando Sans SemiExpanded"` via `fontProviders.google()`, per the decision in [research.md](./research.md)
-- [ ] T002 [P] Create `src/styles/global.css`: custom properties for the fixed palette (`--color-home-bg: #444444`, `--color-white: #FFFFFF`, `--color-menu-text: #333333`; body text black; Instagram glyph grey — S10) and a minimal box-sizing/margin reset
+- [X] T001 Add a `fonts:` array to `astro.config.mjs` registering `"Grenze Gotisch"` and `"Zalando Sans SemiExpanded"` via `fontProviders.google()`, per the decision in [research.md](./research.md)
+- [X] T002 [P] Create `src/styles/global.css`: custom properties for the fixed palette (`--color-home-bg: #444444`, `--color-white: #FFFFFF`, `--color-menu-text: #333333`; body text black; Instagram glyph grey — S10) and a minimal box-sizing/margin reset
 
 **Checkpoint**: Font config and palette variables exist; nothing renders yet.
 
@@ -46,9 +46,9 @@ story is independently testable until this phase is done.
 
 **⚠️ CRITICAL**: Do not start Phase 3+ before this checkpoint.
 
-- [ ] T003 [P] Create `src/components/Header.astro`: three `<a>` items (Home → `/`, About → `/about`, Contact → `/contact`); accept a `shadow` boolean prop (default `false`)
-- [ ] T004 [P] Create `src/components/Footer.astro`: two-half structure — left half plain text `thisismaca@gmail.com` (not an anchor); right half an `<a href="https://instagram.com/thisismaca" target="_blank" rel="noopener noreferrer">` containing `@thisismaca` and an Instagram glyph
-- [ ] T005 Create `src/layouts/Base.astro` (depends on T003, T004): imports `global.css`, accepts a `headerShadow` boolean prop (default `false`) forwarded to `<Header shadow={headerShadow} />`, renders `<Footer />`, and a `<slot />` for page content
+- [X] T003 [P] Create `src/components/Header.astro`: three `<a>` items (Home → `/`, About → `/about`, Contact → `/contact`); accept a `shadow` boolean prop (default `false`)
+- [X] T004 [P] Create `src/components/Footer.astro`: two-half structure — left half plain text `thisismaca@gmail.com` (not an anchor); right half an `<a href="https://instagram.com/thisismaca" target="_blank" rel="noopener noreferrer">` containing `@thisismaca` and an Instagram glyph
+- [X] T005 Create `src/layouts/Base.astro` (depends on T003, T004): imports `global.css`, accepts a `headerShadow` boolean prop (default `false`) forwarded to `<Header shadow={headerShadow} />`, renders `<Footer />`, and a `<slot />` for page content
 
 **Checkpoint**: `Base`/`Header`/`Footer` exist and compose, but are not yet
 wired to routes, responsive, typeset, or styled for shadow/colour.
@@ -66,11 +66,11 @@ page and each item navigates correctly. Tab through with no mouse.
 
 ### Implementation for User Story 1
 
-- [ ] T006 [P] [US1] Replace the scaffold placeholder in `src/pages/index.astro` with `Base` (`headerShadow={false}`), empty body (FR-001, FR-002…FR-013 via Base)
-- [ ] T007 [P] [US1] Create `src/pages/about.astro` using `Base` (`headerShadow={true}`), empty body
-- [ ] T008 [P] [US1] Create `src/pages/contact.astro` using `Base` (`headerShadow={true}`), empty body
-- [ ] T009 [US1] In `src/components/Header.astro`, style the nav row: `flex-wrap: nowrap`, centred, `clamp(15px, 3vw, 30px)` padding-top (S4.5), `clamp(5px, 1vw, 8px)` padding-bottom (S4.6), 5px minimum horizontal padding (S4.7), `clamp(8px, 4vw, 30px)` gap between items (S4.8), height left as a consequence of padding and line-box, never set directly (S4.9)
-- [ ] T010 [US1] Run [quickstart.md](./quickstart.md) Scenario 1 against all three routes; fix any wrap, overflow, or keyboard-focus issue found
+- [X] T006 [P] [US1] Replace the scaffold placeholder in `src/pages/index.astro` with `Base` (`headerShadow={false}`), empty body (FR-001, FR-002…FR-013 via Base)
+- [X] T007 [P] [US1] Create `src/pages/about.astro` using `Base` (`headerShadow={true}`), empty body
+- [X] T008 [P] [US1] Create `src/pages/contact.astro` using `Base` (`headerShadow={true}`), empty body
+- [X] T009 [US1] In `src/components/Header.astro`, style the nav row: `flex-wrap: nowrap`, centred, `clamp(15px, 3vw, 30px)` padding-top (S4.5), `clamp(5px, 1vw, 8px)` padding-bottom (S4.6), 5px minimum horizontal padding (S4.7), `clamp(8px, 4vw, 30px)` gap between items (S4.8), height left as a consequence of padding and line-box, never set directly (S4.9)
+- [X] T010 [US1] Run [quickstart.md](./quickstart.md) Scenario 1 against all three routes; fix any wrap, overflow, or keyboard-focus issue found
 
 **Checkpoint**: User Story 1 is independently functional — three real pages,
 working JS-free navigation, one-line header at 320px.
@@ -89,11 +89,11 @@ header shadow appears on `/about`/`/contact` but not `/`.
 
 ### Implementation for User Story 2
 
-- [ ] T011 [US2] In `src/components/Header.astro`, set menu item type to the Grenze Gotisch custom property, weight 500, `20px` from 768px up and `16px` below (S9.1), colour `--color-menu-text`
-- [ ] T012 [P] [US2] In `src/styles/global.css`, set body text to the Zalando Sans SemiExpanded custom property, regular, `14px`, black on white (S9.2)
-- [ ] T013 [US2] In `src/components/Header.astro`, add a shadow style applied only when the `shadow` prop is true (S4.11)
-- [ ] T014 [P] [US2] Set page backgrounds: `--color-home-bg` on `src/pages/index.astro` (FR-020a), `--color-white` on `src/pages/about.astro` and `src/pages/contact.astro` (FR-015)
-- [ ] T015 [US2] Run [quickstart.md](./quickstart.md) Scenario 2; fix any invisible-text flash or incorrect shadow/background found
+- [X] T011 [US2] In `src/components/Header.astro`, set menu item type to the Grenze Gotisch custom property, weight 500, `20px` from 768px up and `16px` below (S9.1), colour `--color-menu-text`
+- [X] T012 [P] [US2] In `src/styles/global.css`, set body text to the Zalando Sans SemiExpanded custom property, regular, `14px`, black on white (S9.2)
+- [X] T013 [US2] In `src/components/Header.astro`, add a shadow style applied only when the `shadow` prop is true (S4.11)
+- [X] T014 [P] [US2] Set page backgrounds: `--color-home-bg` on `src/pages/index.astro` (FR-020a), `--color-white` on `src/pages/about.astro` and `src/pages/contact.astro` (FR-015)
+- [X] T015 [US2] Run [quickstart.md](./quickstart.md) Scenario 2; fix any invisible-text flash or incorrect shadow/background found
 
 **Checkpoint**: User Stories 1 and 2 both independently functional.
 
@@ -110,10 +110,10 @@ the email is plain text, and that activating Instagram opens a new tab.
 
 ### Implementation for User Story 3
 
-- [ ] T016 [US3] In `src/components/Footer.astro`, lay out the two halves as a non-wrapping flex row, each centred within itself, shrinking rather than stacking at any width (S5.5)
-- [ ] T017 [US3] In `src/components/Footer.astro`, style the Instagram glyph grey and confirm the anchor carries both `target="_blank"` and `rel="noopener noreferrer"` (S5.3, S5.4)
-- [ ] T018 [US3] Confirm `src/components/Footer.astro` carries no shadow or border in any state (S5.6)
-- [ ] T019 [US3] Run [quickstart.md](./quickstart.md) Scenario 3; fix any stacking, styling, or new-tab issue found
+- [X] T016 [US3] In `src/components/Footer.astro`, lay out the two halves as a non-wrapping flex row, each centred within itself, shrinking rather than stacking at any width (S5.5)
+- [X] T017 [US3] In `src/components/Footer.astro`, style the Instagram glyph grey and confirm the anchor carries both `target="_blank"` and `rel="noopener noreferrer"` (S5.3, S5.4)
+- [X] T018 [US3] Confirm `src/components/Footer.astro` carries no shadow or border in any state (S5.6)
+- [X] T019 [US3] Run [quickstart.md](./quickstart.md) Scenario 3; fix any stacking, styling, or new-tab issue found
 
 **Checkpoint**: All three user stories independently functional.
 
@@ -121,9 +121,9 @@ the email is plain text, and that activating Instagram opens a new tab.
 
 ## Phase 6: Polish & Cross-Cutting Concerns
 
-- [ ] T020 [P] Run [quickstart.md](./quickstart.md) Scenario 4 (continuous resize, 320px→1440px) across all three pages; confirm no visible snap in header padding/gap
-- [ ] T021 Run [quickstart.md](./quickstart.md) Scenario 5: `npm run build && npm run preview -- --host`, repeat Scenarios 1–3 against the built site, then confirm `grep -ril "<script" dist/` returns nothing
-- [ ] T022 Update root `PLAN.md` §7 Milestone 1 checklist once T001–T021 all pass
+- [X] T020 [P] Run [quickstart.md](./quickstart.md) Scenario 4 (continuous resize, 320px→1440px) across all three pages; confirm no visible snap in header padding/gap
+- [X] T021 Run [quickstart.md](./quickstart.md) Scenario 5: `npm run build && npm run preview -- --host`, repeat Scenarios 1–3 against the built site, then confirm `grep -ril "<script" dist/` returns nothing
+- [X] T022 Update root `PLAN.md` §7 Milestone 1 checklist once T001–T021 all pass
 
 ---
 

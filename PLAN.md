@@ -357,10 +357,30 @@ hosting is going to be annoying, it is much better to discover that now.
 **Milestone 0 is closed.** Next up: Milestone 1, the shell (§7 below) — base
 layout, header, footer, three routes, palette, both fonts, no images yet.
 
-**Milestone 1 — the shell.**
+**Milestone 1 — the shell.** *(closed 2026-07-30)*
 Base layout, header, footer, three routes, the palette, both fonts. No images.
 Verify S4 and S5 completely at 320px and at 1440px. This is where S4.4 gets
-measured for real.
+measured for real. Built as Spec Kit feature `001-shell`
+(`specs/001-shell/`) — spec, plan, and 22 tasks, all executed and verified
+against the actual production build (`npm run build && npm run preview`),
+not just the dev server.
+
+- ✅ `Base`/`Header`/`Footer` built, three routes wired up, all with zero
+  JavaScript in the built output (confirmed by grepping `dist/`).
+- ✅ S4.4 measured for real at 320px through 1440px with the real fonts
+  loaded — one line, no wrap, `clamp()` values confirmed continuous by
+  sampling computed styles at several widths rather than only at the
+  breakpoint.
+- ✅ Header shadow toggle (S4.11), page backgrounds (S10, and the S6.2 gap
+  this pass found and fixed — Home's own `#444444` background, not just the
+  white surfaces), typography boundary exact at 767px/768px (S9.1, S11.1).
+- ✅ Footer two-half layout, Instagram link/glyph, plain-text email (S5).
+- **Real bug found and fixed during implementation**: Astro's `fonts:`
+  config alone does not emit any usable CSS — a font must additionally be
+  rendered via the `Font` component from `astro:assets` in `<head>`, or
+  `var(--font-menu)` silently resolves to nothing and the browser falls
+  back to its default serif. Documented in `specs/001-shell/research.md`
+  so it isn't rediscovered later.
 
 **Milestone 2 — one piece.**
 Content collection, schema, a single piece file, one image through the pipeline,
