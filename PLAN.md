@@ -462,8 +462,14 @@ description against the same threshold, not just description.
   list), and confirms all five pairs pass at 4.5:1+.
 - ✅ Zero `<script>` tags in the build output, unchanged from Milestone 1.
 
-**Milestone 4 — About and Contact.**
-The photo wrap, the shadow on both, the Contact footer swap.
+**Milestone 4 — About and Contact.** *(split, 2026-07-30)*
+The photo wrap, the shadow on both, the Contact footer swap. Originally one
+milestone; split into two Spec Kit features because About's real content
+(bio copy, influences, the site's own source-repo link, and Maca's photo)
+arrived while Contact's (the invitation text) had not — the mirror image of
+why Milestones 2/3 merged. `specs/003-about/` covers the About half only;
+Contact remains unscoped until its content exists, at which point it
+becomes its own feature rather than blocking on it now.
 
 **Milestone 5 — verification pass.**
 Walk §10 below end to end. Fix. Merge to `main`.
