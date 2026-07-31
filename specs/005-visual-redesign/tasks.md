@@ -23,7 +23,7 @@ change front-loaded a later story's actual work.
 
 ## Phase 1: Setup
 
-- [ ] T001 In `astro.config.mjs`, add Vazirmatn to the `fonts:` array via `fontProviders.google()`, `cssVariable: '--font-body'` (reusing the existing variable name — the underlying family changes, callers don't need to), `weights: [300, 400]`; remove the Zalando Sans SemiExpanded entry entirely
+- [X] T001 In `astro.config.mjs`, add Vazirmatn to the `fonts:` array via `fontProviders.google()`, `cssVariable: '--font-body'` (reusing the existing variable name — the underlying family changes, callers don't need to), `weights: [300, 400]`; remove the Zalando Sans SemiExpanded entry entirely
 
 **Checkpoint**: Font config updated. Nothing renders differently yet — no `<Font>` call points at the new registration.
 
@@ -36,11 +36,11 @@ story depends on.
 
 **⚠️ CRITICAL**: Do not start Phase 3+ before this checkpoint.
 
-- [ ] T002 In `src/layouts/Base.astro` (depends on T001): remove the `headerShadow` and `background` props entirely (both are now dead — shadow is universal, every page is white); wrap `<slot />` in a `<main>` element; add `narrowContent`/`centerContent` boolean props (both default `false`) with `@media (min-width: 768px)` CSS on `<main>` — `narrowContent` sets `width: 33.333%; margin-inline: auto`, `centerContent` additionally sets `display: flex; flex-direction: column; justify-content: center`; make `body` a flex column with `min-height: 100vh` and `<main>` `flex: 1 0 auto` (this alone satisfies S8.8's sticky footer for every page, not just Contact); replace the Zalando Sans SemiExpanded `<Font>` call with nothing (same `--font-body` variable now serves Vazirmatn per T001); remove `<Header shadow={...} />`'s prop, calling it unconditionally
-- [ ] T003 In `src/styles/global.css` (depends on T001): remove the `--color-home-bg` custom property and the `body[data-bg='dark']` rule entirely (dead now that every page is white); update `body`'s font rule to `font-weight: 300; font-size: 18px` (was 400/14px)
-- [ ] T004 [P] In `src/components/Header.astro`: remove the `shadow` prop, apply the `has-shadow` class unconditionally; add a `@media (min-width: 768px)` block wrapping the nav items in a `width: 33.333%; margin-inline: auto` span with `justify-content: space-between` (replacing `gap` at this breakpoint only — below 768px, today's `justify-content: center` and `gap: clamp(8px, 4vw, 30px)` stay exactly as they are); update menu font-size to `28px` (was 20px) inside that same media query, and `24px` (was 16px) in the base/mobile rule
-- [ ] T005 [P] In `src/components/Footer.astro`, add `@media (min-width: 768px) { footer { height: 80px; display: flex; align-items: center; } }` — no change below 768px
-- [ ] T006 [P] In `src/components/Piece.astro`, change `.title` from `font-weight: 700` to `font-family: var(--font-body); font-weight: 400; font-size: 20px` (S9.4) — `.description` needs no change, it already inherits the new S9.2 default from `body`
+- [X] T002 In `src/layouts/Base.astro` (depends on T001): remove the `headerShadow` and `background` props entirely (both are now dead — shadow is universal, every page is white); wrap `<slot />` in a `<main>` element; add `narrowContent`/`centerContent` boolean props (both default `false`) with `@media (min-width: 768px)` CSS on `<main>` — `narrowContent` sets `width: 33.333%; margin-inline: auto`, `centerContent` additionally sets `display: flex; flex-direction: column; justify-content: center`; make `body` a flex column with `min-height: 100vh` and `<main>` `flex: 1 0 auto` (this alone satisfies S8.8's sticky footer for every page, not just Contact); replace the Zalando Sans SemiExpanded `<Font>` call with nothing (same `--font-body` variable now serves Vazirmatn per T001); remove `<Header shadow={...} />`'s prop, calling it unconditionally
+- [X] T003 In `src/styles/global.css` (depends on T001): remove the `--color-home-bg` custom property and the `body[data-bg='dark']` rule entirely (dead now that every page is white); update `body`'s font rule to `font-weight: 300; font-size: 18px` (was 400/14px)
+- [X] T004 [P] In `src/components/Header.astro`: remove the `shadow` prop, apply the `has-shadow` class unconditionally; add a `@media (min-width: 768px)` block wrapping the nav items in a `width: 33.333%; margin-inline: auto` span with `justify-content: space-between` (replacing `gap` at this breakpoint only — below 768px, today's `justify-content: center` and `gap: clamp(8px, 4vw, 30px)` stay exactly as they are); update menu font-size to `28px` (was 20px) inside that same media query, and `24px` (was 16px) in the base/mobile rule
+- [X] T005 [P] In `src/components/Footer.astro`, add `@media (min-width: 768px) { footer { height: 80px; display: flex; align-items: center; } }` — no change below 768px
+- [X] T006 [P] In `src/components/Piece.astro`, change `.title` from `font-weight: 700` to `font-family: var(--font-body); font-weight: 400; font-size: 20px` (S9.4) — `.description` needs no change, it already inherits the new S9.2 default from `body`
 
 **Checkpoint**: Every shared component reflects the redesign. Pages
 haven't been wired to the new `Base` props yet, so width/centring won't
@@ -57,9 +57,9 @@ gap between piece units.
 narrowed column, and flush piece units with 10px caption padding as the
 only separation.
 
-- [ ] T007 [US1] In `src/pages/index.astro` (depends on T002): remove the `background="dark"` prop (Base has no such prop anymore); add `narrowContent={true}`
-- [ ] T008 [US1] Remove the `.stack`'s `gap`/`padding-block: 20px` rule from `src/styles/global.css`; add `padding-bottom: 10px` to `Piece.astro`'s `.caption` rule (S6.14)
-- [ ] T009 [US1] Run [quickstart.md](./quickstart.md) Scenario 1; fix any issue found
+- [X] T007 [US1] In `src/pages/index.astro` (depends on T002): remove the `background="dark"` prop (Base has no such prop anymore); add `narrowContent={true}`
+- [X] T008 [US1] Remove the `.stack`'s `gap`/`padding-block: 20px` rule from `src/styles/global.css`; add `padding-bottom: 10px` to `Piece.astro`'s `.caption` rule (S6.14)
+- [X] T009 [US1] Run [quickstart.md](./quickstart.md) Scenario 1; fix any issue found
 
 **Checkpoint**: User Story 1 independently functional.
 
@@ -75,9 +75,9 @@ viewport bottom.
 both horizontal narrowing and vertical centring; confirm neither applies
 below 768px.
 
-- [ ] T010 [US2] In `src/pages/about.astro` (depends on T002): remove the `headerShadow` prop; add `narrowContent={true} centerContent={true}`; change the `<Image>` `height` prop from `100` to `200` (width stays `80`); add `padding-left: 20px` to the body text (not the photo)
-- [ ] T011 [US2] In `src/pages/contact.astro` (depends on T002): remove the `headerShadow` prop; add `narrowContent={true} centerContent={true}`
-- [ ] T012 [US2] Run [quickstart.md](./quickstart.md) Scenario 2; fix any issue found
+- [X] T010 [US2] In `src/pages/about.astro` (depends on T002): remove the `headerShadow` prop; add `narrowContent={true} centerContent={true}`; change the `<Image>` `height` prop from `100` to `200` (width stays `80`); add `padding-left: 20px` to the body text (not the photo)
+- [X] T011 [US2] In `src/pages/contact.astro` (depends on T002): remove the `headerShadow` prop; add `narrowContent={true} centerContent={true}`
+- [X] T012 [US2] Run [quickstart.md](./quickstart.md) Scenario 2; fix any issue found
 
 **Checkpoint**: User Stories 1 and 2 both independently functional.
 
@@ -94,7 +94,7 @@ treatment.
 span/size/shadow, footer height, and typography — all already built in
 Phase 2 (T004–T006); this phase verifies rather than implements.
 
-- [ ] T013 [US3] Run [quickstart.md](./quickstart.md) Scenario 3 (depends on T002–T006); fix anything found
+- [X] T013 [US3] Run [quickstart.md](./quickstart.md) Scenario 3 (depends on T002–T006); fix anything found
 
 **Checkpoint**: All three user stories independently functional.
 
@@ -102,8 +102,8 @@ Phase 2 (T004–T006); this phase verifies rather than implements.
 
 ## Phase 6: Polish & Cross-Cutting Concerns
 
-- [ ] T014 [P] Run [quickstart.md](./quickstart.md) Scenario 4 (`grep -ril "<script" dist/`, throttled font check, continuous resize 320px–2560px on all three pages); confirm no output, no invisible text, no horizontal scroll
-- [ ] T015 Update root `PLAN.md` Milestone 6 checklist once T001–T014 all pass
+- [X] T014 [P] Run [quickstart.md](./quickstart.md) Scenario 4 (`grep -ril "<script" dist/`, throttled font check, continuous resize 320px–2560px on all three pages); confirm no output, no invisible text, no horizontal scroll
+- [X] T015 Update root `PLAN.md` Milestone 6 checklist once T001–T014 all pass
 
 ---
 

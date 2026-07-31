@@ -569,6 +569,47 @@ new width/centring/sticky-footer behaviour is CSS only), one breakpoint
 about this), and the work still wins (a narrower column is still a
 deliberate framing choice for the work, not chrome competing with it).
 
+*(closed 2026-07-30, built as `specs/005-visual-redesign/`)*
+
+- ✅ A real conflict caught during planning, not implementation: S4.3/S4.8's
+  "middle third" nav span, applied literally at every width, would have
+  broken S4.4 (one line at 320px) — confirmed with actual rendered text,
+  not assumed: three words at the new 24px size total ~174px against
+  ~107px available in a literal third of 320px, and the infeasible range
+  extends to roughly 500px. Fixed in `SPEC.md` itself before writing the
+  plan: the nav's middle-third span applies only at 768px and up, reusing
+  the site's one existing breakpoint rather than inventing a crossover
+  value.
+- ✅ All measurements confirmed on the actual rendered site, not assumed
+  from the CSS: at 1024px, Home's column and the header nav both measure
+  ~336px against an expected third of ~341px (the ~5px gap is the
+  scrollbar); the header nav's three items distribute with matching
+  ~62px gaps on both sides; all six inter-piece gaps read as flush (0px)
+  with each caption's own 10px bottom padding confirmed directly; the
+  footer measures exactly 80px at 768px+ and reverts to its auto height
+  below it.
+- ✅ Contact's sticky footer works precisely as intended — footer bottom
+  measured exactly equal to viewport bottom on its naturally short
+  content.
+- **Real finding, not a defect**: About's vertical centring (S7.8) has
+  little practical effect. The 200px photo plus the bio text wrapping
+  into a ~336px column produces roughly 1240px of content — taller than
+  almost any real viewport — so there's essentially no vertical slack
+  left to centre within on a typical screen. The CSS is exactly correct
+  (`justify-content: center` is present and does nothing when content
+  already exceeds the container, exactly as flexbox is supposed to
+  behave); the emergent result of combining "narrow the column" with
+  "also centre it vertically" just doesn't read the way it might have
+  sounded when specified. Not fixed unilaterally — flagged for the site
+  owner to decide whether About's column should be wider than Home's, or
+  whether this is fine as is.
+- ✅ Font-display:swap confirmed present on all 6 `@font-face` rules
+  (Grenze Gotisch, Vazirmatn ×2 weights, both with fallbacks) — the
+  typeface swap didn't quietly drop S9.3's guarantee.
+- ✅ Keyboard focus order unaffected by wrapping page content in `<main>`.
+- ✅ Zero `<script>` tags and full WCAG contrast pass, unchanged from
+  every prior feature — this redesign touches no per-piece colour.
+
 ---
 
 ## 8. Verification

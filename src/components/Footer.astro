@@ -19,6 +19,16 @@ const { copyright = false } = Astro.props;
     background: var(--color-white);
   }
 
+  /* S5.8 redesign — fixed height at 768px+, contents centred inside;
+     unchanged (auto, from padding/content) below that. */
+  @media (min-width: 768px) {
+    footer {
+      height: 80px;
+      display: flex;
+      align-items: center;
+    }
+  }
+
   /* S8.4 — the /contact-only state. */
   .copyright {
     margin: 0;
