@@ -1,6 +1,6 @@
 # Spec — thisismaca.com
 
-**Status:** draft 3 · **Date:** 2026-07-30
+**Status:** draft 4 · **Date:** 2026-07-30
 
 This document describes *what must be true* of the finished site. It names no
 framework, host or library on purpose — those belong in `PLAN.md`, which can be
@@ -8,6 +8,33 @@ thrown away and rewritten without touching this file.
 
 Every statement below should be checkable by looking at the built site. Anything
 that cannot be checked is a note, not a requirement, and is marked as such.
+
+**Changed since draft 3 — the visual redesign.** A deliberate second pass at
+the site's identity after seeing it live, not a bug fix. The headline
+reversal: Home's full-bleed dark stack is gone. Every page now centres its
+content in a narrower column on large screens, on white throughout. Detail:
+
+- **Header** (§4): the nav no longer just centres — it spans a specific
+  width (the middle third of the viewport), menu text is larger, and the
+  under-shadow that was Home's one exception is now on all three pages.
+- **Footer** (§5): a fixed height on large screens, unchanged on small ones.
+- **Home** (§6): white background (was `#444444`), content narrowed to the
+  middle third on large screens, the 20px inter-piece gap replaced by 10px
+  of padding under each caption.
+- **About & Contact** (§7, §8): both narrowed *and* vertically centred on
+  large screens — About's photo grows to 200px tall, its body text gains
+  left padding.
+- **Typography** (§9): a new default face (Vazirmatn) replaces Zalando Sans
+  SemiExpanded everywhere except the header menu, which keeps Grenze
+  Gotisch at larger sizes. Piece captions gain their own distinct title
+  treatment, replacing the bold weight with a dedicated face/size.
+
+Two decisions were made explicitly, not assumed, because the alternative
+readings would have produced a genuinely different site: About and
+Contact get vertical centring as well as horizontal narrowing since their
+content is short enough to fit a viewport; Home does not, since its stack
+is always taller than one screen. And Grenze Gotisch survives on the menu
+specifically — the new default face replaces everything *else*.
 
 **Changed since draft 2:** §7's open influences question is closed — text,
 woven into the bio, not images or a separate list (S7.7 also added: a link
@@ -56,13 +83,14 @@ whatever proportions it has.
 > **Note — where the images come from.** The stack is composed as a whole in
 > Photoshop and exported as one file per piece. A landscape work is placed on a
 > portrait canvas there, with its surround chosen deliberately rather than left
-> to the browser. Source files are around 2400px wide so they hold up
-> full-bleed on a desktop.
+> to the browser. Source files are around 2400px wide, which was originally
+> sized to hold up full-bleed on a desktop. *(Amended, redesign: Home's
+> content column is now capped at roughly a third of the viewport, S6.13 — a
+> 2400px source still comfortably covers even a third of a 2560px-wide
+> screen, so the size held up even though the reason it was chosen didn't.)*
 >
 > **Visual design is baked into the pixels; text is not.** Titles and
-> descriptions stay as real HTML (§6), never lettering inside an image. A 2400px
-> composition renders at roughly 16% on a phone, which is where most visitors
-> are.
+> descriptions stay as real HTML (§6), never lettering inside an image.
 
 ---
 
@@ -82,18 +110,25 @@ Present on all three pages, identical in structure.
 it at any width.
 **S4.2** It spans the full viewport width, edge to edge.
 **S4.3** It contains exactly three items — Home, About, Contact — as a single
-horizontal row, centred.
+horizontal row. *(Amended, redesign)* The row is not merely centred: as a
+group, the items span the horizontal middle third of the viewport — the
+group's left edge sits at one-third of the viewport width, its right edge
+at two-thirds.
 **S4.4** The three items remain on one line at every viewport width down to
 320px. No hamburger, no wrapping, no overflow.
 **S4.5** Padding above the items: `clamp(15px, 3vw, 30px)`.
 **S4.6** Padding below the items: `clamp(5px, 1vw, 8px)`.
-**S4.7** Horizontal padding: 5px minimum.
-**S4.8** Gap between adjacent items: `clamp(8px, 4vw, 30px)`.
+**S4.7** Horizontal padding: 5px minimum, inside the middle-third span defined
+by S4.3.
+**S4.8** *(Amended, redesign)* The three items distribute evenly
+(space-between) across the middle-third span defined in S4.3, rather than
+sitting a fixed gap apart. There is no independent gap value to set.
 **S4.9** Header height is a consequence of padding plus line box. It is never
 set directly.
 **S4.10** Each item navigates to its corresponding page.
-**S4.11** A shadow along the header's lower edge is visible on `/about` and
-`/contact`, and absent on `/`.
+**S4.11** *(Amended, redesign)* A shadow along the header's lower edge is
+visible on all three pages, including `/`. *(Previously absent on `/` —
+that exception is gone; the header now looks identical on every page.)*
 
 ---
 
@@ -110,6 +145,11 @@ stacking.
 **S5.6** The footer carries no shadow. On the white pages it merges into the
 page, which is intended.
 **S5.7** On `/contact` the footer's contents are replaced — see §8.
+**S5.8** *(New, redesign)* At 768px and above, the footer has a fixed height
+of 80px, with its contents vertically centred inside. Below 768px, height
+remains a consequence of padding and content — unchanged from before this
+requirement existed. *(This is a deliberate, footer-specific exception. It
+does not amend S4.9, which governs the header only.)*
 
 ---
 
@@ -117,40 +157,63 @@ page, which is intended.
 
 **S6.1** The ten pieces are stacked vertically in a single column, in `order`,
 beginning below the header.
-**S6.2** The background behind and between pieces is `#444444`.
+**S6.2** *(Amended, redesign)* The page background is white (`#FFFFFF`),
+replacing the original `#444444`. Nothing on Home is dark any longer.
 **S6.3** A piece unit is its image with its caption block flush beneath it, no
 gap between the two.
-**S6.4** The caption block contains the title in bold with the description
-below it.
+**S6.4** *(Amended, redesign)* The caption block contains the title with the
+description below it. The title is no longer bold — it is distinguished by
+its own typeface, weight, and size instead (S9.4).
 **S6.5** The caption block's background and text colours come from that piece's
 own fields, so they differ from piece to piece.
-**S6.6** Each image spans the full viewport width. Its height is its own
-intrinsic height at that width. Nothing is cropped and no height is imposed.
-**S6.7** At least 20px separates one piece unit from the next — that is,
-between a caption block and the image below it. The page background shows
-through.
-**S6.8** The same 20px minimum separates the header from the first image, and
-the last caption block from the footer.
+**S6.6** *(Amended, redesign)* Each image spans the full width of the content
+column defined in S6.13 — the full viewport below 768px, the middle third of
+the viewport at 768px and up. Its height is its own intrinsic height at that
+width. Nothing is cropped and no height is imposed.
+**S6.7** *(Superseded, redesign — see S6.14)*
+**S6.8** *(Superseded, redesign — see S6.14)*
 **S6.9** There is no carousel, no arrows, no dots, no snapping and no
 pagination. The page is scrolled.
 **S6.10** Images below the fold are deferred until needed.
 **S6.11** The first image is not deferred and begins loading immediately.
 **S6.12** The page does not shift as images load. Space is reserved from each
 image's known dimensions before it arrives.
+**S6.13** *(New, redesign)* At 768px and above, the stack is horizontally
+centred and constrained to the middle third of the viewport width (each side
+margin is approximately one-third of the viewport). Below 768px, the stack
+returns to full width — the margin is not visible there. Home is not
+vertically centred at any width; its content is expected to exceed one
+screen's height.
+**S6.14** *(New, redesign — replaces S6.7/S6.8)* There is no gap between one
+piece unit and the next; images and captions run flush end to end. Instead,
+each caption carries 10px of padding below its own content, which is the
+only separation between a caption and the next piece's image.
 
 ---
 
 ## 7. About
 
 **S7.1** The page background is white throughout.
-**S7.2** A photograph of Maca appears at the top left, approximately 100px tall
-by 80px wide, with 5px of margin on every side.
+**S7.2** *(Amended, redesign)* A photograph of Maca appears at the top left,
+approximately 200px tall by 80px wide, with 5px of margin on every side.
+*(Height increased from 100px; width unchanged.)*
 **S7.3** At 768px and above, body text flows around the photograph.
 **S7.4** Below 768px, the photograph is centred and all text sits beneath it.
 **S7.5** Body text is black.
-**S7.6** The header shadow is visible (S4.11).
+**S7.6** The header shadow is visible (S4.11) — now identical to `/`, since
+S4.11 no longer carves out an exception for Home.
 
 **S7.7** The page includes a link to the site's own source repository.
+
+**S7.8** *(New, redesign)* At 768px and above, the About content area is
+horizontally constrained to the middle third of the viewport (as Home's
+stack is, S6.13) *and* vertically centred within the viewport height. Below
+768px, neither constraint applies. *(Unlike Home, About's content is short
+enough to fit a screen, which is why it gets vertical centring and Home
+does not.)*
+**S7.9** *(New, redesign)* The body text (not the photograph) carries an
+additional 20px of padding on its left side, independent of the photograph's
+own 5px margin from S7.2.
 
 > **Decided 2026-07-30 — influences.** Text, not images, resolving the open
 > question above: influences (Virgil Finlay, Richey Beckett, Peeter Baltens,
@@ -168,23 +231,47 @@ above and below.
 **S8.3** The email and Instagram blocks described in §5 appear here as page
 content rather than as footer.
 **S8.4** The footer on this page contains only `© Maca Sepúlveda 2026`, at 10px.
+Its height still follows S5.8 (fixed at 768px and up) like every other page's
+footer.
 **S8.5** This copyright line appears on `/contact` only.
-**S8.6** The header shadow is visible (S4.11).
+**S8.6** The header shadow is visible (S4.11) — now identical to `/`, since
+S4.11 no longer carves out an exception for Home.
+
+**S8.7** *(New, redesign)* At 768px and above, the Contact content area is
+horizontally constrained to the middle third of the viewport *and*
+vertically centred within the viewport height — the same treatment as
+About (S7.8), for the same reason: its content is short enough to fit a
+screen.
+**S8.8** *(New, redesign)* The footer stays pinned to the bottom of the
+viewport when the page's content is shorter than the screen, rather than
+floating partway up the page. It behaves normally (follows the content) once
+content grows taller than the viewport.
 
 ---
 
 ## 9. Typography
 
-**S9.1** Menu items use Grenze Gotisch, weight 500, at 20px from 768px up and
-16px below.
-**S9.2** All other text uses Zalando Sans SemiExpanded, regular, 14px — except
-the copyright line at 10px (S8.4).
+**S9.1** *(Amended, redesign)* Menu items use Grenze Gotisch, weight 500, at
+28px from 768px up and 24px below. *(Increased from 20px/16px — "two sizes
+larger," where one size is the 4px gap the original two values already
+established.)*
+**S9.2** *(Amended, redesign)* All other text uses Vazirmatn, weight 300
+(Light), 18px — replacing Zalando Sans SemiExpanded entirely — except the
+copyright line, which stays at 10px (S8.4), and each piece caption's title
+(S9.4).
 **S9.3** Both faces are self-hosted or loaded such that no text is invisible
-while fonts load.
+while fonts load. *(Now Grenze Gotisch and Vazirmatn; Zalando Sans
+SemiExpanded is retired and no longer loaded at all.)*
+**S9.4** *(New, redesign)* Each piece's caption title uses Vazirmatn, weight
+400 (Regular), 20px — distinct from the description beneath it, which uses
+the default S9.2 treatment. This replaces the bold weight the title
+previously used (S6.4): the title is now set apart by its own face, weight,
+and size, not by boldness.
 
 > Grenze Gotisch is a blackletter display face, not a sans. This is intentional;
-> it does the work of a gallery label. The 20px/16px sizes are provisional and
-> should be checked against the rendered face rather than assumed.
+> it does the work of a gallery label. The 28px/24px sizes are the redesign's
+> best estimate at "two sizes larger" and should be checked against the
+> rendered face rather than assumed correct.
 
 ---
 
@@ -192,23 +279,33 @@ while fonts load.
 
 | Role | Value |
 |---|---|
-| Home background, and gaps between pieces | `#444444` |
-| Header, footer, About, Contact | `#FFFFFF` |
+| Every page background — Home, header, footer, About, Contact | `#FFFFFF` |
 | Menu lettering | `#333333` |
 | Body text on white | Black |
 | Instagram glyph | Grey |
 | Caption background and text | Per piece (§2) |
 
+*(Amended, redesign: `#444444` is retired. Home no longer has a distinct
+background — every page is now white, per S6.2.)*
+
 ---
 
 ## 11. Responsive behaviour
 
-**S11.1** One breakpoint, at 768px, governing menu type size (S9.1) and the
-About layout (S7.3, S7.4).
-**S11.2** Header padding and item spacing are fluid and cross no breakpoint
-(S4.5, S4.6, S4.8).
+**S11.1** *(Amended, redesign)* One breakpoint, still at 768px, now governing:
+menu type size (S9.1); the About and Contact wrap/stack and
+narrow/vertically-centred layouts (S7.3, S7.4, S7.8, S8.7); Home's
+narrow-column width (S6.13); and the footer's fixed height (S5.8). No second
+breakpoint was introduced for any of this — every large/small distinction
+in this redesign uses the same 768px line.
+**S11.2** Header padding is fluid and crosses no breakpoint (S4.5, S4.6). The
+item-distribution mechanism (S4.8) is not a fluid value — it's a fixed
+one-third-of-viewport span (S4.3) with even spacing inside it, which holds
+at every width above 320px without needing to change at 768px.
 **S11.3** Nothing scrolls horizontally at any width from 320px up.
 **S11.4** The stack is one column at every width. It never becomes a grid.
+Narrowing its width at 768px+ (S6.13) doesn't change this — it's still one
+column, just a narrower one.
 
 ---
 
@@ -253,6 +350,10 @@ Not in this version, and not to be quietly added:
    generates the responsive widths regardless of source size (§12).
    Still open: whether a minimum source width should be enforced.
 4. How the composition reads on a very wide monitor, where each piece becomes
-   large. Worth mocking one screen at 1440px and one at 2560px before export.
+   large. *(Amended, redesign: substantially defused, not fully closed —
+   Home's content is now capped at a third of the viewport width, S6.13, so
+   pieces no longer grow toward the full screen width on large monitors the
+   way they used to. Still worth a look at 2560px once real content is in
+   place, but the risk is much smaller than it was.)*
 5. Page titles, meta descriptions, favicon, and what a 404 does.
 6. Where the print house link lives, if anywhere, given §13.
