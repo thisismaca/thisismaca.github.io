@@ -245,8 +245,13 @@ Not in this version, and not to be quietly added:
 
 1. Whether `year`, `medium` and `band/venue` return as content fields — they
    were in the original brief and are absent here.
-2. Influences on the About page (§7).
-3. Image export format, and how many responsive widths per piece.
+2. ~~Influences on the About page (§7).~~ Closed — see §7's decided note.
+3. Image export format, and how many responsive widths per piece — partly
+   answered in practice: source files arrive as finished JPEGs at
+   whatever width the photograph was shot/edited at (1365–2794px across
+   the first five), not a fixed 2400px, and Astro's build pipeline
+   generates the responsive widths regardless of source size (§12).
+   Still open: whether a minimum source width should be enforced.
 4. How the composition reads on a very wide monitor, where each piece becomes
    large. Worth mocking one screen at 1440px and one at 2560px before export.
 5. Page titles, meta descriptions, favicon, and what a 404 does.

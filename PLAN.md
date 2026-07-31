@@ -1,6 +1,6 @@
 # Plan — thisismaca.com
 
-**Status:** draft 3 · **Date:** 2026-07-30 · **Implements:** `SPEC.md` draft 2
+**Status:** draft 4 · **Date:** 2026-07-30 · **Implements:** `SPEC.md` draft 3
 
 This document describes *how* the spec gets built. Unlike `SPEC.md`, it is
 disposable. If Astro turns out to be the wrong choice, this file is rewritten
@@ -9,6 +9,14 @@ and the spec is untouched.
 **Rule for this document:** every decision below names the spec requirements it
 serves. Anything here that serves no requirement is either scope creep, or a
 sign that the spec has a hole.
+
+**Changed since draft 3:** Milestones 4 (About, then Contact) and 5
+(verification) are closed — §7. §8's verification table expanded from 13
+curated rows to one row per requirement, and actually run in full against
+the live site rather than local dev — see its "Milestone 5 results." Two
+stale cross-references fixed along the way: §8 referred to itself as "§10,"
+and `SPEC.md`'s influences open question stayed listed after §7 had already
+resolved it.
 
 **Changed since draft 2:** Milestone 0 is closed and Milestone 1 (the shell)
 is built and deployed — §7. Milestones 2 and 3 are merged into one feature,
@@ -517,8 +525,16 @@ milestone:
 - ✅ Zero `<script>` tags and no horizontal overflow at 320px, confirmed
   across all three pages, not just `/contact`.
 
-**Milestone 5 — verification pass.**
-Walk §10 below end to end. Fix. Merge to `main`.
+**Milestone 5 — verification pass.** *(closed 2026-07-30)*
+Walk §8 below end to end. Fix. Merge to `main`. *(Originally read "§10" —
+a stale cross-reference to this document's own section numbering; §10 is
+"Open — decide during build," not verification. Fixed while closing this
+milestone.)*
+
+Every row in §8's now-complete table run against the live production site.
+Zero failures — see §8's "Milestone 5 results" for what was actually
+checked and what it found, not just a pass count. Already on `main` as of
+this milestone, via the same push-and-merge pattern as every prior one.
 
 The images can arrive at any point from Milestone 2 onward — everything before
 that runs on placeholders, and the Photoshop work proceeds in parallel rather
@@ -531,18 +547,80 @@ than blocking.
 How each part of the spec gets checked. This is what makes the requirements
 testable rather than decorative.
 
+**Expanded 2026-07-30.** This table originally listed 13 rows — "the ones
+that actually catch problems" — not the full 55-odd requirements in
+`SPEC.md`. That was fine while each feature verified its own slice as it
+was built (every `specs/*/quickstart.md` covers its feature completely).
+It stopped being fine at Milestone 5, whose entire job is a full pass
+against the finished site as a whole — a curated subset can't do that.
+Expanded to one row per requirement, grouped by `SPEC.md` section.
+
 | Requirement | Check |
 |---|---|
+| **Content model (§2)** | |
 | S2.1 | Add a piece file, rebuild, confirm no code changed |
 | S2.2 | Delete an `alt` value, confirm the build fails |
+| S2.3 | Count pieces on `/` — launch target is ten; a lower count is a launch-readiness gap, not a bug |
+| S2.4 | Confirm `content.config.ts` has no orientation/medium/category field |
+| **Routes (§3)** | |
+| S3.1 | Confirm exactly `/`, `/about`, `/contact` exist and nothing else does |
+| S3.2 | Confirm no per-piece URL resolves (by design) |
+| **Header (§4)** | |
+| S4.1 | Confirm header is white, flush to viewport top, no grey above it at any width |
+| S4.2 | Confirm header spans full viewport width edge to edge |
+| S4.3 | Confirm exactly Home/About/Contact, one row, centred |
 | S4.4 | 320px viewport, real font, three items on one line |
 | S4.5–S4.8 | Resize continuously, confirm no snapping |
+| S4.9 | Confirm header CSS sets no fixed height — inspect computed style |
+| S4.10 | Activate each item, confirm it navigates to the right page |
 | S4.11 | Shadow present on `/about` and `/contact`, absent on `/` |
+| **Footer (§5)** | |
+| S5.1 | Confirm footer is white with two halves |
+| S5.2 | Confirm email is plain text, not a link |
+| S5.3 | Confirm `@thisismaca` + grey glyph |
 | S5.4 | Instagram opens in a new tab |
+| S5.5 | Narrow the viewport, confirm halves shrink rather than stack |
+| S5.6 | Confirm no shadow/border on the footer |
+| S5.7 | Confirm `/contact`'s footer differs from `/` and `/about`'s (see S8.4/S8.5) |
+| **Home (§6)** | |
+| S6.1 | Confirm pieces stack in ascending `order`, below the header |
+| S6.2 | Confirm `#444444` behind and between pieces |
+| S6.3 | Confirm each caption is flush against its own image, no gap |
+| S6.4 | Confirm bold title above description in each caption |
+| S6.5 | Confirm caption colours differ per piece and match each piece's own fields |
+| S6.6 | Confirm images are full width, uncropped, no imposed height |
 | S6.7 | Measure the gap between two piece units |
+| S6.8 | Measure header→first-image and last-caption→footer gaps |
+| S6.9 | Confirm no carousel/arrows/dots/pagination exists |
 | S6.10–S6.12 | Throttle the network, confirm nothing shifts as images land |
+| **About (§7)** | |
+| S7.1 | Confirm white background throughout |
+| S7.2 | Measure the photo: ~80×100px, 5px margin on every side |
+| S7.3 | At 768px+, confirm text wraps beside the photo |
+| S7.4 | Below 768px, confirm the photo is centred with text below it |
+| S7.5 | Confirm body text is black |
+| S7.6 | Shadow present (S4.11) |
+| S7.7 | Confirm the source-repo link is present and correctly targeted |
+| **Contact (§8)** | |
+| S8.1 | Confirm white background |
+| S8.2 | Confirm exact invitation text, black, centred, 20px margin above/below |
+| S8.3 | Confirm email/Instagram render as page content, not footer |
+| S8.4 | Confirm the footer contains only the copyright line, at 10px |
+| S8.5 | Confirm the copyright line appears nowhere but `/contact` |
+| S8.6 | Shadow present (S4.11) |
+| **Typography (§9)** | |
+| S9.1 | Confirm Grenze Gotisch weight 500, 20px≥768px / 16px<768px |
+| S9.2 | Confirm Zalando Sans SemiExpanded regular 14px elsewhere, 10px on the copyright line |
+| S9.3 | Throttle fonts, confirm no invisible/unstyled text at any point |
+| **Colour (§10)** | Covered by the section-specific rows above — no separate check |
+| **Responsive (§11)** | |
+| S11.1 | Confirm 768px is the only breakpoint anywhere in the CSS |
+| S11.2 | Confirm header padding/spacing never jumps at a fixed width |
 | S11.3 | No horizontal scroll from 320px up |
+| S11.4 | Confirm the stack never becomes multi-column at any width |
+| **Performance & accessibility (§12)** | |
 | S12.1 | View source on the built output, confirm no script tags |
+| S12.2 | Covered by S2.2 |
 | S12.3 | Confirm multiple widths generated per image |
 | S12.4 | Run every caption colour pair through the WCAG contrast formula |
 | S12.5 | Tab through all three pages |
@@ -553,6 +631,57 @@ eyeballing needed. Run it against every pair as pieces are added; it already
 caught 2 of the first 5 (§7, Milestones 2/3). The remaining manual judgment
 is only what to do about a failure — nudge the same hue, pick a different
 colour, or knowingly accept it — which stays a person's call.
+
+### Milestone 5 results — 2026-07-30
+
+Every row above run against `https://thisismaca.github.io` — the live
+deployed site, not local dev or the build directory — with two exceptions
+noted below where the live artifact and the local build are provably
+identical. **Zero failures.**
+
+Findings worth recording, not just a pass/fail tally:
+
+- **S11.1, checked properly for the first time.** Scanned `document.
+  styleSheets` for every `@media` rule actually shipped, across every
+  page, rather than trusting that no stray breakpoint had crept in.
+  Result: exactly two rules exist site-wide — `(width >= 768px)` on every
+  page (the header's font-size switch) and `(width <= 767px)` on `/about`
+  only (the photo's stacked layout). Same threshold, both sides, no third
+  value anywhere. This is the kind of thing that's cheap to get subtly
+  wrong (a stray `767px` vs `768px`, or a second breakpoint introduced by
+  a later feature without noticing) and expensive to notice by eye.
+- **S9.3, checked as a mechanism, not an observation.** Rather than
+  throttle the network and eyeball whether text ever went invisible,
+  read every shipped `@font-face` rule directly: all six (both faces,
+  including their metric-matched fallbacks) carry `font-display: swap`.
+  That's a standards-guaranteed behaviour, not a network-luck outcome —
+  confirming the property is set is strictly stronger evidence than one
+  throttled observation would have been.
+- **S4.5–S4.8, re-measured at the exact 767/768 boundary on production**,
+  not just re-trusting `001-shell`'s original numbers: `16px`→`20px` font,
+  padding tracking the `clamp()` formula continuously on both sides, no
+  snap.
+- **S6.7/S6.8, all six gaps on the live site measure ~20.00px** —
+  header→first piece, all four inter-piece gaps, last caption→footer.
+  One `gap`/`padding-block` property on the stack container, holding
+  everywhere it needs to.
+- **S12.3/S6.10/S6.11, confirmed via actual network requests**, not just
+  the `loading`/`fetchpriority` attributes: multiple distinct `.webp`
+  files for the same source image were genuinely requested over the
+  wire; the first piece alone carries `eager`/`high`, every other piece
+  `lazy` with no `fetchpriority`.
+- **S12.1, confirmed two ways**: zero `<script>` elements in the live DOM
+  (`document.querySelectorAll('script').length === 0`) and zero
+  `<script` substrings in the local `dist/` output — the two exceptions
+  where local and live were both checked, since they're provably the same
+  artifact and each method has a different failure mode it would catch.
+- **S2.3 remains a known, accepted gap**: five of ten launch pieces. Not
+  a defect — `PLAN.md` §7 always treated this as incremental, and nothing
+  about the site's behaviour depends on the count being ten.
+
+No code changed as a result of this milestone. That itself is a form of
+evidence: four features, each verified in isolation as it was built, still
+compose correctly as a whole site with nothing missed in between.
 
 ---
 
@@ -567,9 +696,14 @@ colour, or knowingly accept it — which stays a person's call.
    automation.~~ Wrong on both counts — see §8's S12.4 update. 2 of the
    first 5 pairs failed and were nudged; 5 pairs remain for the pieces still
    to come.
-4. **Photoshop and CSS disagreeing.** The composition is designed at one width
-   and rendered at many. Check one exported piece in the browser early rather
-   than exporting all ten first.
+4. **Photoshop and CSS disagreeing.** ~~The composition is designed at one
+   width and rendered at many. Check one exported piece in the browser early
+   rather than exporting all ten first.~~ Moot as written — the assumed
+   Photoshop-compositing workflow didn't happen. All five real pieces are
+   direct camera exports (1365–2794px, whatever the shot's native
+   resolution), not canvases composed at a fixed width, and the site never
+   needed them to be (S2.4 holds regardless of source dimensions). No CSS
+   disagreement risk remains once that assumption is gone.
 
 ---
 
@@ -577,7 +711,13 @@ colour, or knowingly accept it — which stays a person's call.
 
 - ~~Pages vs Workers (§1.2), at Milestone 0.~~ **Closed 2026-07-30 — GitHub
   Pages. See §1.2.**
-- Image export format and how many responsive widths (spec open question 3).
+- ~~Image export format and how many responsive widths (spec open question
+  3).~~ **Answered in practice, 2026-07-30** — see `SPEC.md` §14. Source
+  format is whatever the camera/editing software exports (JPEG); Astro's
+  pipeline generates responsive widths at build time regardless of source
+  size, so "how many" was never a decision to make by hand.
 - Page titles, meta descriptions, favicon, 404 (spec open question 5).
 - Whether `year`, `medium` and `band/venue` return to the schema (spec open
-  question 1). Cheap to add now, more disruptive once ten files exist.
+  question 1). Five piece files already exist, so this is no longer
+  hypothetically disruptive — adding a field now means touching all five
+  existing pieces, not zero.
