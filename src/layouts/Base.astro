@@ -5,14 +5,15 @@ import Footer from '../components/Footer.astro';
 import '../styles/global.css';
 
 interface Props {
-  headerShadow?: boolean;
-  /** S10 / FR-020a — 'dark' is Home's #444444; every other page is white. */
-  background?: 'white' | 'dark';
   /** S8.4/S8.5 — true only on /contact. */
   footerCopyright?: boolean;
+  /** S6.13/S7.8/S8.7 — narrows content to the middle third at 768px+. All three pages set this. */
+  narrowContent?: boolean;
+  /** S7.8/S8.7 — additionally centres content vertically at 768px+. About/Contact only, not Home. */
+  centerContent?: boolean;
 }
 
-const { headerShadow = false, background = 'white', footerCopyright = false } = Astro.props;
+const { footerCopyright = false, narrowContent = false, centerContent = false } = Astro.props;
 ---
 
 <html lang="en">
@@ -33,9 +34,44 @@ const { headerShadow = false, background = 'white', footerCopyright = false } = 
     <Font cssVariable="--font-menu" preload />
     <Font cssVariable="--font-body" preload />
   </head>
-  <body data-bg={background}>
-    <Header shadow={headerShadow} />
-    <slot />
+  <body>
+    <!-- S4.11 redesign — the shadow is now universal; Header takes no prop. -->
+    <Header />
+    <main class:list={[{ narrow: narrowContent, center: centerContent }]}>
+      <slot />
+    </main>
     <Footer copyright={footerCopyright} />
   </body>
 </html>
+
+<style>
+  /* S8.8 — one mechanism for every page, not a Contact-only special case:
+     footer is the last flex child of a min-height:100vh column, so it
+     sits at the bottom on short pages and simply follows content once
+     content (like Home's stack) grows past one screen. */
+  body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  main {
+    flex: 1 0 auto;
+  }
+
+  /* S6.13/S7.8/S8.7 — 768px+ only; confirmed necessary at this exact
+     line by the header-nav math in specs/005-visual-redesign/research.md,
+     reused here for consistency (S11.1: one breakpoint, not a second). */
+  @media (min-width: 768px) {
+    main.narrow {
+      width: 33.333%;
+      margin-inline: auto;
+    }
+
+    main.center {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+  }
+</style>

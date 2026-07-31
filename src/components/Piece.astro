@@ -36,11 +36,19 @@ const { piece, priority = false } = Astro.props;
   }
 
   .caption {
-    padding: clamp(12px, 3vw, 24px);
+    padding-block-start: clamp(12px, 3vw, 24px);
+    padding-inline: clamp(12px, 3vw, 24px);
+    /* S6.14 redesign — fixed 10px, not the fluid clamp above: this is the
+       one thing separating this caption from the next piece's image, now
+       that the stack's own gap is gone. */
+    padding-block-end: 10px;
   }
 
+  /* S9.4/S6.4 redesign — own typeface/weight/size, not bold. */
   .title {
-    font-weight: 700;
+    font-family: var(--font-body), sans-serif;
+    font-weight: 400;
+    font-size: 20px;
     margin: 0 0 0.5em;
   }
 

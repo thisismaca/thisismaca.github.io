@@ -10,10 +10,16 @@ export default defineConfig({
 
   // SPEC.md S9.1/S9.2 — menu type and body type. Confirmed against Google
   // Fonts 2026-07-30 (specs/001-shell/research.md): Grenze Gotisch is a
-  // static family (weight 500 exists directly); Zalando Sans SemiExpanded
-  // is its own family, not an axis of "Zalando Sans". Astro's Fonts API
+  // static family (weight 500 exists directly). Astro's Fonts API
   // self-hosts and generates a metric-matched fallback automatically,
   // which is what satisfies S9.3 (no invisible text while loading).
+  //
+  // Redesign, 2026-07-30 (specs/005-visual-redesign): Zalando Sans
+  // SemiExpanded is retired. Vazirmatn takes over --font-body — a
+  // variable font spanning weights 100-900, confirmed on Google Fonts
+  // before committing 300 (default text, S9.2) and 400 (caption titles,
+  // S9.4) here. Both weights share the one cssVariable; CSS picks the
+  // matching @font-face by font-weight, no second registration needed.
   fonts: [
     {
       name: 'Grenze Gotisch',
@@ -22,10 +28,10 @@ export default defineConfig({
       weights: [500],
     },
     {
-      name: 'Zalando Sans SemiExpanded',
+      name: 'Vazirmatn',
       cssVariable: '--font-body',
       provider: fontProviders.google(),
-      weights: [400],
+      weights: [300, 400],
     },
   ],
 

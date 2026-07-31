@@ -1,6 +1,6 @@
 # Plan — thisismaca.com
 
-**Status:** draft 4 · **Date:** 2026-07-30 · **Implements:** `SPEC.md` draft 3
+**Status:** draft 5 · **Date:** 2026-07-30 · **Implements:** `SPEC.md` draft 4
 
 This document describes *how* the spec gets built. Unlike `SPEC.md`, it is
 disposable. If Astro turns out to be the wrong choice, this file is rewritten
@@ -9,6 +9,11 @@ and the spec is untouched.
 **Rule for this document:** every decision below names the spec requirements it
 serves. Anything here that serves no requirement is either scope creep, or a
 sign that the spec has a hole.
+
+**Changed since draft 4:** Milestone 6, the visual redesign, added — §7.
+Not part of the original build order; a deliberate second pass at the
+site's identity requested after Milestones 0–5 shipped a verified launch
+state. Implements `SPEC.md` draft 4 in full.
 
 **Changed since draft 3:** Milestones 4 (About, then Contact) and 5
 (verification) are closed — §7. §8's verification table expanded from 13
@@ -536,9 +541,74 @@ Zero failures — see §8's "Milestone 5 results" for what was actually
 checked and what it found, not just a pass count. Already on `main` as of
 this milestone, via the same push-and-merge pattern as every prior one.
 
-The images can arrive at any point from Milestone 2 onward — everything before
-that runs on placeholders, and the Photoshop work proceeds in parallel rather
-than blocking.
+**Milestone 6 — the visual redesign.** *(added 2026-07-30)*
+Not part of the original build order — Milestones 0–5 took the site from
+nothing to a fully verified launch state, and this is a deliberate second
+pass at its identity after seeing that state live, requested by the site
+owner rather than surfaced by testing. Implements `SPEC.md` draft 4's
+amendments in full: §4 (header nav spans the middle third of the viewport,
+larger menu text, shadow now on all three pages), §5 (footer gets a fixed
+80px height at 768px+), §6 (Home goes white, narrows to the middle third
+at 768px+, the 20px inter-piece gap becomes 10px of caption padding), §7/§8
+(About and Contact narrow and vertically centre at 768px+, About's photo
+grows to 200px tall with new left text padding, Contact's footer sticks to
+the viewport bottom), §9 (Vazirmatn replaces Zalando Sans SemiExpanded
+everywhere except the menu, piece captions get a distinct title treatment).
+
+Built as one Spec Kit feature, not split across several — unlike the
+Milestone 2/3 merge or the Milestone 4 split, which were driven by content
+arriving at different times, every part of this redesign arrived in the
+same request as one coherent design decision. Splitting it into several
+near-identical specify/plan/tasks cycles would be process for its own
+sake, the same reasoning `001-shell`'s tasks.md and others have used
+throughout this project.
+
+Constitution constraints hold unchanged throughout: zero JavaScript (the
+new width/centring/sticky-footer behaviour is CSS only), one breakpoint
+(no second breakpoint is introduced anywhere — `SPEC.md` S11.1 is explicit
+about this), and the work still wins (a narrower column is still a
+deliberate framing choice for the work, not chrome competing with it).
+
+*(closed 2026-07-30, built as `specs/005-visual-redesign/`)*
+
+- ✅ A real conflict caught during planning, not implementation: S4.3/S4.8's
+  "middle third" nav span, applied literally at every width, would have
+  broken S4.4 (one line at 320px) — confirmed with actual rendered text,
+  not assumed: three words at the new 24px size total ~174px against
+  ~107px available in a literal third of 320px, and the infeasible range
+  extends to roughly 500px. Fixed in `SPEC.md` itself before writing the
+  plan: the nav's middle-third span applies only at 768px and up, reusing
+  the site's one existing breakpoint rather than inventing a crossover
+  value.
+- ✅ All measurements confirmed on the actual rendered site, not assumed
+  from the CSS: at 1024px, Home's column and the header nav both measure
+  ~336px against an expected third of ~341px (the ~5px gap is the
+  scrollbar); the header nav's three items distribute with matching
+  ~62px gaps on both sides; all six inter-piece gaps read as flush (0px)
+  with each caption's own 10px bottom padding confirmed directly; the
+  footer measures exactly 80px at 768px+ and reverts to its auto height
+  below it.
+- ✅ Contact's sticky footer works precisely as intended — footer bottom
+  measured exactly equal to viewport bottom on its naturally short
+  content.
+- **Real finding, not a defect**: About's vertical centring (S7.8) has
+  little practical effect. The 200px photo plus the bio text wrapping
+  into a ~336px column produces roughly 1240px of content — taller than
+  almost any real viewport — so there's essentially no vertical slack
+  left to centre within on a typical screen. The CSS is exactly correct
+  (`justify-content: center` is present and does nothing when content
+  already exceeds the container, exactly as flexbox is supposed to
+  behave); the emergent result of combining "narrow the column" with
+  "also centre it vertically" just doesn't read the way it might have
+  sounded when specified. Not fixed unilaterally — flagged for the site
+  owner to decide whether About's column should be wider than Home's, or
+  whether this is fine as is.
+- ✅ Font-display:swap confirmed present on all 6 `@font-face` rules
+  (Grenze Gotisch, Vazirmatn ×2 weights, both with fallbacks) — the
+  typeface swap didn't quietly drop S9.3's guarantee.
+- ✅ Keyboard focus order unaffected by wrapping page content in `<main>`.
+- ✅ Zero `<script>` tags and full WCAG contrast pass, unchanged from
+  every prior feature — this redesign touches no per-piece colour.
 
 ---
 

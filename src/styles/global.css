@@ -1,7 +1,7 @@
 /* Fixed palette — SPEC.md §10. Every colour on the site comes from here;
-   nothing is a one-off hex value in a component. */
+   nothing is a one-off hex value in a component. --color-home-bg (#444444)
+   is retired by the redesign — every page is white now. */
 :root {
-  --color-home-bg: #444444;
   --color-white: #ffffff;
   --color-menu-text: #333333;
   --color-body-text: #000000;
@@ -23,31 +23,24 @@ body {
   padding: 0;
 }
 
+/* S9.2 redesign — Vazirmatn Light 300, 18px, replacing Zalando Sans
+   SemiExpanded regular 14px. */
 body {
   font-family: var(--font-body), sans-serif;
-  font-weight: 400;
-  font-size: 14px;
+  font-weight: 300;
+  font-size: 18px;
   color: var(--color-body-text);
   background: var(--color-white);
-}
-
-/* S6.2/S10/FR-020a — Home's background, set via Base's `background` prop. */
-body[data-bg='dark'] {
-  background: var(--color-home-bg);
 }
 
 a {
   color: inherit;
 }
 
-/* S6.1/S6.7/S6.8 — the Home piece stack. One property (gap) governs the
-   space between pieces; padding-block covers the same 20px minimum
-   between the header and the first image, and the last caption and the
-   footer. Deliberately one rule, not per-piece margins, so it can't drift
-   out of sync (PLAN.md §5). */
+/* S6.1 — the Home piece stack, one column. S6.7/S6.8's 20px gap is
+   retired by the redesign (S6.14): pieces run flush, and each caption's
+   own bottom padding (Piece.astro) is the only separation now. */
 .stack {
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  padding-block: 20px;
 }

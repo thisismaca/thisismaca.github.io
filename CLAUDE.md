@@ -91,15 +91,18 @@ hand-written and the command's template output is markedly worse. Amend by hand.
 
 Spec Kit is feature-oriented: each `/speckit-specify` creates a numbered
 `specs/###-*/` directory. The mapping for this project is **one Spec Kit
-feature per `PLAN.md` §7 milestone**, with two exceptions driven by when real
-content actually arrived rather than the milestone boundaries as originally
-drawn: Milestones 2 and 3 (one piece, then the stack) merged into a single
-feature `002-*` when five of the ten launch pieces arrived finished at once;
-Milestone 4 (About and Contact) split, with `003-about` covering only the
-About half once its content existed, Contact left for a future feature once
-its own content does. See `PLAN.md` §7 for both. `SPEC.md` stays at root as
-the whole-site contract; each feature spec cites its requirement IDs rather
-than restating them.
+feature per `PLAN.md` §7 milestone**, with exceptions driven by when real
+content or requests actually arrived rather than the milestone boundaries as
+originally drawn: Milestones 2 and 3 (one piece, then the stack) merged into
+a single feature `002-*` when five of the ten launch pieces arrived finished
+at once; Milestone 4 (About and Contact) split into `003-about` and
+`004-contact` because their content arrived separately. Milestone 6 (the
+visual redesign) is one feature despite touching nearly every page, because
+— unlike the splits/merges above — every part of it arrived in a single
+request as one coherent design decision, not staggered content. See
+`PLAN.md` §7 for all of this. `SPEC.md` stays at root as the whole-site
+contract; each feature spec cites its requirement IDs rather than restating
+them.
 
 ## Constitution constraints
 
@@ -119,32 +122,55 @@ Non-negotiable; they should shape every implementation choice:
 
 ## Architecture
 
-Per `PLAN.md`, mostly not yet built:
+Built and live at `https://thisismaca.github.io`. Per `PLAN.md`'s milestones:
 
 - **Content:** one file per piece in `src/content/pieces/`, schema in
   `src/content.config.ts`. Fields `title`, `description`, `image`, `alt`,
   `captionBackground`, `captionText`, `order` — all required, `alt` non-empty,
   hex colours validated. **No orientation field** (`S2.4` excludes it by design).
-  Astro 7 imports `z` from `astro/zod`, not `astro:content`.
+  Astro 7 imports `z` from `astro/zod`, not `astro:content`. Five of ten launch
+  pieces exist; adding the rest is a file addition, no code change.
 - **Images:** sources go in **`src/assets/`, never `public/`**. Files in
   `public/` are copied untouched, which defeats `S12.3` (responsive sizes) and
   `S6.12` (no layout shift, which relies on build-time intrinsic dimensions).
   This is the single easiest thing to get wrong here.
 - **Routes:** exactly three — `/`, `/about`, `/contact`. No per-piece URLs.
-- **Styling:** plain CSS, no framework. One breakpoint (768px), six colours,
-  a handful of `clamp()` values.
-- **Header shadow:** one boolean prop on the base layout (on for About/Contact,
-  off for Home), not three header copies.
+- **Styling:** plain CSS, no framework. One breakpoint (768px). Content on
+  every page narrows to a centred column at 768px+ (`Base.astro`'s
+  `narrowContent` prop); About and Contact additionally centre vertically
+  within the viewport (`centerContent`) — Home doesn't, since its stack is
+  always taller than one screen.
+- **Header shadow:** unconditional on every page — no prop, no per-page
+  toggle. (It used to be on for About/Contact, off for Home; the 2026-07-30
+  redesign made it universal.)
+- **Sticky footer:** `Base.astro` makes `body` a flex column with
+  `min-height: 100vh` and `<main>` `flex: 1 0 auto`, so `Footer` is always
+  the last flex child — this is what pins it to the viewport bottom on short
+  pages (Contact) without needing a per-page special case; Home's longer
+  content is unaffected by the same mechanism.
+- **Typography:** Grenze Gotisch on the header menu only; Vazirmatn
+  everywhere else (body text at weight 300/18px, piece caption titles at
+  weight 400/20px sharing the same `--font-body` font registration —
+  Astro's Fonts API resolves the right `@font-face` from `font-weight`
+  alone, no second config entry needed per weight).
 
 ## Verification
 
-`PLAN.md` §8 maps each requirement to a check. The ones that actually catch
-problems:
+`PLAN.md` §8 has one row per `SPEC.md` requirement, not just a curated
+subset — it's been run end to end against the live production site once
+(Milestone 5) and again after the redesign (Milestone 6). The ones most
+likely to catch a real regression:
 
 - **S2.2** — delete an `alt` value; the build must fail.
 - **S12.1** — grep built HTML in `dist/` for `<script`; must find none.
-- **S12.4** — contrast-check every hand-picked caption colour pair. Twenty
-  hand-chosen colours with nothing automated to validate them; this is the
-  requirement most likely to be silently violated.
+- **S12.4** — run `node scripts/check-contrast.mjs`. It reads every piece's
+  actual frontmatter, so it automatically covers pieces added later — no
+  manual eyeballing, and no hardcoded list to fall out of sync.
 - **S4.4** — three menu items on one line at 320px, with the real blackletter
-  font loaded. Previously estimated by arithmetic, never measured.
+  font loaded, below the header nav's middle-third span (which only applies
+  at 768px+ — confirmed by measuring rendered text that a literal reading at
+  every width would break this).
+- **S7.8** — About's vertical centring is real but often invisible in
+  practice: the narrow column makes the bio text tall enough that most
+  viewports have no vertical slack left. Not a bug if you see it — see
+  `PLAN.md`'s Milestone 6 note before treating it as one.

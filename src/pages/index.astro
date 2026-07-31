@@ -6,7 +6,7 @@ import Piece from '../components/Piece.astro';
 const pieces = (await getCollection('pieces')).sort((a, b) => a.data.order - b.data.order);
 ---
 
-<Base headerShadow={false} background="dark">
+<Base narrowContent={true}>
   <div class="stack">
     {pieces.map((piece) => (
       <Piece piece={piece.data} priority={piece.data.order === 1} />
