@@ -531,18 +531,80 @@ than blocking.
 How each part of the spec gets checked. This is what makes the requirements
 testable rather than decorative.
 
+**Expanded 2026-07-30.** This table originally listed 13 rows — "the ones
+that actually catch problems" — not the full 55-odd requirements in
+`SPEC.md`. That was fine while each feature verified its own slice as it
+was built (every `specs/*/quickstart.md` covers its feature completely).
+It stopped being fine at Milestone 5, whose entire job is a full pass
+against the finished site as a whole — a curated subset can't do that.
+Expanded to one row per requirement, grouped by `SPEC.md` section.
+
 | Requirement | Check |
 |---|---|
+| **Content model (§2)** | |
 | S2.1 | Add a piece file, rebuild, confirm no code changed |
 | S2.2 | Delete an `alt` value, confirm the build fails |
+| S2.3 | Count pieces on `/` — launch target is ten; a lower count is a launch-readiness gap, not a bug |
+| S2.4 | Confirm `content.config.ts` has no orientation/medium/category field |
+| **Routes (§3)** | |
+| S3.1 | Confirm exactly `/`, `/about`, `/contact` exist and nothing else does |
+| S3.2 | Confirm no per-piece URL resolves (by design) |
+| **Header (§4)** | |
+| S4.1 | Confirm header is white, flush to viewport top, no grey above it at any width |
+| S4.2 | Confirm header spans full viewport width edge to edge |
+| S4.3 | Confirm exactly Home/About/Contact, one row, centred |
 | S4.4 | 320px viewport, real font, three items on one line |
 | S4.5–S4.8 | Resize continuously, confirm no snapping |
+| S4.9 | Confirm header CSS sets no fixed height — inspect computed style |
+| S4.10 | Activate each item, confirm it navigates to the right page |
 | S4.11 | Shadow present on `/about` and `/contact`, absent on `/` |
+| **Footer (§5)** | |
+| S5.1 | Confirm footer is white with two halves |
+| S5.2 | Confirm email is plain text, not a link |
+| S5.3 | Confirm `@thisismaca` + grey glyph |
 | S5.4 | Instagram opens in a new tab |
+| S5.5 | Narrow the viewport, confirm halves shrink rather than stack |
+| S5.6 | Confirm no shadow/border on the footer |
+| S5.7 | Confirm `/contact`'s footer differs from `/` and `/about`'s (see S8.4/S8.5) |
+| **Home (§6)** | |
+| S6.1 | Confirm pieces stack in ascending `order`, below the header |
+| S6.2 | Confirm `#444444` behind and between pieces |
+| S6.3 | Confirm each caption is flush against its own image, no gap |
+| S6.4 | Confirm bold title above description in each caption |
+| S6.5 | Confirm caption colours differ per piece and match each piece's own fields |
+| S6.6 | Confirm images are full width, uncropped, no imposed height |
 | S6.7 | Measure the gap between two piece units |
+| S6.8 | Measure header→first-image and last-caption→footer gaps |
+| S6.9 | Confirm no carousel/arrows/dots/pagination exists |
 | S6.10–S6.12 | Throttle the network, confirm nothing shifts as images land |
+| **About (§7)** | |
+| S7.1 | Confirm white background throughout |
+| S7.2 | Measure the photo: ~80×100px, 5px margin on every side |
+| S7.3 | At 768px+, confirm text wraps beside the photo |
+| S7.4 | Below 768px, confirm the photo is centred with text below it |
+| S7.5 | Confirm body text is black |
+| S7.6 | Shadow present (S4.11) |
+| S7.7 | Confirm the source-repo link is present and correctly targeted |
+| **Contact (§8)** | |
+| S8.1 | Confirm white background |
+| S8.2 | Confirm exact invitation text, black, centred, 20px margin above/below |
+| S8.3 | Confirm email/Instagram render as page content, not footer |
+| S8.4 | Confirm the footer contains only the copyright line, at 10px |
+| S8.5 | Confirm the copyright line appears nowhere but `/contact` |
+| S8.6 | Shadow present (S4.11) |
+| **Typography (§9)** | |
+| S9.1 | Confirm Grenze Gotisch weight 500, 20px≥768px / 16px<768px |
+| S9.2 | Confirm Zalando Sans SemiExpanded regular 14px elsewhere, 10px on the copyright line |
+| S9.3 | Throttle fonts, confirm no invisible/unstyled text at any point |
+| **Colour (§10)** | Covered by the section-specific rows above — no separate check |
+| **Responsive (§11)** | |
+| S11.1 | Confirm 768px is the only breakpoint anywhere in the CSS |
+| S11.2 | Confirm header padding/spacing never jumps at a fixed width |
 | S11.3 | No horizontal scroll from 320px up |
+| S11.4 | Confirm the stack never becomes multi-column at any width |
+| **Performance & accessibility (§12)** | |
 | S12.1 | View source on the built output, confirm no script tags |
+| S12.2 | Covered by S2.2 |
 | S12.3 | Confirm multiple widths generated per image |
 | S12.4 | Run every caption colour pair through the WCAG contrast formula |
 | S12.5 | Tab through all three pages |
