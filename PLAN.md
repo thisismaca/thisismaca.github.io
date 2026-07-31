@@ -1,6 +1,6 @@
 # Plan — thisismaca.com
 
-**Status:** draft 3 · **Date:** 2026-07-30 · **Implements:** `SPEC.md` draft 2
+**Status:** draft 4 · **Date:** 2026-07-30 · **Implements:** `SPEC.md` draft 3
 
 This document describes *how* the spec gets built. Unlike `SPEC.md`, it is
 disposable. If Astro turns out to be the wrong choice, this file is rewritten
@@ -9,6 +9,14 @@ and the spec is untouched.
 **Rule for this document:** every decision below names the spec requirements it
 serves. Anything here that serves no requirement is either scope creep, or a
 sign that the spec has a hole.
+
+**Changed since draft 3:** Milestones 4 (About, then Contact) and 5
+(verification) are closed — §7. §8's verification table expanded from 13
+curated rows to one row per requirement, and actually run in full against
+the live site rather than local dev — see its "Milestone 5 results." Two
+stale cross-references fixed along the way: §8 referred to itself as "§10,"
+and `SPEC.md`'s influences open question stayed listed after §7 had already
+resolved it.
 
 **Changed since draft 2:** Milestone 0 is closed and Milestone 1 (the shell)
 is built and deployed — §7. Milestones 2 and 3 are merged into one feature,
@@ -517,8 +525,16 @@ milestone:
 - ✅ Zero `<script>` tags and no horizontal overflow at 320px, confirmed
   across all three pages, not just `/contact`.
 
-**Milestone 5 — verification pass.**
-Walk §10 below end to end. Fix. Merge to `main`.
+**Milestone 5 — verification pass.** *(closed 2026-07-30)*
+Walk §8 below end to end. Fix. Merge to `main`. *(Originally read "§10" —
+a stale cross-reference to this document's own section numbering; §10 is
+"Open — decide during build," not verification. Fixed while closing this
+milestone.)*
+
+Every row in §8's now-complete table run against the live production site.
+Zero failures — see §8's "Milestone 5 results" for what was actually
+checked and what it found, not just a pass count. Already on `main` as of
+this milestone, via the same push-and-merge pattern as every prior one.
 
 The images can arrive at any point from Milestone 2 onward — everything before
 that runs on placeholders, and the Photoshop work proceeds in parallel rather
@@ -616,6 +632,57 @@ caught 2 of the first 5 (§7, Milestones 2/3). The remaining manual judgment
 is only what to do about a failure — nudge the same hue, pick a different
 colour, or knowingly accept it — which stays a person's call.
 
+### Milestone 5 results — 2026-07-30
+
+Every row above run against `https://thisismaca.github.io` — the live
+deployed site, not local dev or the build directory — with two exceptions
+noted below where the live artifact and the local build are provably
+identical. **Zero failures.**
+
+Findings worth recording, not just a pass/fail tally:
+
+- **S11.1, checked properly for the first time.** Scanned `document.
+  styleSheets` for every `@media` rule actually shipped, across every
+  page, rather than trusting that no stray breakpoint had crept in.
+  Result: exactly two rules exist site-wide — `(width >= 768px)` on every
+  page (the header's font-size switch) and `(width <= 767px)` on `/about`
+  only (the photo's stacked layout). Same threshold, both sides, no third
+  value anywhere. This is the kind of thing that's cheap to get subtly
+  wrong (a stray `767px` vs `768px`, or a second breakpoint introduced by
+  a later feature without noticing) and expensive to notice by eye.
+- **S9.3, checked as a mechanism, not an observation.** Rather than
+  throttle the network and eyeball whether text ever went invisible,
+  read every shipped `@font-face` rule directly: all six (both faces,
+  including their metric-matched fallbacks) carry `font-display: swap`.
+  That's a standards-guaranteed behaviour, not a network-luck outcome —
+  confirming the property is set is strictly stronger evidence than one
+  throttled observation would have been.
+- **S4.5–S4.8, re-measured at the exact 767/768 boundary on production**,
+  not just re-trusting `001-shell`'s original numbers: `16px`→`20px` font,
+  padding tracking the `clamp()` formula continuously on both sides, no
+  snap.
+- **S6.7/S6.8, all six gaps on the live site measure ~20.00px** —
+  header→first piece, all four inter-piece gaps, last caption→footer.
+  One `gap`/`padding-block` property on the stack container, holding
+  everywhere it needs to.
+- **S12.3/S6.10/S6.11, confirmed via actual network requests**, not just
+  the `loading`/`fetchpriority` attributes: multiple distinct `.webp`
+  files for the same source image were genuinely requested over the
+  wire; the first piece alone carries `eager`/`high`, every other piece
+  `lazy` with no `fetchpriority`.
+- **S12.1, confirmed two ways**: zero `<script>` elements in the live DOM
+  (`document.querySelectorAll('script').length === 0`) and zero
+  `<script` substrings in the local `dist/` output — the two exceptions
+  where local and live were both checked, since they're provably the same
+  artifact and each method has a different failure mode it would catch.
+- **S2.3 remains a known, accepted gap**: five of ten launch pieces. Not
+  a defect — `PLAN.md` §7 always treated this as incremental, and nothing
+  about the site's behaviour depends on the count being ten.
+
+No code changed as a result of this milestone. That itself is a form of
+evidence: four features, each verified in isolation as it was built, still
+compose correctly as a whole site with nothing missed in between.
+
 ---
 
 ## 9. Risks
@@ -629,9 +696,14 @@ colour, or knowingly accept it — which stays a person's call.
    automation.~~ Wrong on both counts — see §8's S12.4 update. 2 of the
    first 5 pairs failed and were nudged; 5 pairs remain for the pieces still
    to come.
-4. **Photoshop and CSS disagreeing.** The composition is designed at one width
-   and rendered at many. Check one exported piece in the browser early rather
-   than exporting all ten first.
+4. **Photoshop and CSS disagreeing.** ~~The composition is designed at one
+   width and rendered at many. Check one exported piece in the browser early
+   rather than exporting all ten first.~~ Moot as written — the assumed
+   Photoshop-compositing workflow didn't happen. All five real pieces are
+   direct camera exports (1365–2794px, whatever the shot's native
+   resolution), not canvases composed at a fixed width, and the site never
+   needed them to be (S2.4 holds regardless of source dimensions). No CSS
+   disagreement risk remains once that assumption is gone.
 
 ---
 
@@ -639,7 +711,13 @@ colour, or knowingly accept it — which stays a person's call.
 
 - ~~Pages vs Workers (§1.2), at Milestone 0.~~ **Closed 2026-07-30 — GitHub
   Pages. See §1.2.**
-- Image export format and how many responsive widths (spec open question 3).
+- ~~Image export format and how many responsive widths (spec open question
+  3).~~ **Answered in practice, 2026-07-30** — see `SPEC.md` §14. Source
+  format is whatever the camera/editing software exports (JPEG); Astro's
+  pipeline generates responsive widths at build time regardless of source
+  size, so "how many" was never a decision to make by hand.
 - Page titles, meta descriptions, favicon, 404 (spec open question 5).
 - Whether `year`, `medium` and `band/venue` return to the schema (spec open
-  question 1). Cheap to add now, more disruptive once ten files exist.
+  question 1). Five piece files already exist, so this is no longer
+  hypothetically disruptive — adding a field now means touching all five
+  existing pieces, not zero.
