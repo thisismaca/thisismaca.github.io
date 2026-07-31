@@ -91,15 +91,18 @@ hand-written and the command's template output is markedly worse. Amend by hand.
 
 Spec Kit is feature-oriented: each `/speckit-specify` creates a numbered
 `specs/###-*/` directory. The mapping for this project is **one Spec Kit
-feature per `PLAN.md` §7 milestone**, with two exceptions driven by when real
-content actually arrived rather than the milestone boundaries as originally
-drawn: Milestones 2 and 3 (one piece, then the stack) merged into a single
-feature `002-*` when five of the ten launch pieces arrived finished at once;
-Milestone 4 (About and Contact) split, with `003-about` covering only the
-About half once its content existed, Contact left for a future feature once
-its own content does. See `PLAN.md` §7 for both. `SPEC.md` stays at root as
-the whole-site contract; each feature spec cites its requirement IDs rather
-than restating them.
+feature per `PLAN.md` §7 milestone**, with exceptions driven by when real
+content or requests actually arrived rather than the milestone boundaries as
+originally drawn: Milestones 2 and 3 (one piece, then the stack) merged into
+a single feature `002-*` when five of the ten launch pieces arrived finished
+at once; Milestone 4 (About and Contact) split into `003-about` and
+`004-contact` because their content arrived separately. Milestone 6 (the
+visual redesign) is one feature despite touching nearly every page, because
+— unlike the splits/merges above — every part of it arrived in a single
+request as one coherent design decision, not staggered content. See
+`PLAN.md` §7 for all of this. `SPEC.md` stays at root as the whole-site
+contract; each feature spec cites its requirement IDs rather than restating
+them.
 
 ## Constitution constraints
 
