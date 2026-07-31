@@ -8,9 +8,11 @@ interface Props {
   headerShadow?: boolean;
   /** S10 / FR-020a — 'dark' is Home's #444444; every other page is white. */
   background?: 'white' | 'dark';
+  /** S8.4/S8.5 — true only on /contact. */
+  footerCopyright?: boolean;
 }
 
-const { headerShadow = false, background = 'white' } = Astro.props;
+const { headerShadow = false, background = 'white', footerCopyright = false } = Astro.props;
 ---
 
 <html lang="en">
@@ -34,6 +36,6 @@ const { headerShadow = false, background = 'white' } = Astro.props;
   <body data-bg={background}>
     <Header shadow={headerShadow} />
     <slot />
-    <Footer />
+    <Footer copyright={footerCopyright} />
   </body>
 </html>

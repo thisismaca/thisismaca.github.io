@@ -462,7 +462,7 @@ description against the same threshold, not just description.
   list), and confirms all five pairs pass at 4.5:1+.
 - ✅ Zero `<script>` tags in the build output, unchanged from Milestone 1.
 
-**Milestone 4 — About and Contact.** *(split, 2026-07-30; About half closed
+**Milestone 4 — About and Contact.** *(split, 2026-07-30; closed in full
 same day)*
 The photo wrap, the shadow on both, the Contact footer swap. Originally one
 milestone; split into two Spec Kit features because About's real content
@@ -493,6 +493,29 @@ becomes its own feature rather than blocking on it now.
 - ✅ Header shadow (S7.6) confirmed still intact — this feature touches no
   shared component.
 - ✅ Zero `<script>` tags, unchanged.
+
+`specs/004-contact/` closes the Contact half, and with it, the whole
+milestone:
+
+- ✅ `/contact` shows the finalized invitation text and the email/Instagram
+  blocks as page content — no hunting, per `SPEC.md` §1's own definition
+  of success.
+- ✅ The email/Instagram markup was extracted into `ContactInfo.astro`,
+  exactly as `PLAN.md` §5 anticipated before either consuming feature
+  existed: one component, rendered by `Footer.astro` in its default state
+  and directly by `contact.astro` as page content. Its flex layout had to
+  move onto its own wrapper rather than depending on `<footer>` to supply
+  it — the thing that makes it actually portable between the two contexts.
+- ✅ `Footer.astro` gained a `copyright` boolean prop (the same pattern as
+  `Header.astro`'s `shadow` prop from `001-shell`): `/contact`'s footer
+  shows only `© Maca Sepúlveda 2026` at 10px; every other page is
+  unaffected.
+- ✅ The regression this refactor risked was checked directly, not
+  assumed: `/` and `/about` footers confirmed identical after the change —
+  same content, same email, same Instagram link, no copyright line
+  leaking onto pages that shouldn't have it.
+- ✅ Zero `<script>` tags and no horizontal overflow at 320px, confirmed
+  across all three pages, not just `/contact`.
 
 **Milestone 5 — verification pass.**
 Walk §10 below end to end. Fix. Merge to `main`.

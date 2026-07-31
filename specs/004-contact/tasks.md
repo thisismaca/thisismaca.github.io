@@ -19,9 +19,9 @@ manually against [quickstart.md](./quickstart.md).
 
 **⚠️ CRITICAL**: Do not start Phase 2+ before this checkpoint.
 
-- [ ] T001 Create `src/components/ContactInfo.astro`: move the two-half email/Instagram markup out of `Footer.astro` verbatim, with its own root wrapper carrying the flex layout (`display: flex`, `.half`, `.glyph` styles) so it works standalone, not only inside `<footer>` (per `research.md`)
-- [ ] T002 Modify `src/components/Footer.astro` (depends on T001): import `ContactInfo`, add a `copyright` boolean prop (default `false`); render `<ContactInfo />` when `false`, a `© Maca Sepúlveda 2026` line at 10px when `true` (S8.4); remove the two-half styles now owned by `ContactInfo`, keep the `<footer>` wrapper's own styles (background, no shadow — S5.6) unchanged
-- [ ] T003 Modify `src/layouts/Base.astro` (depends on T002): add a `footerCopyright` boolean prop (default `false`), forward it as `<Footer copyright={footerCopyright} />`
+- [X] T001 Create `src/components/ContactInfo.astro`: move the two-half email/Instagram markup out of `Footer.astro` verbatim, with its own root wrapper carrying the flex layout (`display: flex`, `.half`, `.glyph` styles) so it works standalone, not only inside `<footer>` (per `research.md`)
+- [X] T002 Modify `src/components/Footer.astro` (depends on T001): import `ContactInfo`, add a `copyright` boolean prop (default `false`); render `<ContactInfo />` when `false`, a `© Maca Sepúlveda 2026` line at 10px when `true` (S8.4); remove the two-half styles now owned by `ContactInfo`, keep the `<footer>` wrapper's own styles (background, no shadow — S5.6) unchanged
+- [X] T003 Modify `src/layouts/Base.astro` (depends on T002): add a `footerCopyright` boolean prop (default `false`), forward it as `<Footer copyright={footerCopyright} />`
 
 **Checkpoint**: The component split exists and compiles. `/` and `/about`
 should already render identically to before (default props unchanged);
@@ -37,8 +37,8 @@ as page content.
 **Independent Test**: Load `/contact`, confirm the invitation and the
 email/Instagram blocks both render as page content.
 
-- [ ] T004 [US1] Modify `src/pages/contact.astro` (depends on T001, T003): add the invitation paragraph with the exact finalized text, styled black, centred, with 20px margin above and below (S8.2); render `<ContactInfo />` as page content below it (S8.3)
-- [ ] T005 [US1] Run [quickstart.md](./quickstart.md) Scenario 1; fix any issue found
+- [X] T004 [US1] Modify `src/pages/contact.astro` (depends on T001, T003): add the invitation paragraph with the exact finalized text, styled black, centred, with 20px margin above and below (S8.2); render `<ContactInfo />` as page content below it (S8.3)
+- [X] T005 [US1] Run [quickstart.md](./quickstart.md) Scenario 1; fix any issue found
 
 **Checkpoint**: User Story 1 independently functional.
 
@@ -51,8 +51,8 @@ email/Instagram blocks both render as page content.
 **Independent Test**: Load `/contact`, scroll to the footer, confirm only
 the copyright line appears.
 
-- [ ] T006 [US2] In `src/pages/contact.astro` (depends on T003), pass `footerCopyright={true}` to `<Base>` (S8.4, S8.5)
-- [ ] T007 [US2] Run [quickstart.md](./quickstart.md) Scenario 2; fix any issue found
+- [X] T006 [US2] In `src/pages/contact.astro` (depends on T003), pass `footerCopyright={true}` to `<Base>` (S8.4, S8.5)
+- [X] T007 [US2] Run [quickstart.md](./quickstart.md) Scenario 2; fix any issue found
 
 **Checkpoint**: User Stories 1 and 2 both independently functional.
 
@@ -65,7 +65,7 @@ the copyright line appears.
 **Independent Test**: Load `/` and `/about`, compare their footers
 against their state before this feature.
 
-- [ ] T008 [US3] Run [quickstart.md](./quickstart.md) Scenario 3 against `/` and `/about`; if either footer differs from its pre-feature state, fix `Footer.astro`/`ContactInfo.astro` until it doesn't
+- [X] T008 [US3] Run [quickstart.md](./quickstart.md) Scenario 3 against `/` and `/about`; if either footer differs from its pre-feature state, fix `Footer.astro`/`ContactInfo.astro` until it doesn't
 
 **Checkpoint**: All three user stories independently functional.
 
@@ -73,8 +73,8 @@ against their state before this feature.
 
 ## Phase 5: Polish & Cross-Cutting Concerns
 
-- [ ] T009 [P] Run [quickstart.md](./quickstart.md) Scenario 4 (`grep -ril "<script" dist/`, then continuous resize 320px–2560px on all three pages); confirm no output and no horizontal scrollbar anywhere
-- [ ] T010 Update root `PLAN.md` §7 Milestone 4 checklist once T001–T009 all pass — this closes the milestone entirely, both halves
+- [X] T009 [P] Run [quickstart.md](./quickstart.md) Scenario 4 (`grep -ril "<script" dist/`, then continuous resize 320px–2560px on all three pages); confirm no output and no horizontal scrollbar anywhere
+- [X] T010 Update root `PLAN.md` §7 Milestone 4 checklist once T001–T009 all pass — this closes the milestone entirely, both halves
 
 ---
 

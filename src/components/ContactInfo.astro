@@ -1,0 +1,56 @@
+---
+---
+
+<div class="contact-info">
+  <div class="half">thisismaca@gmail.com</div>
+  <div class="half">
+    <a href="https://instagram.com/thisismaca" target="_blank" rel="noopener noreferrer">
+      <span>@thisismaca</span>
+      <svg class="glyph" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false">
+        <rect x="2" y="2" width="20" height="20" rx="5" fill="none" stroke="currentColor" stroke-width="2" />
+        <circle cx="12" cy="12" r="5" fill="none" stroke="currentColor" stroke-width="2" />
+        <circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" />
+      </svg>
+    </a>
+  </div>
+</div>
+
+<style>
+  /* Owns its own flex layout rather than relying on a parent (e.g.
+     <footer>) to supply it — this renders both inside the footer and
+     standalone as /contact's page content (SPEC.md S8.3). */
+  .contact-info {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+  }
+
+  /* S5.1/S5.5 — two halves, each centred within itself, shrinking rather
+     than stacking or wrapping at any width. */
+  .half {
+    flex: 1 1 50%;
+    min-width: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-block: clamp(8px, 2vw, 16px);
+    padding-inline: 5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .half a {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    text-decoration: none;
+  }
+
+  /* S5.3 — only the glyph is specified as grey; the handle text is
+     unstyled body text (inherited black). */
+  .glyph {
+    color: var(--color-instagram-glyph);
+    flex-shrink: 0;
+  }
+</style>
