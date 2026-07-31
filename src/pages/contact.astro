@@ -1,5 +1,23 @@
 ---
 import Base from '../layouts/Base.astro';
+import ContactInfo from '../components/ContactInfo.astro';
 ---
 
-<Base headerShadow={true}></Base>
+<Base headerShadow={true} footerCopyright={true}>
+  <p class="invitation">
+    If you have any inquiries (art or software related) please contact me through email or
+    Instagram.
+  </p>
+  <ContactInfo />
+</Base>
+
+<style>
+  /* S8.2 — black is already the global body-text default; centred with a
+     fixed 20px margin, not a fluid clamp, since the spec gives one exact
+     value rather than a range. */
+  .invitation {
+    text-align: center;
+    margin-block: 20px;
+    padding-inline: clamp(15px, 3vw, 30px);
+  }
+</style>
