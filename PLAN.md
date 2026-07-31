@@ -1,6 +1,6 @@
 # Plan — thisismaca.com
 
-**Status:** draft 4 · **Date:** 2026-07-30 · **Implements:** `SPEC.md` draft 3
+**Status:** draft 5 · **Date:** 2026-07-30 · **Implements:** `SPEC.md` draft 4
 
 This document describes *how* the spec gets built. Unlike `SPEC.md`, it is
 disposable. If Astro turns out to be the wrong choice, this file is rewritten
@@ -9,6 +9,11 @@ and the spec is untouched.
 **Rule for this document:** every decision below names the spec requirements it
 serves. Anything here that serves no requirement is either scope creep, or a
 sign that the spec has a hole.
+
+**Changed since draft 4:** Milestone 6, the visual redesign, added — §7.
+Not part of the original build order; a deliberate second pass at the
+site's identity requested after Milestones 0–5 shipped a verified launch
+state. Implements `SPEC.md` draft 4 in full.
 
 **Changed since draft 3:** Milestones 4 (About, then Contact) and 5
 (verification) are closed — §7. §8's verification table expanded from 13
@@ -536,9 +541,33 @@ Zero failures — see §8's "Milestone 5 results" for what was actually
 checked and what it found, not just a pass count. Already on `main` as of
 this milestone, via the same push-and-merge pattern as every prior one.
 
-The images can arrive at any point from Milestone 2 onward — everything before
-that runs on placeholders, and the Photoshop work proceeds in parallel rather
-than blocking.
+**Milestone 6 — the visual redesign.** *(added 2026-07-30)*
+Not part of the original build order — Milestones 0–5 took the site from
+nothing to a fully verified launch state, and this is a deliberate second
+pass at its identity after seeing that state live, requested by the site
+owner rather than surfaced by testing. Implements `SPEC.md` draft 4's
+amendments in full: §4 (header nav spans the middle third of the viewport,
+larger menu text, shadow now on all three pages), §5 (footer gets a fixed
+80px height at 768px+), §6 (Home goes white, narrows to the middle third
+at 768px+, the 20px inter-piece gap becomes 10px of caption padding), §7/§8
+(About and Contact narrow and vertically centre at 768px+, About's photo
+grows to 200px tall with new left text padding, Contact's footer sticks to
+the viewport bottom), §9 (Vazirmatn replaces Zalando Sans SemiExpanded
+everywhere except the menu, piece captions get a distinct title treatment).
+
+Built as one Spec Kit feature, not split across several — unlike the
+Milestone 2/3 merge or the Milestone 4 split, which were driven by content
+arriving at different times, every part of this redesign arrived in the
+same request as one coherent design decision. Splitting it into several
+near-identical specify/plan/tasks cycles would be process for its own
+sake, the same reasoning `001-shell`'s tasks.md and others have used
+throughout this project.
+
+Constitution constraints hold unchanged throughout: zero JavaScript (the
+new width/centring/sticky-footer behaviour is CSS only), one breakpoint
+(no second breakpoint is introduced anywhere — `SPEC.md` S11.1 is explicit
+about this), and the work still wins (a narrower column is still a
+deliberate framing choice for the work, not chrome competing with it).
 
 ---
 
