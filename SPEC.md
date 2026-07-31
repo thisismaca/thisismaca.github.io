@@ -110,19 +110,29 @@ Present on all three pages, identical in structure.
 it at any width.
 **S4.2** It spans the full viewport width, edge to edge.
 **S4.3** It contains exactly three items — Home, About, Contact — as a single
-horizontal row. *(Amended, redesign)* The row is not merely centred: as a
-group, the items span the horizontal middle third of the viewport — the
-group's left edge sits at one-third of the viewport width, its right edge
-at two-thirds.
+horizontal row. *(Amended, redesign — 768px and up only.)* At 768px and
+above, the row is not merely centred: as a group, the items span the
+horizontal middle third of the viewport — the group's left edge sits at
+one-third of the viewport width, its right edge at two-thirds. *(Confirmed
+by measuring actual rendered text at the new S9.1 sizes before writing this
+into the spec: at 768px, the three words total ~203px against 256px of
+available space — comfortable. Below 768px, a literal middle third is
+mathematically impossible — even at 500px viewport the three words alone
+measure ~174px against ~167px available, before any padding — so this
+requirement holds only at 768px and up.)*
 **S4.4** The three items remain on one line at every viewport width down to
 320px. No hamburger, no wrapping, no overflow.
 **S4.5** Padding above the items: `clamp(15px, 3vw, 30px)`.
 **S4.6** Padding below the items: `clamp(5px, 1vw, 8px)`.
-**S4.7** Horizontal padding: 5px minimum, inside the middle-third span defined
-by S4.3.
-**S4.8** *(Amended, redesign)* The three items distribute evenly
-(space-between) across the middle-third span defined in S4.3, rather than
-sitting a fixed gap apart. There is no independent gap value to set.
+**S4.7** Horizontal padding: 5px minimum. At 768px and up, inside the
+middle-third span defined by S4.3; below 768px, inside the full-width row
+as it worked before this feature.
+**S4.8** *(Amended, redesign — 768px and up only.)* At 768px and above, the
+three items distribute evenly (space-between) across the middle-third span
+defined in S4.3, rather than sitting a fixed gap apart. Below 768px, the
+original fluid gap — `clamp(8px, 4vw, 30px)` — applies unchanged; this is
+what keeps S4.4 achievable at 320px once S4.3's constraint would otherwise
+make it impossible.
 **S4.9** Header height is a consequence of padding plus line box. It is never
 set directly.
 **S4.10** Each item navigates to its corresponding page.
@@ -293,11 +303,11 @@ background — every page is now white, per S6.2.)*
 ## 11. Responsive behaviour
 
 **S11.1** *(Amended, redesign)* One breakpoint, still at 768px, now governing:
-menu type size (S9.1); the About and Contact wrap/stack and
-narrow/vertically-centred layouts (S7.3, S7.4, S7.8, S8.7); Home's
-narrow-column width (S6.13); and the footer's fixed height (S5.8). No second
-breakpoint was introduced for any of this — every large/small distinction
-in this redesign uses the same 768px line.
+menu type size (S9.1); the header nav's middle-third span (S4.3, S4.8); the
+About and Contact wrap/stack and narrow/vertically-centred layouts (S7.3,
+S7.4, S7.8, S8.7); Home's narrow-column width (S6.13); and the footer's
+fixed height (S5.8). No second breakpoint was introduced for any of this —
+every large/small distinction in this redesign uses the same 768px line.
 **S11.2** Header padding is fluid and crosses no breakpoint (S4.5, S4.6). The
 item-distribution mechanism (S4.8) is not a fluid value — it's a fixed
 one-third-of-viewport span (S4.3) with even spacing inside it, which holds
