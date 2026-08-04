@@ -7,7 +7,7 @@ import '../styles/global.css';
 interface Props {
   /** S8.4/S8.5 — true only on /contact. */
   footerCopyright?: boolean;
-  /** S6.13/S7.8/S8.7 — narrows content to the middle third at 768px+. All three pages set this. */
+  /** S6.13/S7.8/S8.7 — narrows content to 40% of the viewport, centred, at 768px+. All three pages set this. */
   narrowContent?: boolean;
   /** S7.8/S8.7 — additionally centres content vertically at 768px+. About/Contact only, not Home. */
   centerContent?: boolean;
@@ -64,7 +64,7 @@ const { footerCopyright = false, narrowContent = false, centerContent = false } 
      reused here for consistency (S11.1: one breakpoint, not a second). */
   @media (min-width: 768px) {
     main.narrow {
-      width: 33.333%;
+      width: 40%;
       margin-inline: auto;
     }
 

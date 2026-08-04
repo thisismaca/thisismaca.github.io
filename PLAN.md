@@ -1,6 +1,6 @@
 # Plan — thisismaca.com
 
-**Status:** draft 5 · **Date:** 2026-07-30 · **Implements:** `SPEC.md` draft 4
+**Status:** draft 6 · **Date:** 2026-08-04 · **Implements:** `SPEC.md` draft 5
 
 This document describes *how* the spec gets built. Unlike `SPEC.md`, it is
 disposable. If Astro turns out to be the wrong choice, this file is rewritten
@@ -9,6 +9,10 @@ and the spec is untouched.
 **Rule for this document:** every decision below names the spec requirements it
 serves. Anything here that serves no requirement is either scope creep, or a
 sign that the spec has a hole.
+
+**Changed since draft 5:** Milestone 7, widening the narrow column from the
+middle third (~33.3%) to 40%, added — §7. Implements `SPEC.md` draft 5
+(S6.13/S7.8/S8.7 amended).
 
 **Changed since draft 4:** Milestone 6, the visual redesign, added — §7.
 Not part of the original build order; a deliberate second pass at the
@@ -610,6 +614,37 @@ deliberate framing choice for the work, not chrome competing with it).
 - ✅ Zero `<script>` tags and full WCAG contrast pass, unchanged from
   every prior feature — this redesign touches no per-piece colour.
 
+**Milestone 7 — narrow column widened to 40%.** *(closed 2026-08-04)*
+Requested after seeing Milestone 6 live: the middle-third column (~33.3%)
+read as too narrow. Implements `SPEC.md` draft 5 (S6.13, S7.8, S8.7
+amended). One value changed in one place — `Base.astro`'s `main.narrow`
+rule — since all three pages share it. The header nav's own middle-third
+span (S4.3, S4.8) is a separate rule in `Header.astro` and was deliberately
+left alone; nothing in the request touched it.
+
+- ✅ Measured directly on the dev server at 1280px: Home's column is
+  39.5–40% of the viewport (the 0.5px gap from exactly 40% is the
+  scrollbar eating into `innerWidth`); About and Contact both measure
+  exactly 40%, centred with matching 30%/30% margins.
+- ✅ Home's images still span the full content column exactly (no gap,
+  no overflow) — confirmed by comparing the first image's rendered width
+  to `main`'s width directly rather than assuming the existing
+  `layout="full-width"` config would track a container it wasn't measured
+  against before.
+- ✅ Header nav span (S4.3) confirmed unchanged at ~33% — this feature
+  touches no shared component the header depends on.
+- ✅ No horizontal scroll introduced at any width; full-width (unnarrowed)
+  behaviour below 768px confirmed unchanged at 375px.
+- **Real finding, not requested but worth recording**: this closes the
+  Milestone 6 finding above about About's vertical centring being
+  "real but rarely visible." A wider column means shorter wrapped lines,
+  so About's total content height at 1280×800 dropped from ~1240px to
+  640px — now shorter than a typical viewport, so S7.8's centring is
+  visibly active: measured top/bottom gaps of 80px/80px, exactly
+  symmetric. Not something this change set out to fix; a side effect of
+  widening the column for an unrelated reason.
+- ✅ Zero `<script>` tags, unchanged.
+
 ---
 
 ## 8. Verification
@@ -663,6 +698,7 @@ Expanded to one row per requirement, grouped by `SPEC.md` section.
 | S6.8 | Measure header→first-image and last-caption→footer gaps |
 | S6.9 | Confirm no carousel/arrows/dots/pagination exists |
 | S6.10–S6.12 | Throttle the network, confirm nothing shifts as images land |
+| S6.13 | At 768px+, measure the stack's width against the viewport (40%) and confirm centred margins |
 | **About (§7)** | |
 | S7.1 | Confirm white background throughout |
 | S7.2 | Measure the photo: ~80×100px, 5px margin on every side |
@@ -671,6 +707,7 @@ Expanded to one row per requirement, grouped by `SPEC.md` section.
 | S7.5 | Confirm body text is black |
 | S7.6 | Shadow present (S4.11) |
 | S7.7 | Confirm the source-repo link is present and correctly targeted |
+| S7.8 | At 768px+, measure width (40% of viewport) and confirm vertical centring (equal top/bottom gaps) |
 | **Contact (§8)** | |
 | S8.1 | Confirm white background |
 | S8.2 | Confirm exact invitation text, black, centred, 20px margin above/below |
@@ -678,6 +715,7 @@ Expanded to one row per requirement, grouped by `SPEC.md` section.
 | S8.4 | Confirm the footer contains only the copyright line, at 10px |
 | S8.5 | Confirm the copyright line appears nowhere but `/contact` |
 | S8.6 | Shadow present (S4.11) |
+| S8.7 | At 768px+, measure width (40% of viewport) and confirm vertical centring (equal top/bottom gaps) |
 | **Typography (§9)** | |
 | S9.1 | Confirm Grenze Gotisch weight 500, 20px≥768px / 16px<768px |
 | S9.2 | Confirm Zalando Sans SemiExpanded regular 14px elsewhere, 10px on the copyright line |

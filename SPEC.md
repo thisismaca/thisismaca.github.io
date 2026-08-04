@@ -1,6 +1,6 @@
 # Spec — thisismaca.com
 
-**Status:** draft 4 · **Date:** 2026-07-30
+**Status:** draft 5 · **Date:** 2026-08-04
 
 This document describes *what must be true* of the finished site. It names no
 framework, host or library on purpose — those belong in `PLAN.md`, which can be
@@ -8,6 +8,12 @@ thrown away and rewritten without touching this file.
 
 Every statement below should be checkable by looking at the built site. Anything
 that cannot be checked is a note, not a requirement, and is marked as such.
+
+**Changed since draft 4.** Home, About and Contact's narrow column (S6.13,
+S7.8, S8.7) widens from the middle third of the viewport (~33.3%) to 40%,
+still centred. A follow-up to the draft 4 redesign, requested after seeing
+it live — the header nav's own middle-third span (S4.3, S4.8) is unrelated
+and unchanged.
 
 **Changed since draft 3 — the visual redesign.** A deliberate second pass at
 the site's identity after seeing it live, not a bug fix. The headline
@@ -85,8 +91,8 @@ whatever proportions it has.
 > portrait canvas there, with its surround chosen deliberately rather than left
 > to the browser. Source files are around 2400px wide, which was originally
 > sized to hold up full-bleed on a desktop. *(Amended, redesign: Home's
-> content column is now capped at roughly a third of the viewport, S6.13 — a
-> 2400px source still comfortably covers even a third of a 2560px-wide
+> content column is now capped at 40% of the viewport, S6.13 — a
+> 2400px source still comfortably covers even 40% of a 2560px-wide
 > screen, so the size held up even though the reason it was chosen didn't.)*
 >
 > **Visual design is baked into the pixels; text is not.** Titles and
@@ -177,7 +183,7 @@ its own typeface, weight, and size instead (S9.4).
 **S6.5** The caption block's background and text colours come from that piece's
 own fields, so they differ from piece to piece.
 **S6.6** *(Amended, redesign)* Each image spans the full width of the content
-column defined in S6.13 — the full viewport below 768px, the middle third of
+column defined in S6.13 — the full viewport below 768px, 40% of
 the viewport at 768px and up. Its height is its own intrinsic height at that
 width. Nothing is cropped and no height is imposed.
 **S6.7** *(Superseded, redesign — see S6.14)*
@@ -188,12 +194,12 @@ pagination. The page is scrolled.
 **S6.11** The first image is not deferred and begins loading immediately.
 **S6.12** The page does not shift as images load. Space is reserved from each
 image's known dimensions before it arrives.
-**S6.13** *(New, redesign)* At 768px and above, the stack is horizontally
-centred and constrained to the middle third of the viewport width (each side
-margin is approximately one-third of the viewport). Below 768px, the stack
-returns to full width — the margin is not visible there. Home is not
-vertically centred at any width; its content is expected to exceed one
-screen's height.
+**S6.13** *(Amended, draft 5)* At 768px and above, the stack is horizontally
+centred and constrained to 40% of the viewport width (each side margin is
+approximately 30% of the viewport). Below 768px, the stack returns to full
+width — the margin is not visible there. Home is not vertically centred at
+any width; its content is expected to exceed one screen's height.
+*(Originally the middle third, ~33.3% — widened to 40% in draft 5.)*
 **S6.14** *(New, redesign — replaces S6.7/S6.8)* There is no gap between one
 piece unit and the next; images and captions run flush end to end. Instead,
 each caption carries 10px of padding below its own content, which is the
@@ -215,12 +221,12 @@ S4.11 no longer carves out an exception for Home.
 
 **S7.7** The page includes a link to the site's own source repository.
 
-**S7.8** *(New, redesign)* At 768px and above, the About content area is
-horizontally constrained to the middle third of the viewport (as Home's
-stack is, S6.13) *and* vertically centred within the viewport height. Below
-768px, neither constraint applies. *(Unlike Home, About's content is short
-enough to fit a screen, which is why it gets vertical centring and Home
-does not.)*
+**S7.8** *(Amended, draft 5)* At 768px and above, the About content area is
+horizontally constrained to 40% of the viewport (as Home's stack is, S6.13)
+*and* vertically centred within the viewport height. Below 768px, neither
+constraint applies. *(Unlike Home, About's content is short enough to fit a
+screen, which is why it gets vertical centring and Home does not. Originally
+the middle third, ~33.3% — widened to 40% in draft 5, alongside S6.13/S8.7.)*
 **S7.9** *(New, redesign)* The body text (not the photograph) carries an
 additional 20px of padding on its left side, independent of the photograph's
 own 5px margin from S7.2.
@@ -247,11 +253,12 @@ footer.
 **S8.6** The header shadow is visible (S4.11) — now identical to `/`, since
 S4.11 no longer carves out an exception for Home.
 
-**S8.7** *(New, redesign)* At 768px and above, the Contact content area is
-horizontally constrained to the middle third of the viewport *and*
+**S8.7** *(Amended, draft 5)* At 768px and above, the Contact content area is
+horizontally constrained to 40% of the viewport *and*
 vertically centred within the viewport height — the same treatment as
 About (S7.8), for the same reason: its content is short enough to fit a
-screen.
+screen. *(Originally the middle third, ~33.3% — widened to 40% in draft 5,
+alongside S6.13/S7.8.)*
 **S8.8** *(New, redesign)* The footer stays pinned to the bottom of the
 viewport when the page's content is shorter than the screen, rather than
 floating partway up the page. It behaves normally (follows the content) once
@@ -361,7 +368,7 @@ Not in this version, and not to be quietly added:
    Still open: whether a minimum source width should be enforced.
 4. How the composition reads on a very wide monitor, where each piece becomes
    large. *(Amended, redesign: substantially defused, not fully closed —
-   Home's content is now capped at a third of the viewport width, S6.13, so
+   Home's content is now capped at 40% of the viewport width, S6.13, so
    pieces no longer grow toward the full screen width on large monitors the
    way they used to. Still worth a look at 2560px once real content is in
    place, but the risk is much smaller than it was.)*
