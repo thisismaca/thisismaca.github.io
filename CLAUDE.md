@@ -170,7 +170,8 @@ likely to catch a real regression:
   font loaded, below the header nav's middle-third span (which only applies
   at 768px+ — confirmed by measuring rendered text that a literal reading at
   every width would break this).
-- **S7.8** — About's vertical centring is real but often invisible in
-  practice: the narrow column makes the bio text tall enough that most
-  viewports have no vertical slack left. Not a bug if you see it — see
-  `PLAN.md`'s Milestone 6 note before treating it as one.
+- **S7.8** — About's vertical centring was real but often invisible at the
+  original 33.3% column width (`PLAN.md`'s Milestone 6 note); widening to
+  40% (Milestone 7, draft 5) shortened the wrapped bio text enough that
+  it's now visibly centred on typical viewports (measured 80px/80px
+  top/bottom at 1280×800) — check for symmetric gaps, not just the CSS.
