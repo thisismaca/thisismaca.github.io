@@ -1,6 +1,6 @@
 # Plan — thisismaca.com
 
-**Status:** draft 6 · **Date:** 2026-08-04 · **Implements:** `SPEC.md` draft 5
+**Status:** draft 7 · **Date:** 2026-08-04 · **Implements:** `SPEC.md` draft 6
 
 This document describes *how* the spec gets built. Unlike `SPEC.md`, it is
 disposable. If Astro turns out to be the wrong choice, this file is rewritten
@@ -9,6 +9,9 @@ and the spec is untouched.
 **Rule for this document:** every decision below names the spec requirements it
 serves. Anything here that serves no requirement is either scope creep, or a
 sign that the spec has a hole.
+
+**Changed since draft 6:** Milestone 8, removing the About photo's forced
+crop, added — §7. Implements `SPEC.md` draft 6 (S7.2 amended).
 
 **Changed since draft 5:** Milestone 7, widening the narrow column from the
 middle third (~33.3%) to 40%, added — §7. Implements `SPEC.md` draft 5
@@ -645,6 +648,29 @@ left alone; nothing in the request touched it.
   widening the column for an unrelated reason.
 - ✅ Zero `<script>` tags, unchanged.
 
+**Milestone 8 — About photo, crop removed.** *(closed 2026-08-04)*
+Reported live as a bug: the photo's fixed 80×200px box (S7.2, set
+deliberately in Milestone 4 and carried through Milestone 6's redesign)
+crops the 1066×1895 source image — `fit=cover` centre-crops roughly 29%
+off the left/right edges to force that box, since the source's aspect
+ratio (0.563) doesn't match the box's (0.4). Implements `SPEC.md` draft 6
+(S7.2 amended) — a reversal of the earlier deliberate choice, not an
+amendment to its reasoning.
+
+- ✅ `about.astro`'s `<Image>` now specifies only `width={80}`, letting
+  Astro infer height from the source's own aspect ratio rather than
+  forcing both dimensions. Confirmed by fetching the actual generated
+  file: 80×142px, ratio 0.5634 against the source's 0.5626 — the ~0.001
+  difference is integer rounding on the inferred height, not a crop.
+- ✅ Margin changed from a uniform 5px to 5px top/left, 30px right/bottom
+  (`margin-right`/`margin-bottom` split out from the old `margin`
+  shorthand) — confirmed via computed style at 768px+.
+- ✅ Below 768px, `margin-inline: auto` still centres the image correctly
+  (symmetric ~132px left/right at 375px viewport) and the 30px bottom
+  margin carries through to the stacked mobile layout too, unchanged from
+  before this fix.
+- ✅ Zero `<script>` tags, unchanged.
+
 ---
 
 ## 8. Verification
@@ -701,7 +727,7 @@ Expanded to one row per requirement, grouped by `SPEC.md` section.
 | S6.13 | At 768px+, measure the stack's width against the viewport (40%) and confirm centred margins |
 | **About (§7)** | |
 | S7.1 | Confirm white background throughout |
-| S7.2 | Measure the photo: ~80×100px, 5px margin on every side |
+| S7.2 | Confirm the photo is 80px wide, uncropped (rendered aspect ratio matches source), 5px top/left margin and 30px right/bottom margin |
 | S7.3 | At 768px+, confirm text wraps beside the photo |
 | S7.4 | Below 768px, confirm the photo is centred with text below it |
 | S7.5 | Confirm body text is black |

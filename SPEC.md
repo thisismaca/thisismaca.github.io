@@ -1,6 +1,6 @@
 # Spec — thisismaca.com
 
-**Status:** draft 5 · **Date:** 2026-08-04
+**Status:** draft 6 · **Date:** 2026-08-04
 
 This document describes *what must be true* of the finished site. It names no
 framework, host or library on purpose — those belong in `PLAN.md`, which can be
@@ -8,6 +8,14 @@ thrown away and rewritten without touching this file.
 
 Every statement below should be checkable by looking at the built site. Anything
 that cannot be checked is a note, not a requirement, and is marked as such.
+
+**Changed since draft 5.** About's photo (S7.2) is no longer force-cropped
+to a fixed 80×200px box. It now renders at 80px wide with height following
+its own aspect ratio, uncropped, with margin changed from a uniform 5px to
+5px top/left and 30px right/bottom. Reported as a bug after seeing it
+live — the original fixed-crop box was a deliberate draft-4 choice
+(`PLAN.md` Milestone 4), but read as an error once rendered, so this
+reverses it rather than amending the reasoning behind it.
 
 **Changed since draft 4.** Home, About and Contact's narrow column (S6.13,
 S7.8, S8.7) widens from the middle third of the viewport (~33.3%) to 40%,
@@ -210,9 +218,13 @@ only separation between a caption and the next piece's image.
 ## 7. About
 
 **S7.1** The page background is white throughout.
-**S7.2** *(Amended, redesign)* A photograph of Maca appears at the top left,
-approximately 200px tall by 80px wide, with 5px of margin on every side.
-*(Height increased from 100px; width unchanged.)*
+**S7.2** *(Amended, draft 6)* A photograph of Maca appears at the top left,
+80px wide with height following the source image's own aspect ratio
+uncropped (~142px at the current source). Margin: 5px top and left, 30px
+right and bottom. *(Previously a fixed 80×200px box, deliberately cropped
+via `fit=cover` — see `PLAN.md` Milestone 4. Reversed in draft 6: the crop
+read as a bug, not a design choice, once seen live. Width unchanged at
+80px; only the forced height/crop is gone.)*
 **S7.3** At 768px and above, body text flows around the photograph.
 **S7.4** Below 768px, the photograph is centred and all text sits beneath it.
 **S7.5** Body text is black.
