@@ -65,7 +65,12 @@ const {
   body {
     display: flex;
     flex-direction: column;
+    /* 100vh is the largest possible mobile viewport (browser chrome
+       collapsed), so on load — chrome still visible — it overshoots the
+       real visible area and pushes the footer below the fold until the
+       page is scrolled. dvh tracks the actual visible viewport instead. */
     min-height: 100vh;
+    min-height: 100dvh;
   }
 
   main {
