@@ -37,6 +37,21 @@ a {
   color: inherit;
 }
 
+/* Present to crawlers/screen readers, invisible on screen — no visual
+   change, but gives search engines and assistive tech a real heading
+   where the design otherwise has none. */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 /* S6.1 — the Home piece stack, one column. S6.7/S6.8's 20px gap is
    retired by the redesign (S6.14): pieces run flush, and each caption's
    own bottom padding (Piece.astro) is the only separation now. */

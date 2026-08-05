@@ -1,6 +1,6 @@
 # Plan — thisismaca.com
 
-**Status:** draft 10 · **Date:** 2026-08-05 · **Implements:** `SPEC.md` draft 9
+**Status:** draft 11 · **Date:** 2026-08-05 · **Implements:** `SPEC.md` draft 10
 
 This document describes *how* the spec gets built. Unlike `SPEC.md`, it is
 disposable. If Astro turns out to be the wrong choice, this file is rewritten
@@ -9,6 +9,10 @@ and the spec is untouched.
 **Rule for this document:** every decision below names the spec requirements it
 serves. Anything here that serves no requirement is either scope creep, or a
 sign that the spec has a hole.
+
+**Changed since draft 10:** Milestone 12, narrow-target SEO (piece-derived
+meta description and hidden `<h1>` on Home, `noindex` on About/Contact),
+added — §7. Implements `SPEC.md` draft 10 (S12.6–S12.8 added).
 
 **Changed since draft 9:** Milestone 11, widening Home's per-caption bottom
 padding from 10px to 30px, added — §7. Implements `SPEC.md` draft 9 (S6.14
@@ -749,6 +753,44 @@ was to remove it, not to keep a now-inert declaration around. Implements
   padding is what now sits between its text and the footer.
 - ✅ Zero `<script>` tags, unchanged.
 
+**Milestone 12 — narrow-target SEO.** *(closed 2026-08-05)* The site owner
+wants to be found for the specific artist/city names in the piece stack,
+not for generic art-portfolio terms. Two decisions made explicitly with
+her rather than assumed, because either reading would produce a genuinely
+different site: no `venue`/`country` schema fields (S2 stays as-is —
+whatever's already in a piece's free-text description is what's there,
+open question 1 remains open); and About/Contact are excluded from search
+indexing entirely rather than having their copy edited to remove generic
+language. Implements `SPEC.md` draft 10 (S12.6–S12.8).
+
+Design notes, not just what shipped:
+
+- `Base.astro` gained `description`/`noindex` props rather than a new
+  per-page head-content slot — the smallest change that serves S12.6/S12.8,
+  and consistent with how `footerCopyright`/`centerContent` already work.
+- Home's description/`<h1>` are both built from `pieces.map(p =>
+  p.data.title)`, not parsed apart into "just the name" — the five titles
+  use inconsistent phrasing ("X in Y, DATE" vs "X - Y, DATE"), so splitting
+  them would mean fragile string-parsing against free text a future piece
+  could easily break silently. Using the whole title is robust and
+  automatically correct for any phrasing.
+- JSON-LD structured data (a stronger, more explicit signal for exactly
+  this use case) was considered and skipped: it ships as a
+  `<script type="application/ld+json">` tag, and S12.1's verification
+  method is a literal grep for `<script` in `dist/` — adding it would pass
+  by the constitution's actual intent (no *executable* JavaScript) while
+  failing its own written check. Flagged to the site owner rather than
+  silently special-cased.
+
+- ✅ Built and grepped `dist/` for `<script` — zero matches, S12.1 intact.
+- ✅ Confirmed in the actual built HTML (not just dev server): `/`'s
+  `<meta name="description">` contains all five piece titles; `/about` and
+  `/contact` carry `<meta name="robots" content="noindex">`; `/` carries
+  no robots tag at all.
+- ✅ Home's `<h1 class="visually-hidden">` confirmed clipped to 1×1px via
+  computed style, zero layout impact, no horizontal scroll introduced.
+- ✅ Zero `<script>` tags, unchanged.
+
 ---
 
 ## 8. Verification
@@ -837,6 +879,9 @@ Expanded to one row per requirement, grouped by `SPEC.md` section.
 | S12.3 | Confirm multiple widths generated per image |
 | S12.4 | Run every caption colour pair through the WCAG contrast formula |
 | S12.5 | Tab through all three pages |
+| S12.6 | Confirm `/`'s meta description is built from actual piece titles, not generic copy |
+| S12.7 | Confirm `/` has a visually-hidden `<h1>` listing the piece titles, clipped with no layout impact |
+| S12.8 | Confirm `noindex` on `/about` and `/contact`, absent on `/` |
 
 **S12.4 update, 2026-07-30**: this turned out to be automatable — a ~30-line
 script computing WCAG relative luminance catches it exactly, no manual

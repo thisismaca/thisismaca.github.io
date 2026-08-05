@@ -4,9 +4,17 @@ import Base from '../layouts/Base.astro';
 import Piece from '../components/Piece.astro';
 
 const pieces = (await getCollection('pieces')).sort((a, b) => a.data.order - b.data.order);
+
+// Built from each piece's own title (artist, city, date — already required,
+// real HTML text per S6.4), not a generic category description, so this
+// stays specific to what's actually in the stack and grows automatically
+// as pieces are added (S2.1) rather than needing to be kept in sync by hand.
+const pieceTitles = pieces.map((piece) => piece.data.title).join('; ');
+const description = `Live concert photography and illustration featuring ${pieceTitles}.`;
 ---
 
-<Base narrowContent={true}>
+<Base narrowContent={true} description={description}>
+  <h1 class="visually-hidden">{pieceTitles}</h1>
   <div class="stack">
     {pieces.map((piece) => (
       <Piece piece={piece.data} priority={piece.data.order === 1} />

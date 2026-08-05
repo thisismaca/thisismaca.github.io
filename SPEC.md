@@ -1,6 +1,6 @@
 # Spec — thisismaca.com
 
-**Status:** draft 9 · **Date:** 2026-08-05
+**Status:** draft 10 · **Date:** 2026-08-05
 
 This document describes *what must be true* of the finished site. It names no
 framework, host or library on purpose — those belong in `PLAN.md`, which can be
@@ -8,6 +8,13 @@ thrown away and rewritten without touching this file.
 
 Every statement below should be checkable by looking at the built site. Anything
 that cannot be checked is a note, not a requirement, and is marked as such.
+
+**Changed since draft 9.** New S12.6–S12.8: Home gets a piece-derived meta
+description and a visually-hidden `<h1>`; About and Contact get
+`noindex`. The goal, per the site owner: findable for the specific
+artist/city names already in the piece stack, not for generic art-portfolio
+terms. Partially resolves open question 5 (meta descriptions, favicon) —
+per-page `<title>` and the 404 page remain open.
 
 **Changed since draft 8.** Home's per-piece caption padding (S6.14) widens
 from 10px to 30px below each caption's text — still the only separation
@@ -365,6 +372,23 @@ file scaled down.
 **S12.4** Text meets WCAG AA contrast against its background — including each
 hand-picked caption pair, which must be checked per piece.
 **S12.5** The whole site is operable and readable without a pointing device.
+**S12.6** *(New, draft 10)* Home carries a `<meta name="description">` built
+from each piece's own `title` field (artist, city, date — already required,
+real text per S6.4), not generic site-wide marketing copy. It updates
+automatically as pieces are added (S2.1), never needing to be kept in sync
+by hand.
+**S12.7** *(New, draft 10)* Home carries a visually-hidden `<h1>` listing
+the same piece titles — a real heading for search engines and assistive
+technology, where the visual design deliberately has none.
+**S12.8** *(New, draft 10)* About and Contact carry
+`<meta name="robots" content="noindex">`; Home does not. The goal is
+narrow: findable for the specific names/places in the piece stack, not for
+generic terms — About's bio and Contact's invitation text aren't that, so
+they're excluded from the index rather than competing for unrelated
+searches. *(Decided with the site owner 2026-08-05: no explicit
+`venue`/`country` content fields were added — S2's schema is unchanged: see
+open question 1 — those stay whatever's already woven into each piece's
+free-text description, at the owner's discretion.)*
 
 ---
 
@@ -402,5 +426,8 @@ Not in this version, and not to be quietly added:
    pieces no longer grow toward the full screen width on large monitors the
    way they used to. Still worth a look at 2560px once real content is in
    place, but the risk is much smaller than it was.)*
-5. Page titles, meta descriptions, favicon, and what a 404 does.
+5. Page titles and what a 404 does. *(Narrowed, draft 10: meta descriptions
+   and search indexing are resolved — S12.6–S12.8. Favicon already exists,
+   `public/favicon.ico`/`.svg`. The per-page `<title>` question is still
+   open: every page still shares the one fixed `thisismaca.com` title.)*
 6. Where the print house link lives, if anywhere, given §13.

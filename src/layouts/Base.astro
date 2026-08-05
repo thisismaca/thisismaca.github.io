@@ -11,9 +11,20 @@ interface Props {
   narrowContent?: boolean;
   /** S7.8/S8.7 — additionally centres content vertically at 768px+. About/Contact only, not Home. */
   centerContent?: boolean;
+  /** Per-page meta description. Omitted entirely (not just empty) when a page has none. */
+  description?: string;
+  /** Excludes this page from search indexing. About/Contact only — Home is
+      the page whose content (piece names/places) is meant to be found. */
+  noindex?: boolean;
 }
 
-const { footerCopyright = false, narrowContent = false, centerContent = false } = Astro.props;
+const {
+  footerCopyright = false,
+  narrowContent = false,
+  centerContent = false,
+  description,
+  noindex = false,
+} = Astro.props;
 ---
 
 <html lang="en">
@@ -23,7 +34,9 @@ const { footerCopyright = false, narrowContent = false, centerContent = false } 
     <link rel="icon" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
-    <!-- Per-page titles/meta are SPEC.md open question 5 — unresolved,
+    {description && <meta name="description" content={description} />}
+    {noindex && <meta name="robots" content="noindex" />}
+    <!-- Per-page titles are still SPEC.md open question 5 — unresolved,
          not this feature's job to decide. One fixed title until then. -->
     <title>thisismaca.com</title>
     <!-- S9.3 — registering the fonts here is what actually emits the
