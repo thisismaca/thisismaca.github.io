@@ -1,6 +1,6 @@
 # Spec — thisismaca.com
 
-**Status:** draft 8 · **Date:** 2026-08-04
+**Status:** draft 9 · **Date:** 2026-08-05
 
 This document describes *what must be true* of the finished site. It names no
 framework, host or library on purpose — those belong in `PLAN.md`, which can be
@@ -8,6 +8,10 @@ thrown away and rewritten without touching this file.
 
 Every statement below should be checkable by looking at the built site. Anything
 that cannot be checked is a note, not a requirement, and is marked as such.
+
+**Changed since draft 8.** Home's per-piece caption padding (S6.14) widens
+from 10px to 30px below each caption's text — still the only separation
+between one piece and the next, now just more of it.
 
 **Changed since draft 7.** About's photo (S7.2) grows another 30%, 96px →
 125px wide (~222px tall), compounding on top of draft 7's increase rather
@@ -218,10 +222,11 @@ approximately 30% of the viewport). Below 768px, the stack returns to full
 width — the margin is not visible there. Home is not vertically centred at
 any width; its content is expected to exceed one screen's height.
 *(Originally the middle third, ~33.3% — widened to 40% in draft 5.)*
-**S6.14** *(New, redesign — replaces S6.7/S6.8)* There is no gap between one
-piece unit and the next; images and captions run flush end to end. Instead,
-each caption carries 10px of padding below its own content, which is the
-only separation between a caption and the next piece's image.
+**S6.14** *(Amended, draft 9)* There is no gap between one piece unit and
+the next; images and captions run flush end to end. Instead, each caption
+carries 30px of padding below its own content, which is the only
+separation between a caption and the next piece's image. *(Originally
+10px — widened in draft 9.)*
 
 ---
 

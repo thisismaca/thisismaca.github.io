@@ -1,6 +1,6 @@
 # Plan — thisismaca.com
 
-**Status:** draft 9 · **Date:** 2026-08-04 · **Implements:** `SPEC.md` draft 8
+**Status:** draft 10 · **Date:** 2026-08-05 · **Implements:** `SPEC.md` draft 9
 
 This document describes *how* the spec gets built. Unlike `SPEC.md`, it is
 disposable. If Astro turns out to be the wrong choice, this file is rewritten
@@ -9,6 +9,10 @@ and the spec is untouched.
 **Rule for this document:** every decision below names the spec requirements it
 serves. Anything here that serves no requirement is either scope creep, or a
 sign that the spec has a hole.
+
+**Changed since draft 9:** Milestone 11, widening Home's per-caption bottom
+padding from 10px to 30px, added — §7. Implements `SPEC.md` draft 9 (S6.14
+amended).
 
 **Changed since draft 8:** Milestone 10, sizing the About photo up another
 30% and removing the body text's left padding, added — §7. Implements
@@ -728,6 +732,23 @@ was to remove it, not to keep a now-inert declaration around. Implements
   either way. If wrong, the intended value is 80 × 1.3 = 104px, not 125px.
 - ✅ Zero `<script>` tags, unchanged.
 
+**Milestone 11 — Home caption padding widened to 30px.** *(closed
+2026-08-05)* `Piece.astro`'s `.caption` rule's `padding-block-end` — S6.14's
+"only separation between a caption and the next piece's image" — goes from
+10px to 30px. One property, one place; every piece shares the same
+`Piece.astro` component so nothing per-piece needed touching. Implements
+`SPEC.md` draft 9 (S6.14 amended).
+
+- ✅ Computed `padding-bottom` on three captions confirmed at 30px each.
+- ✅ Caption-to-next-image gap still measures exactly 0px — the 30px is
+  padding *inside* the caption, below its text, not a new gap between
+  pieces; S6.3's "flush" and S6.14's "no gap between units" both still
+  hold, just with more room inside each caption before that flush edge.
+- ✅ Last caption→footer gap (S6.8's original intent, now folded into
+  S6.14) also flush at 0px — unaffected, since the last piece's own 30px
+  padding is what now sits between its text and the footer.
+- ✅ Zero `<script>` tags, unchanged.
+
 ---
 
 ## 8. Verification
@@ -777,11 +798,12 @@ Expanded to one row per requirement, grouped by `SPEC.md` section.
 | S6.4 | Confirm bold title above description in each caption |
 | S6.5 | Confirm caption colours differ per piece and match each piece's own fields |
 | S6.6 | Confirm images are full width, uncropped, no imposed height |
-| S6.7 | Measure the gap between two piece units |
-| S6.8 | Measure header→first-image and last-caption→footer gaps |
+| S6.7 | *(Superseded — see S6.14)* |
+| S6.8 | *(Superseded — see S6.14)* |
 | S6.9 | Confirm no carousel/arrows/dots/pagination exists |
 | S6.10–S6.12 | Throttle the network, confirm nothing shifts as images land |
 | S6.13 | At 768px+, measure the stack's width against the viewport (40%) and confirm centred margins |
+| S6.14 | Confirm captions run flush against the next image (0px gap) with 30px padding below each caption's own text |
 | **About (§7)** | |
 | S7.1 | Confirm white background throughout |
 | S7.2 | Confirm the photo is 125px wide, uncropped (rendered aspect ratio matches source), 5px top/left margin and 30px right/bottom margin |
