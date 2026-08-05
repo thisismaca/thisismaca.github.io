@@ -1,6 +1,6 @@
 # Plan — thisismaca.com
 
-**Status:** draft 11 · **Date:** 2026-08-05 · **Implements:** `SPEC.md` draft 10
+**Status:** draft 12 · **Date:** 2026-08-05 · **Implements:** `SPEC.md` draft 11
 
 This document describes *how* the spec gets built. Unlike `SPEC.md`, it is
 disposable. If Astro turns out to be the wrong choice, this file is rewritten
@@ -9,6 +9,11 @@ and the spec is untouched.
 **Rule for this document:** every decision below names the spec requirements it
 serves. Anything here that serves no requirement is either scope creep, or a
 sign that the spec has a hole.
+
+**Changed since draft 11:** Milestone 13, widening Home's meta description
+to also pull a word-boundary-truncated excerpt of each piece's
+`description` (not just its `title`), added — §7. Implements `SPEC.md`
+draft 11 (S12.6 amended).
 
 **Changed since draft 10:** Milestone 12, narrow-target SEO (piece-derived
 meta description and hidden `<h1>` on Home, `noindex` on About/Contact),
@@ -791,6 +796,32 @@ Design notes, not just what shipped:
   computed style, zero layout impact, no horizontal scroll introduced.
 - ✅ Zero `<script>` tags, unchanged.
 
+**Milestone 13 — meta description widened to include piece descriptions.**
+*(closed 2026-08-05)* Follow-up to Milestone 12, prompted by a real
+upcoming case: a coral-reef illustration piece whose actual subject
+(environmental theme) lives in its `description`, not its `title` — the
+title-only meta description from Milestone 12 wouldn't have represented it
+at all. Implements `SPEC.md` draft 11 (S12.6 amended).
+
+- `index.astro` gained an `excerpt()` helper: truncates each piece's
+  `description` to 100 characters at the last word boundary before that
+  cut, appending `…`. Length-based, not sentence-parsing — descriptions
+  aren't written with any consistent punctuation to split on, and a
+  fragile parse here would repeat the exact mistake avoided in Milestone
+  12 (extracting "just the name" from inconsistently-phrased titles).
+- Deliberately NOT applied to the `<h1>` (S12.7 stays titles-only): a
+  screen reader announces the `<h1>` before any visible content, so
+  stuffing it with five-plus paragraph excerpts would be a real
+  accessibility cost. The meta description carries no such cost — it's
+  never rendered or announced on the page itself, only shown by search
+  engines — so that's where the fuller excerpt lives.
+
+- ✅ Built and inspected the actual `dist/index.html`: all five excerpts
+  end cleanly at a word boundary followed by `…` (e.g. "...perfect
+  photo,…", "...snake pit…") — no mid-word cuts.
+- ✅ `<h1>` confirmed unchanged — titles only, same as Milestone 12.
+- ✅ Zero `<script>` tags, unchanged.
+
 ---
 
 ## 8. Verification
@@ -879,7 +910,7 @@ Expanded to one row per requirement, grouped by `SPEC.md` section.
 | S12.3 | Confirm multiple widths generated per image |
 | S12.4 | Run every caption colour pair through the WCAG contrast formula |
 | S12.5 | Tab through all three pages |
-| S12.6 | Confirm `/`'s meta description is built from actual piece titles, not generic copy |
+| S12.6 | Confirm `/`'s meta description is built from actual piece titles and description excerpts, not generic copy, and excerpts are word-boundary truncated |
 | S12.7 | Confirm `/` has a visually-hidden `<h1>` listing the piece titles, clipped with no layout impact |
 | S12.8 | Confirm `noindex` on `/about` and `/contact`, absent on `/` |
 

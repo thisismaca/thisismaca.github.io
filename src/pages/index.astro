@@ -10,7 +10,24 @@ const pieces = (await getCollection('pieces')).sort((a, b) => a.data.order - b.d
 // stays specific to what's actually in the stack and grows automatically
 // as pieces are added (S2.1) rather than needing to be kept in sync by hand.
 const pieceTitles = pieces.map((piece) => piece.data.title).join('; ');
-const description = `Live concert photography and illustration featuring ${pieceTitles}.`;
+
+// Truncates at a word boundary rather than mid-word — simple length-based
+// cut, not sentence-parsing, since descriptions aren't written with any
+// consistent punctuation pattern to split on.
+function excerpt(text: string, maxLength = 100) {
+  if (text.length <= maxLength) return text;
+  const cut = text.slice(0, maxLength);
+  const lastSpace = cut.lastIndexOf(' ');
+  return (lastSpace > 0 ? cut.slice(0, lastSpace) : cut) + '…';
+}
+
+// The meta description additionally pulls a short excerpt of each piece's
+// own description, so subject-matter keywords (a piece's actual topic, not
+// just who/where/when) are represented too — not just the h1 (see below).
+const pieceSummaries = pieces
+  .map((piece) => `${piece.data.title} — ${excerpt(piece.data.description)}`)
+  .join('; ');
+const description = `Live concert photography and illustration featuring ${pieceSummaries}.`;
 ---
 
 <Base narrowContent={true} description={description}>
