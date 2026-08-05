@@ -1,6 +1,6 @@
 # Spec — thisismaca.com
 
-**Status:** draft 11 · **Date:** 2026-08-05
+**Status:** draft 12 · **Date:** 2026-08-05
 
 This document describes *what must be true* of the finished site. It names no
 framework, host or library on purpose — those belong in `PLAN.md`, which can be
@@ -8,6 +8,13 @@ thrown away and rewritten without touching this file.
 
 Every statement below should be checkable by looking at the built site. Anything
 that cannot be checked is a note, not a requirement, and is marked as such.
+
+**Changed since draft 11.** Three mobile fixes for About (S7.7, S7.10):
+the source-repo link now reads "GitHub" instead of the raw URL, fixing a
+horizontal-overflow bug (S11.3) that also explains a previously-unexplained
+gap in the mobile header nav — both were the same root cause, confirmed by
+testing after the fix. Body text is now centre-aligned below 768px,
+matching the photo.
 
 **Changed since draft 10.** S12.6 widened: Home's meta description now
 also pulls a short excerpt of each piece's `description`, not just its
@@ -261,7 +268,12 @@ compound rather than both measuring from the original 80px.)*
 **S7.6** The header shadow is visible (S4.11) — now identical to `/`, since
 S4.11 no longer carves out an exception for Home.
 
-**S7.7** The page includes a link to the site's own source repository.
+**S7.7** *(Amended, draft 12)* The page includes a link to the site's own
+source repository, with link text reading "GitHub" rather than the raw
+URL. *(Originally the literal URL as visible text — at narrow viewports
+this is one long unbroken string with no wrap opportunity, overflowing the
+page horizontally, S11.3. "GitHub" fixes the overflow at its source rather
+than wrapping the long string; the `href` is unchanged.)*
 
 **S7.8** *(Amended, draft 5)* At 768px and above, the About content area is
 horizontally constrained to 40% of the viewport (as Home's stack is, S6.13)
@@ -274,6 +286,10 @@ of padding on its left side, independent of the photograph's own margin.~~
 Removed in draft 8 — the body text now carries no padding of its own; only
 the photograph's S7.2 margin and the `.about` container's own padding
 separate it from the page edge and the photo.
+**S7.10** *(New, draft 12)* Below 768px, body text is centre-aligned,
+matching the photograph's own centring (S7.4). At 768px and above, text
+stays left-aligned/`start` — it wraps beside the floated photo (S7.3),
+where centring would read as ragged rather than intentional.
 
 > **Decided 2026-07-30 — influences.** Text, not images, resolving the open
 > question above: influences (Virgil Finlay, Richey Beckett, Peeter Baltens,
