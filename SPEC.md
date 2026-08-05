@@ -1,6 +1,6 @@
 # Spec — thisismaca.com
 
-**Status:** draft 9 · **Date:** 2026-08-05
+**Status:** draft 11 · **Date:** 2026-08-05
 
 This document describes *what must be true* of the finished site. It names no
 framework, host or library on purpose — those belong in `PLAN.md`, which can be
@@ -8,6 +8,20 @@ thrown away and rewritten without touching this file.
 
 Every statement below should be checkable by looking at the built site. Anything
 that cannot be checked is a note, not a requirement, and is marked as such.
+
+**Changed since draft 10.** S12.6 widened: Home's meta description now
+also pulls a short excerpt of each piece's `description`, not just its
+`title` — so a piece's actual subject (e.g. a coral-reef illustration's
+environmental theme) is represented, not only who/where/when. S12.7's
+`<h1>` deliberately stays titles-only, for screen-reader users who'd
+otherwise hear a wall of excerpt text before any real content.
+
+**Changed since draft 9.** New S12.6–S12.8: Home gets a piece-derived meta
+description and a visually-hidden `<h1>`; About and Contact get
+`noindex`. The goal, per the site owner: findable for the specific
+artist/city names already in the piece stack, not for generic art-portfolio
+terms. Partially resolves open question 5 (meta descriptions, favicon) —
+per-page `<title>` and the 404 page remain open.
 
 **Changed since draft 8.** Home's per-piece caption padding (S6.14) widens
 from 10px to 30px below each caption's text — still the only separation
@@ -365,6 +379,31 @@ file scaled down.
 **S12.4** Text meets WCAG AA contrast against its background — including each
 hand-picked caption pair, which must be checked per piece.
 **S12.5** The whole site is operable and readable without a pointing device.
+**S12.6** *(Amended, draft 11)* Home carries a `<meta name="description">`
+built from each piece's own `title` (artist, city, date) plus a short
+word-boundary-truncated excerpt of its `description` — not generic
+site-wide marketing copy. Both fields are already required, real text per
+S6.4. It updates automatically as pieces are added (S2.1), never needing
+to be kept in sync by hand. *(Originally titles only; draft 11 added the
+description excerpt so a piece's actual subject matter — not just
+who/where/when — is represented, e.g. a coral-reef illustration's
+environmental theme, not only its title.)*
+**S12.7** *(New, draft 10)* Home carries a visually-hidden `<h1>` listing
+the piece titles only — a real heading for search engines and assistive
+technology, where the visual design deliberately has none. *(Deliberately
+narrower than S12.6: a screen reader announces this before any visible
+content, so it stays to short titles rather than the fuller per-piece
+excerpts S12.6 carries — those live only in the meta description, which is
+never rendered or announced on the page itself.)*
+**S12.8** *(New, draft 10)* About and Contact carry
+`<meta name="robots" content="noindex">`; Home does not. The goal is
+narrow: findable for the specific names/places in the piece stack, not for
+generic terms — About's bio and Contact's invitation text aren't that, so
+they're excluded from the index rather than competing for unrelated
+searches. *(Decided with the site owner 2026-08-05: no explicit
+`venue`/`country` content fields were added — S2's schema is unchanged: see
+open question 1 — those stay whatever's already woven into each piece's
+free-text description, at the owner's discretion.)*
 
 ---
 
@@ -402,5 +441,8 @@ Not in this version, and not to be quietly added:
    pieces no longer grow toward the full screen width on large monitors the
    way they used to. Still worth a look at 2560px once real content is in
    place, but the risk is much smaller than it was.)*
-5. Page titles, meta descriptions, favicon, and what a 404 does.
+5. Page titles and what a 404 does. *(Narrowed, draft 10: meta descriptions
+   and search indexing are resolved — S12.6–S12.8. Favicon already exists,
+   `public/favicon.ico`/`.svg`. The per-page `<title>` question is still
+   open: every page still shares the one fixed `thisismaca.com` title.)*
 6. Where the print house link lives, if anywhere, given §13.
