@@ -1,6 +1,6 @@
 # Spec — thisismaca.com
 
-**Status:** draft 6 · **Date:** 2026-08-04
+**Status:** draft 7 · **Date:** 2026-08-04
 
 This document describes *what must be true* of the finished site. It names no
 framework, host or library on purpose — those belong in `PLAN.md`, which can be
@@ -8,6 +8,10 @@ thrown away and rewritten without touching this file.
 
 Every statement below should be checkable by looking at the built site. Anything
 that cannot be checked is a note, not a requirement, and is marked as such.
+
+**Changed since draft 6.** About's photo (S7.2) grows 20%, 80px → 96px wide
+(height following the same aspect ratio, ~171px). Straightforward sizing
+request, no other change.
 
 **Changed since draft 5.** About's photo (S7.2) is no longer force-cropped
 to a fixed 80×200px box. It now renders at 80px wide with height following
@@ -218,13 +222,13 @@ only separation between a caption and the next piece's image.
 ## 7. About
 
 **S7.1** The page background is white throughout.
-**S7.2** *(Amended, draft 6)* A photograph of Maca appears at the top left,
-80px wide with height following the source image's own aspect ratio
-uncropped (~142px at the current source). Margin: 5px top and left, 30px
+**S7.2** *(Amended, draft 7)* A photograph of Maca appears at the top left,
+96px wide with height following the source image's own aspect ratio
+uncropped (~171px at the current source). Margin: 5px top and left, 30px
 right and bottom. *(Previously a fixed 80×200px box, deliberately cropped
-via `fit=cover` — see `PLAN.md` Milestone 4. Reversed in draft 6: the crop
-read as a bug, not a design choice, once seen live. Width unchanged at
-80px; only the forced height/crop is gone.)*
+via `fit=cover` — see `PLAN.md` Milestone 4. Draft 6 reversed the crop; the
+crop read as a bug, not a design choice, once seen live. Draft 7 then sized
+the now-uncropped photo up 20%, 80px → 96px, aspect ratio unchanged.)*
 **S7.3** At 768px and above, body text flows around the photograph.
 **S7.4** Below 768px, the photograph is centred and all text sits beneath it.
 **S7.5** Body text is black.
