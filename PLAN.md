@@ -1,6 +1,6 @@
 # Plan — thisismaca.com
 
-**Status:** draft 7 · **Date:** 2026-08-04 · **Implements:** `SPEC.md` draft 6
+**Status:** draft 8 · **Date:** 2026-08-04 · **Implements:** `SPEC.md` draft 7
 
 This document describes *how* the spec gets built. Unlike `SPEC.md`, it is
 disposable. If Astro turns out to be the wrong choice, this file is rewritten
@@ -9,6 +9,9 @@ and the spec is untouched.
 **Rule for this document:** every decision below names the spec requirements it
 serves. Anything here that serves no requirement is either scope creep, or a
 sign that the spec has a hole.
+
+**Changed since draft 7:** Milestone 9, sizing the About photo up 20%,
+added — §7. Implements `SPEC.md` draft 7 (S7.2 amended).
 
 **Changed since draft 6:** Milestone 8, removing the About photo's forced
 crop, added — §7. Implements `SPEC.md` draft 6 (S7.2 amended).
@@ -669,6 +672,31 @@ amendment to its reasoning.
   (symmetric ~132px left/right at 375px viewport) and the 30px bottom
   margin carries through to the stacked mobile layout too, unchanged from
   before this fix.
+- ✅ Zero `<script>` tags, unchanged.
+
+**Milestone 9 — About photo sized up 20%.** *(closed 2026-08-04)*
+Plain sizing request following Milestone 8. `width={80}` → `width={96}` in
+`about.astro`'s `<Image>`; height is still inferred from the source's
+aspect ratio (no second value to keep in sync). Implements `SPEC.md` draft
+7 (S7.2 amended).
+
+- ✅ Generated file confirmed 96×171px, ratio 0.5614 against the source's
+  0.5626 — consistent with the same integer-rounding gap Milestone 8
+  measured, not a new crop.
+- ✅ At 768px+, text still wraps beside the larger photo — checked via a
+  `Range` on the first paragraph's actual text node (a bounding-box check
+  on the paragraph would false-fail here too, same caveat Milestone 4's
+  log recorded for the original float).
+- ✅ No horizontal scroll introduced at 1280px; margins (5px top/left,
+  30px right/bottom) unchanged and unaffected by the size increase.
+- **Found in passing, not fixed here**: at 375px, the About page already
+  scrolls horizontally — the source-repo link (S7.7) renders its raw URL
+  as unbroken text with no `overflow-wrap`, so it overflows the viewport
+  regardless of photo size (confirmed independent of this change: below
+  768px the photo is `float: none` and doesn't affect paragraph width at
+  all). This is a pre-existing S11.3 violation, not something Milestone 8
+  or 9 introduced. Flagged for a separate fix rather than folded into this
+  milestone's scope.
 - ✅ Zero `<script>` tags, unchanged.
 
 ---
