@@ -39,6 +39,12 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    /* Below ~406px the full 18px email text no longer fits half the
+       screen width plus its own 5px padding — centred + overflow:hidden
+       then clips into the padding itself, so it reads as flush against
+       the screen edge instead of evenly spaced. Shrinking keeps the text
+       inside its half so the padding stays visible on both sides. */
+    font-size: clamp(14px, 4.8vw - 1.5px, 18px);
   }
 
   .half a {
