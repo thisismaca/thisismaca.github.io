@@ -1,6 +1,6 @@
 # Plan — thisismaca.com
 
-**Status:** draft 12 · **Date:** 2026-08-05 · **Implements:** `SPEC.md` draft 11
+**Status:** draft 13 · **Date:** 2026-08-05 · **Implements:** `SPEC.md` draft 12
 
 This document describes *how* the spec gets built. Unlike `SPEC.md`, it is
 disposable. If Astro turns out to be the wrong choice, this file is rewritten
@@ -9,6 +9,11 @@ and the spec is untouched.
 **Rule for this document:** every decision below names the spec requirements it
 serves. Anything here that serves no requirement is either scope creep, or a
 sign that the spec has a hole.
+
+**Changed since draft 12:** Milestone 14, three mobile fixes for About —
+shortened source-repo link text (fixing a horizontal-overflow bug that
+also explained the mobile header gap) and centred body text below 768px
+— added — §7. Implements `SPEC.md` draft 12 (S7.7 amended, S7.10 added).
 
 **Changed since draft 11:** Milestone 13, widening Home's meta description
 to also pull a word-boundary-truncated excerpt of each piece's
@@ -822,6 +827,37 @@ at all. Implements `SPEC.md` draft 11 (S12.6 amended).
 - ✅ `<h1>` confirmed unchanged — titles only, same as Milestone 12.
 - ✅ Zero `<script>` tags, unchanged.
 
+**Milestone 14 — three mobile fixes for About.** *(closed 2026-08-05)*
+Reported directly by the site owner from the mobile experience. Two of
+the three turned out to share one root cause. Implements `SPEC.md` draft
+12 (S7.7 amended, S7.10 added).
+
+- **The S11.3 violation flagged but not fixed in Milestones 8/9/9's
+  passing note is now closed.** The source-repo link's anchor text changes
+  from the raw URL to "GitHub" — `href` unchanged. This alone closed two
+  of the three reported issues: the horizontal overflow itself, and a
+  previously-unexplained gap at the right edge of the mobile header nav.
+  Confirmed the two were the same root cause, not fixed the second one
+  separately: once the overflow was gone, `document.documentElement
+  .scrollWidth` exactly equalled `clientWidth` and the header nav's
+  centre-offset measured 0px at 375px and 320px, with no other change
+  touching the header at all. The mechanism: an overflowing descendant
+  anywhere on the page can widen the effective containing block that
+  `justify-content: center`/`margin-inline: auto` centre against, so
+  every such rule on the page centres against that wider width rather
+  than the visibly available one — a global symptom from one local cause.
+- `.about p` gains `text-align: center` inside the existing
+  `@media (max-width: 767px)` block only — confirmed `start` (default) is
+  unchanged at 768px+, where text wraps beside the floated photo (S7.3)
+  and centring would read as ragged rather than intentional.
+- **Process note**: a background-task suggestion for this exact overflow
+  (flagged proactively after Milestone 9) had already been started by the
+  site owner in a separate session before this more specific request
+  arrived, so it couldn't be withdrawn. That session may still land its
+  own (now-superseded) fix to the same lines independently — flagged to
+  the site owner rather than assumed resolved.
+- ✅ Zero `<script>` tags, unchanged.
+
 ---
 
 ## 8. Verification
@@ -884,7 +920,8 @@ Expanded to one row per requirement, grouped by `SPEC.md` section.
 | S7.4 | Below 768px, confirm the photo is centred with text below it |
 | S7.5 | Confirm body text is black |
 | S7.6 | Shadow present (S4.11) |
-| S7.7 | Confirm the source-repo link is present and correctly targeted |
+| S7.7 | Confirm the source-repo link reads "GitHub" and targets the repo correctly |
+| S7.10 | Below 768px, confirm body text is centre-aligned; at 768px+, confirm it's still `start` |
 | S7.8 | At 768px+, measure width (40% of viewport) and confirm vertical centring (equal top/bottom gaps) |
 | **Contact (§8)** | |
 | S8.1 | Confirm white background |
