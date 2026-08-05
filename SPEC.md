@@ -1,6 +1,6 @@
 # Spec — thisismaca.com
 
-**Status:** draft 7 · **Date:** 2026-08-04
+**Status:** draft 8 · **Date:** 2026-08-04
 
 This document describes *what must be true* of the finished site. It names no
 framework, host or library on purpose — those belong in `PLAN.md`, which can be
@@ -8,6 +8,12 @@ thrown away and rewritten without touching this file.
 
 Every statement below should be checkable by looking at the built site. Anything
 that cannot be checked is a note, not a requirement, and is marked as such.
+
+**Changed since draft 7.** About's photo (S7.2) grows another 30%, 96px →
+125px wide (~222px tall), compounding on top of draft 7's increase rather
+than measuring from the original 80px. S7.9 is removed: the body text's
+20px left padding is gone, so only S7.2's photo margin and the page's own
+container padding separate text from photo and edge.
 
 **Changed since draft 6.** About's photo (S7.2) grows 20%, 80px → 96px wide
 (height following the same aspect ratio, ~171px). Straightforward sizing
@@ -222,13 +228,14 @@ only separation between a caption and the next piece's image.
 ## 7. About
 
 **S7.1** The page background is white throughout.
-**S7.2** *(Amended, draft 7)* A photograph of Maca appears at the top left,
-96px wide with height following the source image's own aspect ratio
-uncropped (~171px at the current source). Margin: 5px top and left, 30px
+**S7.2** *(Amended, draft 8)* A photograph of Maca appears at the top left,
+125px wide with height following the source image's own aspect ratio
+uncropped (~222px at the current source). Margin: 5px top and left, 30px
 right and bottom. *(Previously a fixed 80×200px box, deliberately cropped
-via `fit=cover` — see `PLAN.md` Milestone 4. Draft 6 reversed the crop; the
-crop read as a bug, not a design choice, once seen live. Draft 7 then sized
-the now-uncropped photo up 20%, 80px → 96px, aspect ratio unchanged.)*
+via `fit=cover` — see `PLAN.md` Milestone 4. Draft 6 reversed the crop.
+Draft 7 sized the now-uncropped photo up 20%, 80px → 96px. Draft 8 sized it
+up again, 30% from that draft-7 value, 96px → 125px — the two increases
+compound rather than both measuring from the original 80px.)*
 **S7.3** At 768px and above, body text flows around the photograph.
 **S7.4** Below 768px, the photograph is centred and all text sits beneath it.
 **S7.5** Body text is black.
@@ -243,9 +250,11 @@ horizontally constrained to 40% of the viewport (as Home's stack is, S6.13)
 constraint applies. *(Unlike Home, About's content is short enough to fit a
 screen, which is why it gets vertical centring and Home does not. Originally
 the middle third, ~33.3% — widened to 40% in draft 5, alongside S6.13/S8.7.)*
-**S7.9** *(New, redesign)* The body text (not the photograph) carries an
-additional 20px of padding on its left side, independent of the photograph's
-own 5px margin from S7.2.
+**S7.9** *(Superseded, draft 8)* ~~The body text carried an additional 20px
+of padding on its left side, independent of the photograph's own margin.~~
+Removed in draft 8 — the body text now carries no padding of its own; only
+the photograph's S7.2 margin and the `.about` container's own padding
+separate it from the page edge and the photo.
 
 > **Decided 2026-07-30 — influences.** Text, not images, resolving the open
 > question above: influences (Virgil Finlay, Richey Beckett, Peeter Baltens,
