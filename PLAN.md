@@ -1,6 +1,6 @@
 # Plan — thisismaca.com
 
-**Status:** draft 8 · **Date:** 2026-08-04 · **Implements:** `SPEC.md` draft 7
+**Status:** draft 9 · **Date:** 2026-08-04 · **Implements:** `SPEC.md` draft 8
 
 This document describes *how* the spec gets built. Unlike `SPEC.md`, it is
 disposable. If Astro turns out to be the wrong choice, this file is rewritten
@@ -9,6 +9,10 @@ and the spec is untouched.
 **Rule for this document:** every decision below names the spec requirements it
 serves. Anything here that serves no requirement is either scope creep, or a
 sign that the spec has a hole.
+
+**Changed since draft 8:** Milestone 10, sizing the About photo up another
+30% and removing the body text's left padding, added — §7. Implements
+`SPEC.md` draft 8 (S7.2 amended, S7.9 removed).
 
 **Changed since draft 7:** Milestone 9, sizing the About photo up 20%,
 added — §7. Implements `SPEC.md` draft 7 (S7.2 amended).
@@ -699,6 +703,31 @@ aspect ratio (no second value to keep in sync). Implements `SPEC.md` draft
   milestone's scope.
 - ✅ Zero `<script>` tags, unchanged.
 
+**Milestone 10 — About photo sized up another 30%; text padding removed.**
+*(closed 2026-08-04)* Two independent requests in one message. `width={96}`
+→ `width={125}` in `about.astro`'s `<Image>` — 30% from the draft-7 value,
+not from the original 80px, matching how the draft-7 request itself was
+phrased ("than what it is now"). Separately, `.about p`'s `padding-left:
+20px` (S7.9) is deleted outright rather than zeroed, since the requirement
+was to remove it, not to keep a now-inert declaration around. Implements
+`SPEC.md` draft 8 (S7.2 amended, S7.9 removed).
+
+- ✅ Generated file confirmed 125×222px, ratio 0.5631 against the source's
+  0.5626 — same negligible rounding gap as Milestones 8 and 9, not a crop.
+- ✅ Paragraph computed `padding` confirmed `0px` on all sides post-change.
+- ✅ At 768px+, text still wraps beside the now-larger photo (checked via
+  `Range` on the actual text node, same method as Milestone 9) and no
+  horizontal scroll appears at 1280px.
+- ✅ Below 768px, the photo remains centred at its new 125px width
+  (`margin-inline: auto` unaffected by the size change).
+- **Ambiguity flagged, not resolved by asking**: "30% larger" doesn't say
+  larger than what. Read as compounding on the live 96px value rather than
+  the original 80px, consistent with the draft-7 request's own explicit
+  "than what it is now" framing. Stated as an assumption rather than
+  blocking on a question, since correcting it is a one-line width change
+  either way. If wrong, the intended value is 80 × 1.3 = 104px, not 125px.
+- ✅ Zero `<script>` tags, unchanged.
+
 ---
 
 ## 8. Verification
@@ -755,7 +784,7 @@ Expanded to one row per requirement, grouped by `SPEC.md` section.
 | S6.13 | At 768px+, measure the stack's width against the viewport (40%) and confirm centred margins |
 | **About (§7)** | |
 | S7.1 | Confirm white background throughout |
-| S7.2 | Confirm the photo is 80px wide, uncropped (rendered aspect ratio matches source), 5px top/left margin and 30px right/bottom margin |
+| S7.2 | Confirm the photo is 125px wide, uncropped (rendered aspect ratio matches source), 5px top/left margin and 30px right/bottom margin |
 | S7.3 | At 768px+, confirm text wraps beside the photo |
 | S7.4 | Below 768px, confirm the photo is centred with text below it |
 | S7.5 | Confirm body text is black |
