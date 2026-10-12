@@ -38,7 +38,7 @@ const links = (await getCollection('links')).sort((a, b) => a.data.order - b.dat
 
   /* S15.7 — the whole card is the link. S15.4 — white, with the header's
      shadow (S4.11's rgba(0, 0, 0, 0.15)) at a tenth less opacity. S15.5 —
-     3px padding, two right-aligned lines 4px apart. */
+     3px padding, two left-aligned lines 4px apart. */
   .links a {
     display: flex;
     flex-direction: column;
@@ -47,7 +47,7 @@ const links = (await getCollection('links')).sort((a, b) => a.data.order - b.dat
     background: var(--color-white);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.135);
     color: var(--color-body-text);
-    text-align: right;
+    text-align: left;
     text-decoration: none;
     /* S15.9 — a raw-URL description is one unbroken string; let it break
        inside the card rather than push the page sideways (S11.3). */

@@ -1,6 +1,6 @@
 # Plan — thisismaca.com
 
-**Status:** draft 14 · **Date:** 2026-10-12 · **Implements:** `SPEC.md` draft 13
+**Status:** draft 15 · **Date:** 2026-10-12 · **Implements:** `SPEC.md` draft 14
 
 This document describes *how* the spec gets built. Unlike `SPEC.md`, it is
 disposable. If Astro turns out to be the wrong choice, this file is rewritten
@@ -9,6 +9,9 @@ and the spec is untouched.
 **Rule for this document:** every decision below names the spec requirements it
 serves. Anything here that serves no requirement is either scope creep, or a
 sign that the spec has a hole.
+
+**Changed since draft 14:** Milestone 16, left-aligning the Links cards'
+text, added — §7. Implements `SPEC.md` draft 14 (S15.5 amended).
 
 **Changed since draft 13:** Milestone 15, the Links page and the collapsing
 header menu, added — §7. Implements `SPEC.md` draft 13 (S3.1, S4.3, S4.4,
@@ -940,6 +943,12 @@ Milestones 8–14.
 - ✅ Keyboard at 375px: Tab lands on the menu toggle, Enter opens it, Tab
   reaches Home, Enter on the toggle closes it.
 
+**Milestone 16 — Links card text left-aligned.** *(closed 2026-10-12)* The
+site owner's change of mind after seeing Milestone 15 live. Implements
+`SPEC.md` draft 14 (S15.5 amended). One declaration in `links.astro`,
+`text-align: right` → `left`; set explicitly rather than dropped to the
+default, so the stylesheet states what S15.5 requires.
+
 ---
 
 ## 8. Verification
@@ -1041,7 +1050,7 @@ Expanded to one row per requirement, grouped by `SPEC.md` section.
 | S15.2 | Confirm cards stack in ascending `order`, 10px apart |
 | S15.3 | Measure card width: a centred 33.33% of the viewport at 768px+, 100% below |
 | S15.4 | Confirm white background and `box-shadow: 0 2px 4px rgba(0, 0, 0, 0.135)` |
-| S15.5 | Confirm 3px padding, 4px between title and description, 700/18px and 400/14px Vazirmatn, right-aligned, black |
+| S15.5 | Confirm 3px padding, 4px between title and description, 700/18px and 400/14px Vazirmatn, left-aligned, black |
 | S15.6 | Confirm 20px above and below the column at 768px+, 10px below |
 | S15.7 | Click anywhere on a card, confirm its `url` opens in a new tab |
 | S15.8 | Confirm white background, header shadow, and the email/Instagram footer |

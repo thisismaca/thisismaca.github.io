@@ -1,6 +1,6 @@
 # Spec — thisismaca.com
 
-**Status:** draft 13 · **Date:** 2026-10-12
+**Status:** draft 14 · **Date:** 2026-10-12
 
 This document describes *what must be true* of the finished site. It names no
 framework, host or library on purpose — those belong in `PLAN.md`, which can be
@@ -8,6 +8,10 @@ thrown away and rewritten without touching this file.
 
 Every statement below should be checkable by looking at the built site. Anything
 that cannot be checked is a note, not a requirement, and is marked as such.
+
+**Changed since draft 13.** The Links cards' text (S15.5) is left-aligned
+instead of right-aligned — the site owner's change of mind after seeing it
+live. Nothing else about the cards changes.
 
 **Changed since draft 12 — a fourth page, and a collapsing menu.** A new
 `/links` page (§15): a column of cards, each opening another site in a new
@@ -527,10 +531,10 @@ horizontally centred. Below 768px, each card spans the full viewport width.
 **S15.4** Each card has a white background and a shadow matching the
 header's (S4.11), 10% lighter — the header shadow's opacity reduced by a
 tenth, same offset and blur.
-**S15.5** Each card has 3px of padding and contains two lines of black
-text, stacked 4px apart, both right-aligned: the link's `title` in
-Vazirmatn weight 700 (Bold), 18px; then its `description` in Vazirmatn
-weight 400 (Regular), 14px.
+**S15.5** *(Amended, draft 14)* Each card has 3px of padding and contains
+two lines of black text, stacked 4px apart, both left-aligned: the link's
+`title` in Vazirmatn weight 700 (Bold), 18px; then its `description` in
+Vazirmatn weight 400 (Regular), 14px. *(Right-aligned in draft 13.)*
 **S15.6** The column of cards has 20px of margin above and below it at
 768px and above; 10px below 768px.
 **S15.7** The whole card is the link: activating anywhere on it opens its
