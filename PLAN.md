@@ -1,6 +1,6 @@
 # Plan — thisismaca.com
 
-**Status:** draft 13 · **Date:** 2026-08-05 · **Implements:** `SPEC.md` draft 12
+**Status:** draft 14 · **Date:** 2026-10-12 · **Implements:** `SPEC.md` draft 13
 
 This document describes *how* the spec gets built. Unlike `SPEC.md`, it is
 disposable. If Astro turns out to be the wrong choice, this file is rewritten
@@ -9,6 +9,10 @@ and the spec is untouched.
 **Rule for this document:** every decision below names the spec requirements it
 serves. Anything here that serves no requirement is either scope creep, or a
 sign that the spec has a hole.
+
+**Changed since draft 13:** Milestone 15, the Links page and the collapsing
+header menu, added — §7. Implements `SPEC.md` draft 13 (S3.1, S4.3, S4.4,
+S4.7, S4.8, S12.8 amended; S4.12–S4.15 and §15 added).
 
 **Changed since draft 12:** Milestone 14, three mobile fixes for About —
 shortened source-repo link text (fixing a horizontal-overflow bug that
@@ -185,8 +189,10 @@ be" is not "is".
 ├── src/
 │   ├── content.config.ts        # collection schema
 │   ├── content/
+│   │   ├── links/               # one file per link — S15.1
 │   │   └── pieces/              # one file per piece — S2.1
 │   ├── assets/
+│   │   ├── menu.png             # collapsed-menu icon — S4.12
 │   │   └── pieces/              # source images, ~2400px wide
 │   ├── layouts/
 │   │   └── Base.astro           # header + footer + shadow flag
@@ -196,6 +202,7 @@ be" is not "is".
 │   │   └── Piece.astro          # image + caption unit — S6.3
 │   ├── pages/
 │   │   ├── index.astro          # S6
+│   │   ├── links.astro          # S15
 │   │   ├── about.astro          # S7
 │   │   └── contact.astro        # S8
 │   └── styles/
@@ -237,6 +244,11 @@ Two schema-level notes:
 
 **Deliberately absent:** any orientation field. S2.4 says the site has no
 concept of orientation, and the schema is where that gets enforced.
+
+**Links (draft 13).** A second collection, `links` — `title`,
+`description`, `url`, `order`, all required (S15.1). `url` is validated
+as an http(s) URL, so a malformed one fails the build the same way a bad hex
+colour does for a piece.
 
 ---
 
@@ -280,6 +292,11 @@ Mapped to the requirements they satisfy.
 - **S8.3** — the email and Instagram blocks appear as page content on Contact
   and as footer elsewhere. Build them as one component used in two places, not
   two components that must be kept in agreement.
+- **S4.12–S4.15** — the collapsed menu is a `<details>` element, not a
+  script (S12.1). One item array feeds both it and the 768px+ row, for the
+  same reason as S8.3. See Milestone 15.
+- **S15.3** — `/links` doesn't use `narrowContent`: its cards are a third
+  of the viewport, not the 40% column.
 
 ---
 
@@ -858,6 +875,71 @@ the three turned out to share one root cause. Implements `SPEC.md` draft
   the site owner rather than assumed resolved.
 - ✅ Zero `<script>` tags, unchanged.
 
+**Milestone 15 — Links page and collapsing menu.** *(closed 2026-10-12)*
+Requested by the site owner in one piece of prose: a fourth page of
+outbound link cards (their own link-in-bio page), plus a header that
+collapses to their own menu glyph below 768px. Implements `SPEC.md` draft
+13 (S3.1, S4.3, S4.4, S4.7, S4.8, S12.8 amended; S4.12–S4.15 and §15 added;
+"a hamburger menu" removed from §13's non-goals). Handled as SPEC/PLAN
+amendments rather than a new `specs/006-*` Spec Kit feature, matching
+Milestones 8–14.
+
+- **Menu fit, measured before writing the spec.** With the real Grenze
+  Gotisch loaded, the four words at 28px total ~259px; a middle third at
+  768px leaves ~241px after S4.7's padding. Widened the row's span to 40%
+  — the content column's existing width — rather than shrinking the type
+  (S9.1) or adding a second breakpoint (S11.1). Re-measured: exactly 40% at
+  768px and 1280px, one line, evenly spaced (81.2px gaps at 1280px).
+- **The collapsed menu is `<details>`/`<summary>`, not a script.** S12.1
+  forbids JavaScript, and the constitution only admits a script the feature
+  can't exist without — this one can. `<details>` toggles natively, is
+  keyboard-operable, and is announced as expanded/collapsed (S12.5). The
+  checkbox-hack alternative was skipped: it needs a visually-hidden input
+  and gives screen readers no expanded state. Known, accepted limit:
+  tapping outside the open list doesn't close it (that would need a
+  script) — tapping the icon again, or following a link, does (S4.14).
+- **One item array, rendered twice** (the row at 768px+, the list below), so
+  the two can't drift. The hidden one is `display: none`, which also takes
+  it out of the accessibility tree and the tab order.
+- **Header height unchanged (S4.13), measured, not assumed**: 55.2px at
+  375px and 320px with the icon, same as with the items; 72.3px at 768px,
+  unchanged. The `<summary>` carries the row's exact padding and the menu
+  face at 24px, and the icon is `height: 1lh` — the line box the items
+  occupied — so S4.9 (height never set directly) still holds.
+- **The icon is the owner's `src/assets/menu.png`** (1254×1254, 929kB, glyph
+  on white with generous built-in margin), rendered through `<Image>` at
+  36px with a 2× candidate: it ships as 226- and 342-byte WebPs (S12.3). Alt
+  text "Menu" (S12.2). The PNG's own whitespace is left as designed, not
+  cropped. The `<summary>` is `fit-content` wide, so only the icon (a
+  ~45×55px target) toggles the menu, not the whole header row.
+- **Links are a content collection** (`src/content/links/*.md`, S15.1),
+  mirroring pieces. `url` is `z.url({ protocol: /^https?$/ })` — confirmed
+  a scheme-less `seashepherd.org/donate` fails the build with
+  `InvalidContentEntryDataError`.
+- **Card shadow** is the header's `rgba(0, 0, 0, 0.15)` with its alpha × 0.9
+  = `0.135` (S15.4) — "10% lighter" read as a relative reduction, not 10
+  percentage points (0.05, a third of the original, would read as a
+  different shadow rather than a lighter one).
+- **Vazirmatn 700** added to `astro.config.mjs` for card titles (S15.5); 400
+  was already registered for caption titles.
+- `/links` uses neither `narrowContent` nor `centerContent`: cards set their
+  own width (a third, S15.3, not the 40% column) and start from the top
+  with their own 20px/10px margin (S15.6). Default footer (S15.8);
+  `noindex` (S12.8).
+- The description gets `overflow-wrap: anywhere` (S15.9) — Milestone 14's
+  lesson that a raw URL is one unbroken string.
+
+- ✅ Built: four pages (`/`, `/links`, `/about`, `/contact`), zero
+  `<script>` tags in `dist/`.
+- ✅ S11.1: the only `@media` conditions in the built output are
+  `(width>=768px)` and About's `(width<=767px)`.
+- ✅ `/links`: no horizontal overflow at 320px or 375px; cards full-width
+  with 10px margins below 768px, a centred 33.33% with 20px margins at
+  768px; title and description 4px apart, 700/18px and 400/14px,
+  right-aligned.
+- ✅ Keyboard at 375px: Tab lands on the menu toggle, Enter opens it, Tab
+  reaches Home, Enter on the toggle closes it.
+
 ---
 
 ## 8. Verification
@@ -881,17 +963,21 @@ Expanded to one row per requirement, grouped by `SPEC.md` section.
 | S2.3 | Count pieces on `/` — launch target is ten; a lower count is a launch-readiness gap, not a bug |
 | S2.4 | Confirm `content.config.ts` has no orientation/medium/category field |
 | **Routes (§3)** | |
-| S3.1 | Confirm exactly `/`, `/about`, `/contact` exist and nothing else does |
+| S3.1 | Confirm exactly `/`, `/links`, `/about`, `/contact` exist and nothing else does |
 | S3.2 | Confirm no per-piece URL resolves (by design) |
 | **Header (§4)** | |
 | S4.1 | Confirm header is white, flush to viewport top, no grey above it at any width |
 | S4.2 | Confirm header spans full viewport width edge to edge |
-| S4.3 | Confirm exactly Home/About/Contact, one row, centred |
-| S4.4 | 320px viewport, real font, three items on one line |
+| S4.3 | At 768px+, confirm exactly Home/Links/About/Contact in that order, one row, spanning 40% of the viewport (left edge at 30%) |
+| S4.4 | 768px viewport, real font, four items on one line |
 | S4.5–S4.8 | Resize continuously, confirm no snapping |
 | S4.9 | Confirm header CSS sets no fixed height — inspect computed style |
 | S4.10 | Activate each item, confirm it navigates to the right page |
 | S4.11 | Shadow present on `/about` and `/contact`, absent on `/` |
+| S4.12 | Below 768px, confirm only the menu icon shows, inside the left padding, alt "Menu" |
+| S4.13 | Below 768px, confirm header height with the icon equals the pre-draft-13 value (55.2px at 375px) |
+| S4.14 | Click, tap and keyboard-activate the icon with JavaScript disabled; confirm the list opens below the header from the left, over the content, and closes on a second activation |
+| S4.15 | Confirm open-list items match the row's face/weight/size/colour, on a white panel with the header's shadow |
 | **Footer (§5)** | |
 | S5.1 | Confirm footer is white with two halves |
 | S5.2 | Confirm email is plain text, not a link |
@@ -946,10 +1032,21 @@ Expanded to one row per requirement, grouped by `SPEC.md` section.
 | S12.2 | Covered by S2.2 |
 | S12.3 | Confirm multiple widths generated per image |
 | S12.4 | Run every caption colour pair through the WCAG contrast formula |
-| S12.5 | Tab through all three pages |
+| S12.5 | Tab through all four pages, including opening and closing the collapsed menu below 768px |
 | S12.6 | Confirm `/`'s meta description is built from actual piece titles and description excerpts, not generic copy, and excerpts are word-boundary truncated |
 | S12.7 | Confirm `/` has a visually-hidden `<h1>` listing the piece titles, clipped with no layout impact |
-| S12.8 | Confirm `noindex` on `/about` and `/contact`, absent on `/` |
+| S12.8 | Confirm `noindex` on `/links`, `/about` and `/contact`, absent on `/` |
+| **Links (§15)** | |
+| S15.1 | Add a link file, rebuild, confirm no code changed; break a `url`, confirm the build fails |
+| S15.2 | Confirm cards stack in ascending `order`, 10px apart |
+| S15.3 | Measure card width: a centred 33.33% of the viewport at 768px+, 100% below |
+| S15.4 | Confirm white background and `box-shadow: 0 2px 4px rgba(0, 0, 0, 0.135)` |
+| S15.5 | Confirm 3px padding, 4px between title and description, 700/18px and 400/14px Vazirmatn, right-aligned, black |
+| S15.6 | Confirm 20px above and below the column at 768px+, 10px below |
+| S15.7 | Click anywhere on a card, confirm its `url` opens in a new tab |
+| S15.8 | Confirm white background, header shadow, and the email/Instagram footer |
+| S15.9 | No horizontal scroll at 320px with a raw-URL description |
+| S15.10 | Confirm the Sea Shepherd card's title, description and url |
 
 **S12.4 update, 2026-07-30**: this turned out to be automatable — a ~30-line
 script computing WCAG relative luminance catches it exactly, no manual

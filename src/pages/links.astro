@@ -1,0 +1,75 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+
+// S15.2 — in `order`, the same way the piece stack is (S6.1).
+const links = (await getCollection('links')).sort((a, b) => a.data.order - b.data.order);
+---
+
+<!-- S15.8 — default footer (About's, not Contact's copyright line). Not
+     narrowed or centred like About/Contact: cards take their own width
+     (S15.3) and the column starts at the top (S15.6). S12.8 — noindex. -->
+<Base noindex={true}>
+  <ul class="links">
+    {
+      links.map((link) => (
+        <li>
+          <a href={link.data.url} target="_blank" rel="noopener noreferrer">
+            <span class="title">{link.data.title}</span>
+            <span class="description">{link.data.description}</span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</Base>
+
+<style>
+  /* S15.2/S15.6 — one column, 10px between cards, 10px above and below
+     it below 768px. */
+  .links {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    list-style: none;
+    margin: 10px 0;
+    padding: 0;
+  }
+
+  /* S15.7 — the whole card is the link. S15.4 — white, with the header's
+     shadow (S4.11's rgba(0, 0, 0, 0.15)) at a tenth less opacity. S15.5 —
+     3px padding, two right-aligned lines 4px apart. */
+  .links a {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 3px;
+    background: var(--color-white);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.135);
+    color: var(--color-body-text);
+    text-align: right;
+    text-decoration: none;
+    /* S15.9 — a raw-URL description is one unbroken string; let it break
+       inside the card rather than push the page sideways (S11.3). */
+    overflow-wrap: anywhere;
+  }
+
+  .title {
+    font-weight: 700;
+    font-size: 18px;
+  }
+
+  .description {
+    font-weight: 400;
+    font-size: 14px;
+  }
+
+  /* S11.1 — the one breakpoint. S15.3/S15.6 — a centred third of the
+     viewport, 20px above and below. */
+  @media (min-width: 768px) {
+    .links {
+      width: 33.333%;
+      margin: 20px auto;
+    }
+  }
+</style>

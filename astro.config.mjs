@@ -18,8 +18,9 @@ export default defineConfig({
   // SemiExpanded is retired. Vazirmatn takes over --font-body — a
   // variable font spanning weights 100-900, confirmed on Google Fonts
   // before committing 300 (default text, S9.2) and 400 (caption titles,
-  // S9.4) here. Both weights share the one cssVariable; CSS picks the
-  // matching @font-face by font-weight, no second registration needed.
+  // S9.4) here, plus 700 (Links card titles, S15.5 — draft 13). All
+  // weights share the one cssVariable; CSS picks the matching
+  // @font-face by font-weight, no second registration needed.
   fonts: [
     {
       name: 'Grenze Gotisch',
@@ -31,7 +32,7 @@ export default defineConfig({
       name: 'Vazirmatn',
       cssVariable: '--font-body',
       provider: fontProviders.google(),
-      weights: [300, 400],
+      weights: [300, 400, 700],
     },
   ],
 

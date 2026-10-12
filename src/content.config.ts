@@ -22,4 +22,17 @@ const pieces = defineCollection({
     }),
 });
 
-export const collections = { pieces };
+// SPEC.md S15.1 (draft 13) — one file per link, same as pieces: adding a
+// link is adding a file. url is validated as http(s), so a typo or a
+// missing scheme fails the build instead of shipping a dead card.
+const links = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/links' }),
+  schema: z.object({
+    title: z.string().min(1),
+    description: z.string().min(1),
+    url: z.url({ protocol: /^https?$/ }),
+    order: z.number().int(),
+  }),
+});
+
+export const collections = { pieces, links };
