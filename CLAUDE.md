@@ -129,28 +129,41 @@ Built and live at `https://thisismaca.github.io`. Per `PLAN.md`'s milestones:
   `captionBackground`, `captionText`, `order` — all required, `alt` non-empty,
   hex colours validated. **No orientation field** (`S2.4` excludes it by design).
   Astro 7 imports `z` from `astro/zod`, not `astro:content`. Five of ten launch
-  pieces exist; adding the rest is a file addition, no code change.
+  pieces exist; adding the rest is a file addition, no code change. Links
+  (`/links`, `S15`) work the same way: one file per link in
+  `src/content/links/` — `title`, `description`, `url` (validated http(s)),
+  `order`.
 - **Images:** sources go in **`src/assets/`, never `public/`**. Files in
   `public/` are copied untouched, which defeats `S12.3` (responsive sizes) and
   `S6.12` (no layout shift, which relies on build-time intrinsic dimensions).
   This is the single easiest thing to get wrong here.
-- **Routes:** exactly three — `/`, `/about`, `/contact`. No per-piece URLs.
+- **Routes:** exactly four — `/`, `/links`, `/about`, `/contact`. No
+  per-piece URLs.
 - **Styling:** plain CSS, no framework. One breakpoint (768px). Content on
-  every page narrows to a centred column at 768px+ (`Base.astro`'s
-  `narrowContent` prop); About and Contact additionally centre vertically
-  within the viewport (`centerContent`) — Home doesn't, since its stack is
-  always taller than one screen.
+  Home, About and Contact narrows to a centred 40% column at 768px+
+  (`Base.astro`'s `narrowContent` prop); About and Contact additionally
+  centre vertically within the viewport (`centerContent`) — Home doesn't,
+  since its stack is always taller than one screen. Links uses neither: its
+  cards are their own centred third of the viewport (`S15.3`).
+- **Header menu:** four items (Home, Links, About, Contact). At 768px+ a row
+  spanning the middle 40%; below 768px collapsed behind the owner's glyph
+  (`src/assets/menu.png`) in a `<details>` element — no JavaScript. Both
+  renderings come from one array in `Header.astro`; add or rename an item
+  there, once.
 - **Header shadow:** unconditional on every page — no prop, no per-page
   toggle. (It used to be on for About/Contact, off for Home; the 2026-07-30
   redesign made it universal.)
 - **Sticky footer:** `Base.astro` makes `body` a flex column with
-  `min-height: 100vh` and `<main>` `flex: 1 0 auto`, so `Footer` is always
-  the last flex child — this is what pins it to the viewport bottom on short
-  pages (Contact) without needing a per-page special case; Home's longer
-  content is unaffected by the same mechanism.
+  `min-height: 100dvh` (100vh fallback — plain `vh` overshoots the visible
+  area while mobile browser chrome is showing) and `<main>`
+  `flex: 1 0 auto`, so `Footer` is always the last flex child — this is
+  what pins it to the viewport bottom on short pages (Contact) without
+  needing a per-page special case; Home's longer content is unaffected by
+  the same mechanism.
 - **Typography:** Grenze Gotisch on the header menu only; Vazirmatn
   everywhere else (body text at weight 300/18px, piece caption titles at
-  weight 400/20px sharing the same `--font-body` font registration —
+  weight 400/20px, Links card titles at 700/18px, all sharing the same
+  `--font-body` font registration —
   Astro's Fonts API resolves the right `@font-face` from `font-weight`
   alone, no second config entry needed per weight).
 

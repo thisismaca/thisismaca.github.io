@@ -1,18 +1,41 @@
 ---
+import { Image } from 'astro:assets';
+import menuIcon from '../assets/menu.png';
+
+// S4.3 draft 13 — the four items, in order. Rendered twice below (the row
+// at 768px+, the collapsed list under it) from this one array, so the two
+// can never disagree about what the menu contains.
+const items = [
+  { href: '/', label: 'Home' },
+  { href: '/links', label: 'Links' },
+  { href: '/about', label: 'About' },
+  { href: '/contact', label: 'Contact' },
+];
 ---
 
 <!-- S4.11 redesign — shadow is now universal, no prop needed. -->
 <header class="has-shadow">
-  <nav>
-    <a href="/">Home</a>
-    <a href="/about">About</a>
-    <a href="/contact">Contact</a>
+  <nav class="row">
+    {items.map((item) => <a href={item.href}>{item.label}</a>)}
   </nav>
+  <!-- S4.12–S4.14 draft 13 — below 768px. <details> is what opens and
+       closes the list with zero JavaScript (S12.1), and it's natively
+       keyboard-operable and announced as expanded/collapsed (S12.5). -->
+  <details class="collapsed">
+    <summary>
+      <Image src={menuIcon} alt="Menu" layout="fixed" width={36} height={36} />
+    </summary>
+    <nav>
+      {items.map((item) => <a href={item.href}>{item.label}</a>)}
+    </nav>
+  </details>
 </header>
 
 <style>
   header {
     background: var(--color-white);
+    /* Anchors the open list (S4.14) to the header's own bottom edge. */
+    position: relative;
   }
 
   /* S4.11 — now unconditional on every page. */
@@ -20,28 +43,9 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
   }
 
-  nav {
-    display: flex;
-    flex-wrap: nowrap;
-    justify-content: center;
-    align-items: center;
-    /* S4.5/S4.6 — fluid, never a fixed value; never crosses a breakpoint. */
-    padding-block-start: clamp(15px, 3vw, 30px);
-    padding-block-end: clamp(5px, 1vw, 8px);
-    /* S4.7 — a floor, not a range; no upper bound is specified. */
-    padding-inline: 5px;
-    /* S4.8 below 768px — the original fluid gap. Kept here (not removed)
-       because S4.3/S4.8's middle-third span is proven infeasible below
-       768px (specs/005-visual-redesign/research.md measures why); this is
-       what keeps S4.4 (one line at 320px) achievable. */
-    gap: clamp(8px, 4vw, 30px);
-    /* S4.9 — no height/min-height here. Header height is left to fall out
-       of this padding plus the line box, never set directly. */
-  }
-
-  nav a {
-    /* S9.1 redesign — same font/weight, larger sizes (24px/28px, up from
-       16px/20px). */
+  /* S9.1 redesign — same font/weight, larger sizes (24px/28px, up from
+     16px/20px). Applies to both renderings of the items (S4.15). */
+  a {
     font-family: var(--font-menu), sans-serif;
     font-weight: 500;
     font-size: 24px;
@@ -50,19 +54,86 @@
     white-space: nowrap;
   }
 
-  /* S11.1 — the one breakpoint. S4.3/S4.8 redesign: at 768px+, nav's own
-     box narrows to the middle third and the items distribute evenly
-     across it, instead of staying centred with a fluid gap. */
+  /* S4.4 draft 13 — the row exists at 768px+ only; below that, the
+     collapsed menu replaces it. */
+  .row {
+    display: none;
+  }
+
+  /* S4.13 — the summary carries the row's exact padding (S4.5–S4.7) and
+     the menu face at its below-768px size, so the icon's 1lh height is the
+     same line box the items occupied: header height is unchanged, and
+     still never set directly (S4.9). */
+  summary {
+    display: block;
+    /* Only the icon is the tap target, not the whole header row. */
+    width: fit-content;
+    list-style: none;
+    padding-block-start: clamp(15px, 3vw, 30px);
+    padding-block-end: clamp(5px, 1vw, 8px);
+    padding-inline: 5px;
+    font-family: var(--font-menu), sans-serif;
+    font-weight: 500;
+    font-size: 24px;
+    cursor: pointer;
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  /* S4.12 — left-aligned, sized to the line box (S4.13). */
+  summary img {
+    display: block;
+    width: auto;
+    height: 1lh;
+  }
+
+  /* S4.14/S4.15 — opens from the left edge directly below the header,
+     over the content rather than pushing it down; white, with the
+     header's own shadow. S4.8's fluid gap now runs vertically between
+     items, and the same value pads the panel so spacing is even. */
+  details nav {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: clamp(8px, 4vw, 30px);
+    padding: clamp(8px, 4vw, 30px);
+    background: var(--color-white);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+  }
+
+  /* S11.1 — the one breakpoint. S4.3/S4.8 draft 13: at 768px+, the row
+     returns and the collapsed menu goes; the row's own box spans the
+     middle 40% (the content column's width) with items distributed
+     evenly across it. */
   @media (min-width: 768px) {
-    nav {
-      width: 33.333%;
-      margin-inline: auto;
+    .row {
+      display: flex;
+      flex-wrap: nowrap;
       justify-content: space-between;
-      gap: 0;
+      align-items: center;
+      width: 40%;
+      margin-inline: auto;
+      /* S4.5/S4.6 — fluid, never a fixed value; never crosses a breakpoint. */
+      padding-block-start: clamp(15px, 3vw, 30px);
+      padding-block-end: clamp(5px, 1vw, 8px);
+      /* S4.7 — a floor, not a range; no upper bound is specified. */
+      padding-inline: 5px;
+      /* S4.9 — no height/min-height here. Header height is left to fall
+         out of this padding plus the line box, never set directly. */
     }
 
-    nav a {
+    .row a {
       font-size: 28px;
+    }
+
+    .collapsed {
+      display: none;
     }
   }
 </style>

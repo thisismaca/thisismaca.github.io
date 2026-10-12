@@ -1,6 +1,6 @@
 # Spec — thisismaca.com
 
-**Status:** draft 12 · **Date:** 2026-08-05
+**Status:** draft 13 · **Date:** 2026-10-12
 
 This document describes *what must be true* of the finished site. It names no
 framework, host or library on purpose — those belong in `PLAN.md`, which can be
@@ -8,6 +8,19 @@ thrown away and rewritten without touching this file.
 
 Every statement below should be checkable by looking at the built site. Anything
 that cannot be checked is a note, not a requirement, and is marked as such.
+
+**Changed since draft 12 — a fourth page, and a collapsing menu.** A new
+`/links` page (§15): a column of cards, each opening another site in a new
+tab — the site owner's own link-in-bio page. The header gains a fourth item,
+Links, between Home and About (S4.3). Two earlier decisions are deliberately
+reversed at the site owner's request: S3.1's "exactly three pages" becomes
+four, and the hamburger menu leaves §13's non-goals — below 768px the header
+now collapses to a single menu icon (S4.4, S4.12–S4.15). Neither reversal
+touches the constitution: the collapsed menu opens without JavaScript
+(S4.14, so S12.1 is unchanged), and each link is a content file, as each
+piece is (S15.1). At 768px and up the menu's span widens from the middle
+third to 40% (S4.3) — measured, not assumed: the four words at 28px total
+~259px, against ~241px usable inside a middle third at 768px.
 
 **Changed since draft 11.** Three mobile fixes for About (S7.7, S7.10):
 the source-repo link now reads "GitHub" instead of the raw URL, fixing a
@@ -145,7 +158,9 @@ whatever proportions it has.
 
 ## 3. Routes
 
-**S3.1** Exactly three pages exist: `/` (home), `/about`, `/contact`.
+**S3.1** *(Amended, draft 13)* Exactly four pages exist: `/` (home),
+`/links`, `/about`, `/contact`. *(Originally three — `/links` was added
+in draft 13, §15.)*
 **S3.2** Individual pieces have no URLs of their own. *(Deliberate — see
 Non-goals. This is the decision most likely to be revisited.)*
 
@@ -153,41 +168,61 @@ Non-goals. This is the decision most likely to be revisited.)*
 
 ## 4. Header
 
-Present on all three pages, identical in structure.
+Present on all four pages, identical in structure.
 
 **S4.1** A white block flush with the top of the viewport. No gray appears above
 it at any width.
 **S4.2** It spans the full viewport width, edge to edge.
-**S4.3** It contains exactly three items — Home, About, Contact — as a single
-horizontal row. *(Amended, redesign — 768px and up only.)* At 768px and
-above, the row is not merely centred: as a group, the items span the
-horizontal middle third of the viewport — the group's left edge sits at
-one-third of the viewport width, its right edge at two-thirds. *(Confirmed
-by measuring actual rendered text at the new S9.1 sizes before writing this
-into the spec: at 768px, the three words total ~203px against 256px of
-available space — comfortable. Below 768px, a literal middle third is
-mathematically impossible — even at 500px viewport the three words alone
-measure ~174px against ~167px available, before any padding — so this
-requirement holds only at 768px and up.)*
-**S4.4** The three items remain on one line at every viewport width down to
-320px. No hamburger, no wrapping, no overflow.
+**S4.3** *(Amended, draft 13)* It contains exactly four items — Home,
+Links, About, Contact, in that order. At 768px and above they form a single
+horizontal row whose group spans the horizontal middle 40% of the viewport
+— its left edge at 30% of the viewport width, its right edge at 70% —
+never the full width. Below 768px they are collapsed behind a menu icon
+(S4.12). *(Originally three items spanning the middle third, a span that
+was itself confirmed by measurement in the redesign: ~203px of text against
+256px at 768px. Draft 13's fourth item doesn't fit that: the four words
+total ~259px at 768px against ~241px usable inside a middle third after
+S4.7's padding, versus ~297px inside 40%. 40% is the width the content
+column already uses at 768px and up — S6.13, S7.8, S8.7 — so the menu now
+lines up with the content beneath it rather than introducing a new
+proportion.)*
+**S4.4** *(Amended, draft 13)* At 768px and above, the four items stay on
+one line — no wrapping, no overflow. *(Originally: three items on one line
+at every width down to 320px, "no hamburger". Below 768px the row is now
+replaced by the collapsed menu, S4.12–S4.15, at the site owner's request —
+not because four items couldn't fit: at 320px they would, ~222px of text at
+24px.)*
 **S4.5** Padding above the items: `clamp(15px, 3vw, 30px)`.
 **S4.6** Padding below the items: `clamp(5px, 1vw, 8px)`.
-**S4.7** Horizontal padding: 5px minimum. At 768px and up, inside the
-middle-third span defined by S4.3; below 768px, inside the full-width row
-as it worked before this feature.
-**S4.8** *(Amended, redesign — 768px and up only.)* At 768px and above, the
-three items distribute evenly (space-between) across the middle-third span
-defined in S4.3, rather than sitting a fixed gap apart. Below 768px, the
-original fluid gap — `clamp(8px, 4vw, 30px)` — applies unchanged; this is
-what keeps S4.4 achievable at 320px once S4.3's constraint would otherwise
-make it impossible.
+**S4.7** *(Amended, draft 13)* Horizontal padding: 5px minimum. At 768px
+and up, inside the 40% span defined by S4.3; below 768px, between the
+viewport's left edge and the menu icon (S4.12).
+**S4.8** *(Amended, draft 13)* At 768px and above, the four items
+distribute evenly (space-between) across the 40% span defined in S4.3,
+rather than sitting a fixed gap apart. Below 768px, the original fluid gap
+— `clamp(8px, 4vw, 30px)` — now separates the items vertically in the
+open list (S4.14) instead of horizontally in a row.
 **S4.9** Header height is a consequence of padding plus line box. It is never
 set directly.
 **S4.10** Each item navigates to its corresponding page.
 **S4.11** *(Amended, redesign)* A shadow along the header's lower edge is
-visible on all three pages, including `/`. *(Previously absent on `/` —
+visible on every page, including `/`. *(Previously absent on `/` —
 that exception is gone; the header now looks identical on every page.)*
+**S4.12** *(New, draft 13)* Below 768px, the header shows a single menu
+icon in place of the four items, at the header's left edge (inside S4.7's
+padding). The icon is the site owner's own glyph, not a generic three-line
+symbol, and carries the text alternative "Menu" (S12.2).
+**S4.13** *(New, draft 13)* The icon fits within the height the row of
+items occupied: the header is exactly as tall with the icon as it was with
+the items — S4.5, S4.6 and S4.9 govern it unchanged.
+**S4.14** *(New, draft 13)* Activating the icon — click, tap or keyboard —
+opens a list of the four items, one per line, left-aligned, appearing from
+the left edge directly below the header and over the page content rather
+than pushing it down. Activating the icon again closes it. This works with
+no JavaScript at all (S12.1).
+**S4.15** *(New, draft 13)* Items in the open list use the same face,
+weight, size and colour as the row (S9.1, §10), on a white panel carrying
+the header's own shadow (S4.11). Each still navigates to its page (S4.10).
 
 ---
 
@@ -334,8 +369,8 @@ larger," where one size is the 4px gap the original two values already
 established.)*
 **S9.2** *(Amended, redesign)* All other text uses Vazirmatn, weight 300
 (Light), 18px — replacing Zalando Sans SemiExpanded entirely — except the
-copyright line, which stays at 10px (S8.4), and each piece caption's title
-(S9.4).
+copyright line, which stays at 10px (S8.4), each piece caption's title
+(S9.4), and the Links page's card text (S15.5, draft 13).
 **S9.3** Both faces are self-hosted or loaded such that no text is invisible
 while fonts load. *(Now Grenze Gotisch and Vazirmatn; Zalando Sans
 SemiExpanded is retired and no longer loaded at all.)*
@@ -356,7 +391,9 @@ and size, not by boldness.
 
 | Role | Value |
 |---|---|
-| Every page background — Home, header, footer, About, Contact | `#FFFFFF` |
+| Every page background — Home, header, footer, Links, About, Contact | `#FFFFFF` |
+| Link card background (S15.4) | `#FFFFFF` |
+| Link card shadow (S15.4) | The header's shadow, 10% lighter |
 | Menu lettering | `#333333` |
 | Body text on white | Black |
 | Instagram glyph | Grey |
@@ -375,6 +412,9 @@ About and Contact wrap/stack and narrow/vertically-centred layouts (S7.3,
 S7.4, S7.8, S8.7); Home's narrow-column width (S6.13); and the footer's
 fixed height (S5.8). No second breakpoint was introduced for any of this —
 every large/small distinction in this redesign uses the same 768px line.
+*(Draft 13 adds, on the same line: the header's collapse to a menu icon,
+S4.12, and its 40% span, S4.3; and the Links page's card width and outer
+margin, S15.3/S15.6. Still no second breakpoint.)*
 **S11.2** Header padding is fluid and crosses no breakpoint (S4.5, S4.6). The
 item-distribution mechanism (S4.8) is not a fluid value — it's a fixed
 one-third-of-viewport span (S4.3) with even spacing inside it, which holds
@@ -411,7 +451,7 @@ narrower than S12.6: a screen reader announces this before any visible
 content, so it stays to short titles rather than the fuller per-piece
 excerpts S12.6 carries — those live only in the meta description, which is
 never rendered or announced on the page itself.)*
-**S12.8** *(New, draft 10)* About and Contact carry
+**S12.8** *(New, draft 10; amended draft 13)* About, Contact and Links carry
 `<meta name="robots" content="noindex">`; Home does not. The goal is
 narrow: findable for the specific names/places in the piece stack, not for
 generic terms — About's bio and Contact's invitation text aren't that, so
@@ -419,7 +459,9 @@ they're excluded from the index rather than competing for unrelated
 searches. *(Decided with the site owner 2026-08-05: no explicit
 `venue`/`country` content fields were added — S2's schema is unchanged: see
 open question 1 — those stay whatever's already woven into each piece's
-free-text description, at the owner's discretion.)*
+free-text description, at the owner's discretion. Links was added to the
+noindex set in draft 13 for the same reason: its content is other sites'
+addresses, not the piece stack.)*
 
 ---
 
@@ -434,7 +476,8 @@ Not in this version, and not to be quietly added:
 - Hand-drawn frames and the ornament kit
 - A contact form
 - Selling anything, including prints
-- A hamburger menu
+- ~~A hamburger menu~~ *(Removed draft 13 at the site owner's request —
+  see S4.12–S4.15.)*
 - Splitting the gallery by medium or by orientation
 - Any admin interface
 
@@ -462,3 +505,41 @@ Not in this version, and not to be quietly added:
    `public/favicon.ico`/`.svg`. The per-page `<title>` question is still
    open: every page still shares the one fixed `thisismaca.com` title.)*
 6. Where the print house link lives, if anywhere, given §13.
+
+---
+
+## 15. Links
+
+*(New, draft 13. Numbered after the existing sections so that no existing
+requirement ID moves.)*
+
+A page of outbound links — the site owner's own link-in-bio page — reached
+from the header (S4.3).
+
+**S15.1** Each link is one content file with required, non-empty `title`,
+`description` and `url` fields, plus `order`, its position in the list.
+Adding a link requires creating one file and changing no code, as S2.1 does
+for pieces. A missing or malformed `url` fails the build.
+**S15.2** Links appear as cards stacked vertically in a single column, in
+`order`, 10px apart.
+**S15.3** At 768px and above, each card is one third of the viewport wide,
+horizontally centred. Below 768px, each card spans the full viewport width.
+**S15.4** Each card has a white background and a shadow matching the
+header's (S4.11), 10% lighter — the header shadow's opacity reduced by a
+tenth, same offset and blur.
+**S15.5** Each card has 3px of padding and contains two lines of black
+text, stacked 4px apart, both right-aligned: the link's `title` in
+Vazirmatn weight 700 (Bold), 18px; then its `description` in Vazirmatn
+weight 400 (Regular), 14px.
+**S15.6** The column of cards has 20px of margin above and below it at
+768px and above; 10px below 768px.
+**S15.7** The whole card is the link: activating anywhere on it opens its
+`url` in a new browser tab.
+**S15.8** The page background is white, the header shadow is visible
+(S4.11), and the footer is the same as About's — the email and Instagram
+halves of §5, not Contact's copyright line (S8.4).
+**S15.9** Card text never forces horizontal scrolling (S11.3): a long
+unbroken description, such as a raw URL, wraps inside its card.
+**S15.10** At launch the page holds one link — title "Sea Shepherd",
+description "https://seashepherd.org/donate/", url
+"https://seashepherd.org/donate/".
